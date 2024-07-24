@@ -5,26 +5,8 @@ tg.expand();
 tg.MainButton.textColor = '#FFFFFF';
 tg.MainButton.color = '#2cab37';
 
-let selectedItem = "";
+let item = "";
 
-// Функция для обработки кликов по кнопкам
-function setupButton(buttonClass, itemNumber) {
-    let buttons = document.getElementsByClassName(buttonClass);
-    Array.from(buttons).forEach(button => {
-        button.addEventListener("click", function() {
-            if (tg.MainButton.isVisible) {
-                tg.MainButton.hide();
-            } else {
-                tg.MainButton.setText(`Вы выбрали товар ${itemNumber}!`);
-                selectedItem = itemNumber;
-                tg.MainButton.show();
-                logAndSendClick(selectedItem);
-            }
-        });
-    });
-}
-
-// Логирование и отправка данных
 function logAndSendClick(item) {
     let timestamp = new Date().toISOString();
     let logData = {
@@ -42,18 +24,102 @@ function logAndSendClick(item) {
     tg.sendData(JSON.stringify(logData));
 }
 
-// Настройка всех кнопок
-setupButton("btn1", "1");
-setupButton("btn2", "2");
-setupButton("btn3", "3");
-setupButton("btn4", "4");
-setupButton("btn5", "5");
-setupButton("btn6", "6");
+let btn1 = document.getElementById("btn1");
+let btn2 = document.getElementById("btn2");
+let btn3 = document.getElementById("btn3");
+let btn4 = document.getElementById("btn4");
+let btn5 = document.getElementById("btn5");
+let btn6 = document.getElementById("btn6");
 
-// Обработка клика по основной кнопке Telegram
-Telegram.WebApp.onEvent("mainButtonClicked", function() {
-    tg.sendData(selectedItem);
+btn1.addEventListener("click", function(){
+btn1.addEventListener("click", function() {
+    if (tg.MainButton.isVisible) {
+        tg.MainButton.hide();
+    }
+    else {
+    } else {
+        tg.MainButton.setText("Вы выбрали товар 1!");
+        item = "1";
+        tg.MainButton.show();
+        logAndSendClick(item);
+    }
 });
+
+btn2.addEventListener("click", function(){
+btn2.addEventListener("click", function() {
+    if (tg.MainButton.isVisible) {
+        tg.MainButton.hide();
+    }
+    else {
+    } else {
+        tg.MainButton.setText("Вы выбрали товар 2!");
+        item = "2";
+        tg.MainButton.show();
+        logAndSendClick(item);
+    }
+});
+
+btn3.addEventListener("click", function(){
+btn3.addEventListener("click", function() {
+    if (tg.MainButton.isVisible) {
+        tg.MainButton.hide();
+    }
+    else {
+    } else {
+        tg.MainButton.setText("Вы выбрали товар 3!");
+        item = "3";
+        tg.MainButton.show();
+        logAndSendClick(item);
+    }
+});
+
+btn4.addEventListener("click", function(){
+btn4.addEventListener("click", function() {
+    if (tg.MainButton.isVisible) {
+        tg.MainButton.hide();
+    }
+    else {
+    } else {
+        tg.MainButton.setText("Вы выбрали товар 4!");
+        item = "4";
+        tg.MainButton.show();
+        logAndSendClick(item);
+    }
+});
+
+btn5.addEventListener("click", function(){
+btn5.addEventListener("click", function() {
+    if (tg.MainButton.isVisible) {
+        tg.MainButton.hide();
+    }
+    else {
+    } else {
+        tg.MainButton.setText("Вы выбрали товар 5!");
+        item = "5";
+        tg.MainButton.show();
+        logAndSendClick(item);
+    }
+});
+
+btn6.addEventListener("click", function(){
+btn6.addEventListener("click", function() {
+    if (tg.MainButton.isVisible) {
+        tg.MainButton.hide();
+    }
+    else {
+    } else {
+        tg.MainButton.setText("Вы выбрали товар 6!");
+        item = "6";
+        tg.MainButton.show();
+        logAndSendClick(item);
+    }
+});
+
+Telegram.WebApp.onEvent("mainButtonClicked", function(){
+Telegram.WebApp.onEvent("mainButtonClicked", function() {
+    tg.sendData(item);
+});
+
 
 // Отображение информации о пользователе
 let usercard = document.getElementById("usercard");
