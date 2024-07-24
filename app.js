@@ -18,9 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     profileBtn.addEventListener('click', () => {
         mainContent.classList.add('hidden');
         profileContent.classList.remove('hidden');
-
-        // Запрашиваем данные профиля пользователя у Telegram бота
-        telegram.sendData(JSON.stringify({ action: 'get_profile' }));
     });
 
     buttons.forEach(button => {
@@ -55,6 +52,18 @@ document.addEventListener('DOMContentLoaded', () => {
             <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
             <span>${user.first_name} ${user.last_name}</span>
         `;
+
+        // Отправляем данные пользователя в Telegram бот
+        const userData = {
+            action: 'user_data',
+            user_id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            username: user.username,
+            phone_number: initDataUnsafe.user.phone_number || ''  // Проверка наличия номера телефона
+        };
+        telegram.sendData(JSON.stringify(userData));
+        console.log('Отправленные данные пользователя:', userData); // Отладочный вывод
     } else {
         console.log('Нет данных пользователя'); // Отладочный вывод
     }
