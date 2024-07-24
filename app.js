@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.btn');
     const userCard = document.getElementById('usercard');
     const telegram = window.Telegram.WebApp;
+    const userInfo = document.getElementById('user-info');
 
     const homeBtn = document.getElementById('home-btn');
     const profileBtn = document.getElementById('profile-btn');
@@ -50,4 +51,15 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>Email: ${profileData.email}</p>
         `;
     });
+
+    // Получаем данные о пользователе из Telegram Web Apps API
+    const initDataUnsafe = telegram.initDataUnsafe;
+    const user = initDataUnsafe.user;
+
+    if (user) {
+        userInfo.innerHTML = `
+            <img src="${user.photo_url}" alt="User Photo">
+            <span>${user.first_name} ${user.last_name}</span>
+        `;
+    }
 });
