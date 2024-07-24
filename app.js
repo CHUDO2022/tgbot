@@ -48,26 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (user) {
         console.log('Данные пользователя:', user); // Отладочный вывод
-
-        let profName = document.createElement('p'); //создаем параграф
-        profName.innerText = `${user.first_name} ${user.last_name || ''} (${user.username || ''}) [${user.language_code || ''}]`;
-        userCard.appendChild(profName); //добавляем 
-
-        let userid = document.createElement('p'); //создаем еще параграф 
-        userid.innerText = `ID: ${user.id}`; //показываем user_id
-        userCard.appendChild(userid); //добавляем
-
-        userInfo.innerHTML = `
-            <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
-            <span>
-                <span class="username">${user.first_name}</span>
-                <span class="status">Новичок</span>
-            </span>
-        `;
-
-        // Отправляем данные пользователя в Telegram бот
+        // Отправляем данные пользователя в Telegram бот для обработки и ответа
         const userData = {
-            action: 'user_data',
+            action: 'get_user_data',
             user_id: user.id,
             first_name: user.first_name,
             last_name: user.last_name,
@@ -85,8 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const profileData = JSON.parse(data);
         console.log('Получены данные профиля:', profileData); // Отладочный вывод
         profileInfo.innerHTML = `
-            <p>Имя: ${profileData.name}</p>
-            <p>Email: ${profileData.email}</p>
+            <p>Имя: ${profileData.first_name} ${profileData.last_name}</p>
+            <p>Username: ${profileData.username}</p>
+            <p>Phone: ${profileData.phone_number}</p>
+            <p>ID: ${profileData.user_id}</p>
+        `;
+        userInfo.innerHTML = `
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
+            <span>
+                <span class="username">${profileData.first_name}</span>
+                <span class="status">Новичок</span>
+            </span>
         `;
     });
 });
