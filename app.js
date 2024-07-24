@@ -66,6 +66,4 @@ if (tg.initDataUnsafe.user) {
     userImage.alt = "User Photo";
     userImage.style.borderRadius = "50%";
     userImage.style.width = "100px";
-    userImage.style.height = "100px";
-    userImage.style.objectFit = "cover";
-
+   
