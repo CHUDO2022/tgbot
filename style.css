@@ -129,6 +129,7 @@ header {
     align-items: center;
     gap: 10px;
     font-size: 16px;
+    color: white;
 }
 
 .user-info img {
@@ -137,3 +138,20 @@ header {
     border-radius: 50%;
 }
 
+.user-info span {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info .username {
+    font-weight: bold;
+}
+
+.user-info .status {
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-size: 12px;
+    margin-top: 2px;
+}
