@@ -48,7 +48,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (user) {
         console.log('Данные пользователя:', user); // Отладочный вывод
-        // Отправляем данные пользователя в Telegram бот для обработки и ответа
+
+        let profName = document.createElement('p'); //создаем параграф
+        profName.innerText = `${user.first_name} ${user.last_name || ''} (${user.username || ''}) [${user.language_code || ''}]`;
+        userCard.appendChild(profName); //добавляем 
+
+        let userid = document.createElement('p'); //создаем еще параграф 
+        userid.innerText = `ID: ${user.id}`; //показываем user_id
+        userCard.appendChild(userid); //добавляем
+
+        userInfo.innerHTML = `
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
+            <span>
+                <span class="username">${user.first_name}</span>
+                <span class="status">Новичок</span>
+            </span>
+        `;
+
+        // Отправляем данные пользователя в Telegram бот
         const userData = {
             action: 'get_user_data',
             user_id: user.id,
