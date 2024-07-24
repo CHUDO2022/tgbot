@@ -45,12 +45,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Получаем данные о пользователе из Telegram Web Apps API
     const initDataUnsafe = telegram.initDataUnsafe;
+    console.log('initDataUnsafe:', initDataUnsafe);  // Отладочный вывод
+    
     const user = initDataUnsafe.user;
 
     if (user) {
+        console.log('Данные пользователя:', user); // Отладочный вывод
         userInfo.innerHTML = `
             <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
             <span>${user.first_name} ${user.last_name}</span>
         `;
+    } else {
+        console.log('Нет данных пользователя'); // Отладочный вывод
     }
+
+    // Получаем данные из Telegram бота
+    telegram.onEvent('web_app_data', function(data) {
+        const profileData = JSON.parse(data);
+        console.log('Получены данные профиля:', profileData); // Отладочный вывод
+        profileInfo.innerHTML = `
+            <p>Имя: ${profileData.name}</p>
+            <p>Email: ${profileData.email}</p>
+        `;
+    });
 });
