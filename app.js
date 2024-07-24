@@ -43,22 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
         telegram.close();
     });
 
-    // Получаем данные из Telegram бота
-    telegram.onEvent('web_app_data', function(data) {
-        const profileData = JSON.parse(data);
-        profileInfo.innerHTML = `
-            <p>Имя: ${profileData.name}</p>
-            <p>Email: ${profileData.email}</p>
-        `;
-    });
-
     // Получаем данные о пользователе из Telegram Web Apps API
     const initDataUnsafe = telegram.initDataUnsafe;
     const user = initDataUnsafe.user;
 
     if (user) {
         userInfo.innerHTML = `
-            <img src="${user.photo_url}" alt="User Photo">
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
             <span>${user.first_name} ${user.last_name}</span>
         `;
     }
