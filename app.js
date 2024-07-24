@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const userCard = document.getElementById('usercard');
     const telegram = window.Telegram.WebApp;
     const userInfo = document.getElementById('user-info');
+    const userFooter = document.getElementById('user-footer');
 
     const homeBtn = document.getElementById('home-btn');
     const profileBtn = document.getElementById('profile-btn');
@@ -76,6 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         telegram.sendData(JSON.stringify(userData));
         console.log('Отправленные данные пользователя:', userData); // Отладочный вывод
+
+        // Отображаем имя пользователя внизу страницы
+        userFooter.innerText = `Пользователь: ${user.first_name} ${user.last_name || ''} (${user.username || ''})`;
     } else {
         console.log('Нет данных пользователя'); // Отладочный вывод
     }
