@@ -121,7 +121,5 @@ header {
     margin-top: 20px;
     padding: 20px;
     background: #1f1f1f;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px
 }
