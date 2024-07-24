@@ -7,7 +7,7 @@ tg.MainButton.color = '#2cab37';
 let item = "";
 
 // Функция для отправки данных о нажатии
-function sendClickData(buttonId, itemValue) {
+function sendClickData(buttonId, itemValue, itemText) {
     let timestamp = new Date().toISOString();
     let clickData = {
         item: itemValue,
@@ -21,6 +21,9 @@ function sendClickData(buttonId, itemValue) {
         }
     };
     tg.sendData(JSON.stringify(clickData));
+    tg.MainButton.setText(itemText);
+    item = itemValue;
+    tg.MainButton.show();
 }
 
 let btn1 = document.getElementById("btn1");
@@ -34,10 +37,7 @@ btn1.addEventListener("click", function() {
     if (tg.MainButton.isVisible) {
         tg.MainButton.hide();
     } else {
-        tg.MainButton.setText("Вы выбрали товар 1!");
-        item = "1";
-        tg.MainButton.show();
-        sendClickData("btn1", item);
+        sendClickData("btn1", "1", "Вы выбрали товар 1!");
     }
 });
 
@@ -45,10 +45,7 @@ btn2.addEventListener("click", function() {
     if (tg.MainButton.isVisible) {
         tg.MainButton.hide();
     } else {
-        tg.MainButton.setText("Вы выбрали товар 2!");
-        item = "2";
-        tg.MainButton.show();
-        sendClickData("btn2", item);
+        sendClickData("btn2", "2", "Вы выбрали товар 2!");
     }
 });
 
@@ -56,10 +53,7 @@ btn3.addEventListener("click", function() {
     if (tg.MainButton.isVisible) {
         tg.MainButton.hide();
     } else {
-        tg.MainButton.setText("Вы выбрали товар 3!");
-        item = "3";
-        tg.MainButton.show();
-        sendClickData("btn3", item);
+        sendClickData("btn3", "3", "Вы выбрали товар 3!");
     }
 });
 
@@ -67,10 +61,7 @@ btn4.addEventListener("click", function() {
     if (tg.MainButton.isVisible) {
         tg.MainButton.hide();
     } else {
-        tg.MainButton.setText("Вы выбрали товар 4!");
-        item = "4";
-        tg.MainButton.show();
-        sendClickData("btn4", item);
+        sendClickData("btn4", "4", "Вы выбрали товар 4!");
     }
 });
 
@@ -78,10 +69,7 @@ btn5.addEventListener("click", function() {
     if (tg.MainButton.isVisible) {
         tg.MainButton.hide();
     } else {
-        tg.MainButton.setText("Вы выбрали товар 5!");
-        item = "5";
-        tg.MainButton.show();
-        sendClickData("btn5", item);
+        sendClickData("btn5", "5", "Вы выбрали товар 5!");
     }
 });
 
@@ -89,10 +77,7 @@ btn6.addEventListener("click", function() {
     if (tg.MainButton.isVisible) {
         tg.MainButton.hide();
     } else {
-        tg.MainButton.setText("Вы выбрали товар 6!");
-        item = "6";
-        tg.MainButton.show();
-        sendClickData("btn6", item);
+        sendClickData("btn6", "6", "Вы выбрали товар 6!");
     }
 });
 
