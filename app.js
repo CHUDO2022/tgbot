@@ -8,17 +8,19 @@ tg.MainButton.color = '#2cab37';
 let selectedItem = "";
 
 // Функция для обработки кликов по кнопкам
-function setupButton(buttonId, itemNumber) {
-    let button = document.getElementById(buttonId);
-    button.addEventListener("click", function() {
-        if (tg.MainButton.isVisible) {
-            tg.MainButton.hide();
-        } else {
-            tg.MainButton.setText(`Вы выбрали товар ${itemNumber}!`);
-            selectedItem = itemNumber;
-            tg.MainButton.show();
-            logAndSendClick(selectedItem);
-        }
+function setupButton(buttonClass, itemNumber) {
+    let buttons = document.getElementsByClassName(buttonClass);
+    Array.from(buttons).forEach(button => {
+        button.addEventListener("click", function() {
+            if (tg.MainButton.isVisible) {
+                tg.MainButton.hide();
+            } else {
+                tg.MainButton.setText(`Вы выбрали товар ${itemNumber}!`);
+                selectedItem = itemNumber;
+                tg.MainButton.show();
+                logAndSendClick(selectedItem);
+            }
+        });
     });
 }
 
