@@ -66,4 +66,11 @@ if (tg.initDataUnsafe.user) {
     userImage.alt = "User Photo";
     userImage.style.borderRadius = "50%";
     userImage.style.width = "100px";
-   
+    userImage.style.height = "100px";
+
+    let userInfo = document.createElement("p");
+    userInfo.innerText = `${tg.initDataUnsafe.user.first_name} ${tg.initDataUnsafe.user.last_name}\n@${tg.initDataUnsafe.user.username}`;
+
+    usercard.appendChild(userImage);
+    usercard.appendChild(userInfo);
+}
