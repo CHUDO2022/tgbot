@@ -57,17 +57,8 @@ Telegram.WebApp.onEvent("mainButtonClicked", function() {
 let usercard = document.getElementById("usercard");
 
 if (tg.initDataUnsafe.user) {
-    let userImage = document.createElement("img");
-    userImage.src = tg.initDataUnsafe.user.photo_url || 'default-avatar.png'; // Поставьте здесь URL по умолчанию, если нет фото
-    userImage.alt = "User Photo";
-    userImage.style.borderRadius = "50%";
-    userImage.style.width = "100px";
-    userImage.style.height = "100px";
-    userImage.style.objectFit = "cover";
+    let userImage = document.getElementById("user-avatar");
+    userImage.src = tg.initDataUnsafe.user.photo_url || 'default-avatar.png';
 
-    let userName = document.createElement("p");
-    userName.innerText = `${tg.initDataUnsafe.user.first_name || ''} ${tg.initDataUnsafe.user.last_name || ''}`;
-
-    usercard.appendChild(userImage);
-    usercard.appendChild(userName);
-}
+    let userName = document.getElementById("user-name");
+    userName.innerText = `${tg.initDataUnsafe.user.first_name || ''} ${tg
