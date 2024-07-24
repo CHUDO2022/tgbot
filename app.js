@@ -50,7 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Данные пользователя:', user); // Отладочный вывод
         userInfo.innerHTML = `
             <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
-            <span>${user.first_name} ${user.last_name}</span>
+            <span>
+                <span class="username">${user.first_name}</span>
+                <span class="status">Новичок</span>
+            </span>
         `;
 
         // Отправляем данные пользователя в Telegram бот
