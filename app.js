@@ -10,7 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
             userCard.textContent = message;
 
             // Отправляем данные в Telegram бот
-            telegram.sendData(JSON.stringify({ productId: productId, message: message }));
+            const data = { productId: productId, message: message };
+            telegram.sendData(JSON.stringify(data));
+
+            // Для отладки выводим данные в консоль
+            console.log('Отправленные данные:', data);
         });
     });
 
