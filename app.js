@@ -47,6 +47,10 @@ setupButton("btn3", "3");
 setupButton("btn4", "4");
 setupButton("btn5", "5");
 setupButton("btn6", "6");
+setupButton("btn7", "7");
+setupButton("btn8", "8");
+setupButton("btn9", "9");
+setupButton("btn10", "10");
 
 // Обработка клика по основной кнопке Telegram
 Telegram.WebApp.onEvent("mainButtonClicked", function() {
@@ -57,8 +61,11 @@ Telegram.WebApp.onEvent("mainButtonClicked", function() {
 let usercard = document.getElementById("usercard");
 
 if (tg.initDataUnsafe.user) {
-    let userImage = document.getElementById("user-avatar");
+    let userImage = document.createElement("img");
     userImage.src = tg.initDataUnsafe.user.photo_url || 'default-avatar.png';
+    userImage.alt = "User Photo";
+    userImage.style.borderRadius = "50%";
+    userImage.style.width = "100px";
+    userImage.style.height = "100px";
+    userImage.style.objectFit = "cover";
 
-    let userName = document.getElementById("user-name");
-    userName.innerText = `${tg.initDataUnsafe.user.first_name || ''} ${tg
