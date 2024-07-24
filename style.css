@@ -1,70 +1,195 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
     margin: 0;
-    padding: 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(to bottom, #000000, #121212);
+    color: white;
+}
+
+.app-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
     min-height: 100vh;
 }
 
-.container {
-    max-width: 1200px;
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
+header {
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 10px;
+    background: #1f1f1f;
+    border-bottom: 1px solid #333;
+}
+
+.header-left .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.user-status {
+    margin-left: 10px;
+    color: #888;
+}
+
+.telegram-channel {
+    display: flex;
+    align-items: center;
+}
+
+.telegram-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.search-bar {
+    padding: 20px;
+    background: #1f1f1f;
+    display: flex;
     justify-content: center;
-    gap: 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+}
+
+.card {
+    background: linear-gradient(145deg, #7e57c2, #673ab7);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    flex: 1;
+    min-width: 200px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
 }
 
 .inner {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: center;
 }
 
 .item {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    width: calc(33.333% - 40px);
-    box-sizing: border-box;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: #1f1f1f;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.item img {
-    width: 100%;
-    height: auto;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 15px;
+.img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
 }
 
 .btn {
-    background-color: #007bff;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: linear-gradient(145deg, #7e57c2, #673ab7);
     color: white;
     border: none;
-    padding: 10px 15px;
-    cursor: pointer;
     border-radius: 5px;
-    transition: background-color 0.3s ease;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
 }
 
 .btn:hover {
+    background: linear-gradient(145deg, #9575cd, #7e57c2);
+}
+
+.info-panels {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.panel {
+    background: #2b2b2b;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    flex: 1;
+    min-width: 200px;
+}
+
+.panel-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.select-order .order-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.select-order .order-btn:hover {
     background-color: #0056b3;
 }
 
 .usercard {
-    margin-top: 30px;
+    margin-top: 20px;
     padding: 20px;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: #1f1f1f;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
