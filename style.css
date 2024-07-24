@@ -75,26 +75,28 @@ header {
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 20px 0;
+}
+
+.items-wrapper {
+    display: inline-flex;
+    gap: 10px;
 }
 
 .item {
     background: #1f1f1f;
     border-radius: 10px;
     padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: inline-block;
+    text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px;
 }
 
 .img {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     border-radius: 10px;
 }
