@@ -5,9 +5,24 @@ tg.expand();
 tg.MainButton.textColor = '#FFFFFF';
 tg.MainButton.color = '#2cab37';
 
-let item = "";
+let selectedItem = "";
 
-// Функция для логирования и отправки данных
+// Функция для обработки кликов по кнопкам
+function setupButton(buttonId, itemNumber) {
+    let button = document.getElementById(buttonId);
+    button.addEventListener("click", function() {
+        if (tg.MainButton.isVisible) {
+            tg.MainButton.hide();
+        } else {
+            tg.MainButton.setText(`Вы выбрали товар ${itemNumber}!`);
+            selectedItem = itemNumber;
+            tg.MainButton.show();
+            logAndSendClick(selectedItem);
+        }
+    });
+}
+
+// Логирование и отправка данных
 function logAndSendClick(item) {
     let timestamp = new Date().toISOString();
     let logData = {
@@ -25,21 +40,6 @@ function logAndSendClick(item) {
     tg.sendData(JSON.stringify(logData));
 }
 
-// Функция для обработки кликов по кнопкам
-function setupButton(buttonId, itemNumber) {
-    let button = document.getElementById(buttonId);
-    button.addEventListener("click", function() {
-        if (tg.MainButton.isVisible) {
-            tg.MainButton.hide();
-        } else {
-            tg.MainButton.setText(`Вы выбрали товар ${itemNumber}!`);
-            item = itemNumber;
-            tg.MainButton.show();
-            logAndSendClick(item);
-        }
-    });
-}
-
 // Настройка всех кнопок
 setupButton("btn1", "1");
 setupButton("btn2", "2");
@@ -47,14 +47,10 @@ setupButton("btn3", "3");
 setupButton("btn4", "4");
 setupButton("btn5", "5");
 setupButton("btn6", "6");
-setupButton("btn7", "7");
-setupButton("btn8", "8");
-setupButton("btn9", "9");
-setupButton("btn10", "10");
 
 // Обработка клика по основной кнопке Telegram
 Telegram.WebApp.onEvent("mainButtonClicked", function() {
-    tg.sendData(item);
+    tg.sendData(selectedItem);
 });
 
 // Отображение информации о пользователе
