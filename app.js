@@ -19,96 +19,54 @@ document.addEventListener('DOMContentLoaded', () => {
     // Список разрешенных user ID для доступа к кнопке статистики
     const allowedUserIds = ['698266175', '987654321']; // Замените на ваши user ID
 
-    // Инициализация базы данных
-    let db;
-    const request = indexedDB.open('ProductStatisticsDB', 1);
-
-    request.onerror = (event) => {
-        console.error('Ошибка при открытии базы данных', event);
-    };
-
-    request.onsuccess = (event) => {
-        db = event.target.result;
-        sendStatisticsToSecondBot(); // Отправка статистики при загрузке приложения
-    };
-
-    request.onupgradeneeded = (event) => {
-        db = event.target.result;
-        const objectStore = db.createObjectStore('productStatistics', { keyPath: 'userId' });
-        objectStore.createIndex('productId', 'productId', { unique: false });
-    };
-
-    // Функция для обновления статистики
+    // Функция для обновления статистики в localStorage
     function updateProductStatistics(productId, userId, username) {
-        const transaction = db.transaction(['productStatistics'], 'readwrite');
-        const objectStore = transaction.objectStore('productStatistics');
+        const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
+        const userStatistics = productStatistics[userId] || {};
 
-        objectStore.get(userId).onsuccess = (event) => {
-            const userStatistics = event.target.result || { userId: userId, stats: {} };
+        if (userStatistics[productId]) {
+            userStatistics[productId].count++;
+        } else {
+            userStatistics[productId] = { count: 1, username: username };
+        }
 
-            if (userStatistics.stats[productId]) {
-                userStatistics.stats[productId].count++;
-            } else {
-                userStatistics.stats[productId] = { count: 1, username: username };
-            }
-
-            objectStore.put(userStatistics);
-            sendStatisticsToSecondBot(); // Отправка статистики после обновления
-        };
+        productStatistics[userId] = userStatistics;
+        localStorage.setItem('productStatistics', JSON.stringify(productStatistics));
     }
 
-    // Функция для создания сообщения со статистикой
-    function createStatisticsMessage() {
-        const transaction = db.transaction(['productStatistics'], 'readonly');
-        const objectStore = transaction.objectStore('productStatistics');
-        const request = objectStore.getAll();
-
-        return new Promise((resolve, reject) => {
-            request.onsuccess = () => {
-                const productStatistics = request.result;
-                let messageContent = 'Статистика переходов:\n';
-                
-                productStatistics.forEach(userStats => {
-                    for (const [productId, data] of Object.entries(userStats.stats)) {
-                        messageContent += `Пользователь ${data.username || 'undefined'} (ID: ${userStats.userId}), Товар ${productId}: ${data.count} переходов\n`;
-                    }
-                });
-
-                resolve(messageContent);
-            };
-
-            request.onerror = (event) => {
-                reject(event);
-            };
-        });
-    }
-
-    // Функция для отправки сообщения со статистикой второму боту
+    // Функция для отправки данных статистики пользователю через второго бота
     function sendStatisticsToSecondBot() {
-        createStatisticsMessage().then(messageContent => {
-            fetch(secondBotUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    chat_id: '698266175', // Замените 'YOUR_CHAT_ID' на актуальный chat_id
-                    text: messageContent
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.ok) {
-                    console.log('Статистика отправлена второму боту:', data);
-                } else {
-                    console.error('Ошибка при отправке статистики второму боту:', data);
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка при отправке статистики второму боту:', error);
-            });
-        }).catch(error => {
-            console.error('Ошибка при создании сообщения со статистикой:', error);
+        const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
+        let message = 'Статистика переходов:\n';
+
+        for (const [userId, userStats] of Object.entries(productStatistics)) {
+            for (const [productId, data] of Object.entries(userStats)) {
+                message += `Пользователь ${data.username || 'undefined'} (ID: ${userId}), Товар ${productId}: ${data.count} переходов\n`;
+            }
+        }
+
+        const data = {
+            chat_id: '698266175', // Замените на актуальный chat_id
+            text: message
+        };
+
+        fetch(secondBotUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                console.log('Статистика отправлена второму боту:', data);
+            } else {
+                console.error('Ошибка при отправке статистики второму боту:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при отправке статистики второму боту:', error);
         });
     }
 
@@ -122,6 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
         mainContent.classList.add('hidden');
         profileContent.classList.remove('hidden');
         statsContent.classList.add('hidden');
+    });
+
+    statsBtn.addEventListener('click', () => {
+        mainContent.classList.add('hidden');
+        profileContent.classList.add('hidden');
+        statsContent.classList.remove('hidden');
+        sendStatisticsToSecondBot();
     });
 
     buttons.forEach(button => {
