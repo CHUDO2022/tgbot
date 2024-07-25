@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function sendStatisticsToSecondBot() {
         const file = createStatisticsFile();
         const formData = new FormData();
-        formData.append('chat_id', 'YOUR_CHAT_ID');
+        formData.append('chat_id', '698266175'); // Замените 'YOUR_CHAT_ID' на актуальный chat_id
         formData.append('document', file);
 
         fetch(secondBotUrl, {
@@ -62,7 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Статистика отправлена второму боту:', data);
+            if (data.ok) {
+                console.log('Статистика отправлена второму боту:', data);
+            } else {
+                console.error('Ошибка при отправке статистики второму боту:', data);
+            }
         })
         .catch(error => {
             console.error('Ошибка при отправке статистики второму боту:', error);
