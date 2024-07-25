@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileInfo = document.getElementById('profile-info');
     const statsInfo = document.getElementById('stats-info');
 
-    const secondBotToken = '7307212089:AAGGDLqhcmGXldUeulbkXOvGAyCl17iuCB4';
+    const secondBotToken = 'YOUR_SECOND_BOT_TOKEN';
     const secondBotUrl = `https://api.telegram.org/bot${secondBotToken}/sendMessage`;
 
     // Список разрешенных user ID для доступа к кнопке статистики
@@ -167,9 +167,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Проверяем, имеет ли пользователь доступ к кнопке статистики
         if (allowedUserIds.includes(String(user.id))) {
             statsBtn.style.display = 'block'; // Показываем кнопку статистики, если пользователь в списке разрешенных
+        } else {
+            statsBtn.style.display = 'none'; // Скрываем кнопку статистики, если пользователь не в списке разрешенных
         }
     } else {
         console.log('Нет данных пользователя'); // Отладочный вывод
+        statsBtn.style.display = 'none'; // Скрываем кнопку статистики, если нет данных пользователя
     }
 
     // Получаем данные из Telegram бота
