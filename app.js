@@ -3,15 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const userCard = document.getElementById('usercard');
     const telegram = window.Telegram.WebApp;
     const userInfo = document.getElementById('user-info');
-    const userFooter = document.getElementById('user-footer');
-
-    const homeBtn = document.getElementById('home-btn');
-    const profileBtn = document.getElementById('profile-btn');
-    const mainContent = document.getElementById('main-content');
-    const profileContent = document.getElementById('profile-content');
-    const statsContent = document.getElementById('stats-content');
-    const profileInfo = document.getElementById('profile-info');
-    const statsInfo = document.getElementById('stats-info');
 
     const secondBotToken = '7307212089:AAGGDLqhcmGXldUeulbkXOvGAyCl17iuCB4';  // Замените на токен второго бота
     const secondBotUrl = `https://api.telegram.org/bot${secondBotToken}/sendMessage`;
@@ -45,13 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для отправки статистики второму боту
     function sendStatisticsToSecondBot(productId) {
-        const message = {
-            username: user.username,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            user_id: user.id,
-            product_id: productId
-        };
+        const message = `Пользователь ${user.username || user.first_name} (${user.id}) выбрал товар ${productId}`;
 
         fetch(secondBotUrl, {
             method: 'POST',
@@ -60,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify({
                 chat_id: '698266175',  // Замените на ваш chat_id
-                text: JSON.stringify(message)
+                text: message
             })
         })
         .then(response => response.json())
