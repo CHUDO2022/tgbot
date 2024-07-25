@@ -29,15 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     request.onsuccess = (event) => {
         db = event.target.result;
+        sendStatisticsToSecondBot(); // Отправка статистики при загрузке приложения
     };
 
     request.onupgradeneeded = (event) => {
         db = event.target.result;
         const objectStore = db.createObjectStore('productStatistics', { keyPath: 'userId' });
         objectStore.createIndex('productId', 'productId', { unique: false });
-
-        const userLogStore = db.createObjectStore('userLogs', { keyPath: 'userId' });
-        userLogStore.createIndex('username', 'username', { unique: false });
     };
 
     // Функция для обновления статистики
@@ -55,61 +53,62 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             objectStore.put(userStatistics);
+            sendStatisticsToSecondBot(); // Отправка статистики после обновления
         };
     }
 
-    // Функция для логирования пользователей
-    function logUser(userId, username) {
-        const transaction = db.transaction(['userLogs'], 'readwrite');
-        const objectStore = transaction.objectStore('userLogs');
-
-        objectStore.get(userId).onsuccess = (event) => {
-            if (!event.target.result) {
-                objectStore.put({ userId: userId, username: username });
-            }
-        };
-    }
-
-    // Функция для создания текстового файла с логами пользователей
-    function createUserLogFile() {
-        const transaction = db.transaction(['userLogs'], 'readonly');
-        const objectStore = transaction.objectStore('userLogs');
+    // Функция для создания текстового файла со статистикой
+    function createStatisticsFile() {
+        const transaction = db.transaction(['productStatistics'], 'readonly');
+        const objectStore = transaction.objectStore('productStatistics');
         const request = objectStore.getAll();
 
-        request.onsuccess = () => {
-            const userLogs = request.result;
-            let fileContent = 'Логи пользователей:\n';
-            
-            userLogs.forEach(log => {
-                fileContent += `Пользователь ${log.username || 'undefined'} (ID: ${log.userId})\n`;
-            });
+        return new Promise((resolve, reject) => {
+            request.onsuccess = () => {
+                const productStatistics = request.result;
+                let fileContent = 'Статистика переходов:\n';
+                
+                productStatistics.forEach(userStats => {
+                    for (const [productId, data] of Object.entries(userStats.stats)) {
+                        fileContent += `Пользователь ${data.username || 'undefined'} (ID: ${userStats.userId}), Товар ${productId}: ${data.count} переходов\n`;
+                    }
+                });
 
-            const blob = new Blob([fileContent], { type: 'text/plain' });
-            const file = new File([blob], 'userLogs.txt', { type: 'text/plain' });
-            sendUserLogToBot(file);
-        };
+                const blob = new Blob([fileContent], { type: 'text/plain' });
+                const file = new File([blob], 'statistics.txt', { type: 'text/plain' });
+                resolve(file);
+            };
+
+            request.onerror = (event) => {
+                reject(event);
+            };
+        });
     }
 
-    // Функция для отправки файла с логами пользователей второму боту
-    function sendUserLogToBot(file) {
-        const formData = new FormData();
-        formData.append('chat_id', '698266175'); // Замените 'YOUR_CHAT_ID' на актуальный chat_id
-        formData.append('document', file);
+    // Функция для отправки текстового файла со статистикой второму боту
+    function sendStatisticsToSecondBot() {
+        createStatisticsFile().then(file => {
+            const formData = new FormData();
+            formData.append('chat_id', '698266175'); // Замените 'YOUR_CHAT_ID' на актуальный chat_id
+            formData.append('document', file);
 
-        fetch(secondBotUrl, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.ok) {
-                console.log('Логи пользователей отправлены второму боту:', data);
-            } else {
-                console.error('Ошибка при отправке логов пользователей второму боту:', data);
-            }
-        })
-        .catch(error => {
-            console.error('Ошибка при отправке логов пользователей второму боту:', error);
+            fetch(secondBotUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    console.log('Статистика отправлена второму боту:', data);
+                } else {
+                    console.error('Ошибка при отправке статистики второму боту:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка при отправке статистики второму боту:', error);
+            });
+        }).catch(error => {
+            console.error('Ошибка при создании файла со статистикой:', error);
         });
     }
 
@@ -125,13 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
         statsContent.classList.add('hidden');
     });
 
-    statsBtn.addEventListener('click', () => {
-        mainContent.classList.add('hidden');
-        profileContent.classList.add('hidden');
-        statsContent.classList.remove('hidden');
-        createUserLogFile(); // Отправляем логи пользователей при нажатии на кнопку статистики
-    });
-
     buttons.forEach(button => {
         button.addEventListener('click', () => {
             const productId = button.id.replace('btn', ''); // Извлекаем номер товара из id кнопки
@@ -144,8 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (user) {
                 // Обновляем статистику переходов
                 updateProductStatistics(productId, user.id, user.username);
-                // Логируем пользователя
-                logUser(user.id, user.username);
 
                 // Отправляем данные в Telegram бот
                 const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
