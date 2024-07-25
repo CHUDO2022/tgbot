@@ -18,18 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для обновления статистики в localStorage
     function updateProductStatistics(productId, userId, username) {
         const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
-        const userStatistics = productStatistics[userId] || { username: username, products: {} };
         const userStatistics = productStatistics[userId] || {};
-
-        if (userStatistics.products[productId]) {
-            userStatistics.products[productId]++;
         if (userStatistics[productId]) {
             userStatistics[productId].count++;
         } else {
-            userStatistics.products[productId] = 1;
             userStatistics[productId] = { count: 1, username: username };
         }
-
         productStatistics[userId] = userStatistics;
         localStorage.setItem('productStatistics', JSON.stringify(productStatistics));
     }
@@ -37,39 +31,32 @@ document.addEventListener('DOMContentLoaded', () => {
     function createStatisticsFile() {
         const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
         let fileContent = 'Статистика переходов:\n';
-
+        
         for (const [userId, userStats] of Object.entries(productStatistics)) {
-            const username = userStats.username || 'undefined';
-            for (const [productId, count] of Object.entries(userStats.products)) {
-                fileContent += `Пользователь ${username} (ID: ${userId}), Товар ${productId}: ${count} переходов\n`;
             for (const [productId, data] of Object.entries(userStats)) {
-                fileContent += `Пользователь ${data.username || 'undefined'} (ID: ${userId}), Товар ${productId}: ${data.count} переходов\n`;
+                fileContent += `Пользователь ${data.username} (ID: ${userId}), Товар ${productId}: ${data.count} переходов\n`;
             }
         }
-
         const blob = new Blob([fileContent], { type: 'text/plain' });
         return new File([blob], 'statistics.txt', { type: 'text/plain' });
     }
-
     // Функция для отправки текстового файла второму боту
     function sendStatisticsToSecondBot() {
-        console.log('Создаем файл статистики...');
         const file = createStatisticsFile();
         const formData = new FormData();
-        formData.append('chat_id', '698266175'); // Ваш chat_idните 'YOUR_CHAT_ID' на актуальный chat_id
+
+        formData.append('chat_id', '698266175'); // Замените 'YOUR_CHAT_ID' на актуальный chat_id
         formData.append('document', file);
 
-        console.log('Отправляем файл статистики боту...');
         fetch(secondBotUrl, {
             method: 'POST',
             body: formData
         })
         .then(response => response.json())
         .then(data => {
+
             if (data.ok) {
                 console.log('Статистика отправлена второму боту:', data);
-                // Очищаем статистику после успешной отправки
-                localStorage.removeItem('productStatistics');
             } else {
                 console.error('Ошибка при отправке статистики второму боту:', data);
             }
@@ -88,9 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         profileContent.classList.remove('hidden');
         statsContent.classList.add('hidden');
     });
-
     statsBtn.addEventListener('click', () => {
-        console.log('Нажата кнопка статистики');
         mainContent.classList.add('hidden');
         profileContent.classList.add('hidden');
         statsContent.classList.remove('hidden');
