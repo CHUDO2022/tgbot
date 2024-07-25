@@ -22,40 +22,47 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для обновления статистики в localStorage
     function updateProductStatistics(productId, userId, username) {
         const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
-        const userStatistics = productStatistics[userId] || {};
+        const userStatistics = productStatistics[userId] || { username: username, products: {} };
 
-        if (userStatistics[productId]) {
-            userStatistics[productId].count++;
+        if (userStatistics.products[productId]) {
+            userStatistics.products[productId]++;
         } else {
-            userStatistics[productId] = { count: 1, username: username };
+            userStatistics.products[productId] = 1;
         }
 
         productStatistics[userId] = userStatistics;
         localStorage.setItem('productStatistics', JSON.stringify(productStatistics));
     }
 
-    // Функция для создания текстового файла со статистикой
+    // Функция для создания Excel-файла со статистикой
     function createStatisticsFile() {
         const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
-        let fileContent = 'Статистика переходов:\n';
+        const data = [['Пользователь', 'ID', 'Товар', 'Количество переходов']];
         
         for (const [userId, userStats] of Object.entries(productStatistics)) {
-            for (const [productId, data] of Object.entries(userStats)) {
-                fileContent += `Пользователь ${data.username || 'undefined'} (ID: ${userId}), Товар ${productId}: ${data.count} переходов\n`;
+            const username = userStats.username || 'undefined';
+            for (const [productId, count] of Object.entries(userStats.products)) {
+                data.push([username, userId, productId, count]);
             }
         }
 
-        const blob = new Blob([fileContent], { type: 'text/plain' });
-        return new File([blob], 'statistics.txt', { type: 'text/plain' });
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Statistics');
+
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        return new Blob([wbout], { type: 'application/octet-stream' });
     }
 
-    // Функция для отправки текстового файла второму боту
+    // Функция для отправки Excel-файла второму боту
     function sendStatisticsToSecondBot() {
+        console.log('Создаем файл статистики...');
         const file = createStatisticsFile();
         const formData = new FormData();
-        formData.append('chat_id', '698266175'); // Замените 'YOUR_CHAT_ID' на актуальный chat_id
-        formData.append('document', file);
+        formData.append('chat_id', '698266175'); // Ваш chat_id
+        formData.append('document', file, 'statistics.xlsx');
 
+        console.log('Отправляем файл статистики боту...');
         fetch(secondBotUrl, {
             method: 'POST',
             body: formData
@@ -64,6 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             if (data.ok) {
                 console.log('Статистика отправлена второму боту:', data);
+                // Очищаем статистику после успешной отправки
+                localStorage.removeItem('productStatistics');
             } else {
                 console.error('Ошибка при отправке статистики второму боту:', data);
             }
@@ -86,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     statsBtn.addEventListener('click', () => {
+        console.log('Нажата кнопка статистики');
         mainContent.classList.add('hidden');
         profileContent.classList.add('hidden');
         statsContent.classList.remove('hidden');
