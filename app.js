@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileInfo = document.getElementById('profile-info');
 
     const secondBotToken = '7307212089:AAGGDLqhcmGXldUeulbkXOvGAyCl17iuCB4';
-    const secondBotUrl = https://api.telegram.org/bot${secondBotToken}/sendDocument;
+    const secondBotUrl = `https://api.telegram.org/bot${secondBotToken}/sendDocument`;
 
     // Список разрешенных user ID для доступа к кнопке статистики
     const allowedUserIds = ['698266175', '987654321']; // Замените на ваши user ID
@@ -23,11 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateProductStatistics(productId, userId, username) {
         const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
         const userStatistics = productStatistics[userId] || {};
+        const userStatistics = productStatistics[userId] || { username: username, products: {} };
 
         if (userStatistics[productId]) {
             userStatistics[productId].count++;
+        if (userStatistics.products[productId]) {
+            userStatistics.products[productId]++;
         } else {
             userStatistics[productId] = { count: 1, username: username };
+            userStatistics.products[productId] = 1;
         }
 
         productStatistics[userId] = userStatistics;
@@ -38,13 +42,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function createStatisticsFile() {
         const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
         let fileContent = 'Статистика переходов:\n';
+
         
         for (const [userId, userStats] of Object.entries(productStatistics)) {
             for (const [productId, data] of Object.entries(userStats)) {
-                fileContent += Пользователь ${data.username || 'undefined'} (ID: ${userId}), Товар ${productId}: ${data.count} переходов\n;
+                fileContent += `Пользователь ${data.username || 'undefined'} (ID: ${userId}), Товар ${productId}: ${data.count} переходов\n`;
+            const username = userStats.username || 'undefined';
+            for (const [productId, count] of Object.entries(userStats.products)) {
+                fileContent += `Пользователь ${username} (ID: ${userId}), Товар ${productId}: ${count} переходов\n`;
             }
         }
-
         const blob = new Blob([fileContent], { type: 'text/plain' });
         return new File([blob], 'statistics.txt', { type: 'text/plain' });
     }
@@ -95,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     buttons.forEach(button => {
         button.addEventListener('click', () => {
             const productId = button.id.replace('btn', ''); // Извлекаем номер товара из id кнопки
-            const message = Вы выбрали такой товар №${productId};
+            const message = `Вы выбрали такой товар №${productId}`;
             userCard.textContent = message;
 
             // Получаем данные пользователя
@@ -127,18 +134,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (user) {
         console.log('Данные пользователя:', user); // Отладочный вывод
         let profName = document.createElement('p'); //создаем параграф
-        profName.innerText = ${user.first_name} ${user.last_name || ''} (${user.username || ''}) [${user.language_code || ''}];
+        profName.innerText = `${user.first_name} ${user.last_name || ''} (${user.username || ''}) [${user.language_code || ''}]`;
         userCard.appendChild(profName); //добавляем 
         let userid = document.createElement('p'); //создаем еще параграф 
-        userid.innerText = ID: ${user.id}; //показываем user_id
+        userid.innerText = `ID: ${user.id}`; //показываем user_id
         userCard.appendChild(userid); //добавляем
-        userInfo.innerHTML = 
+        userInfo.innerHTML = `
             <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
             <span>
                 <span class="username">${user.first_name}</span>
                 <span class="status">Новичок</span>
             </span>
-        ;
+        `;
         // Отправляем данные пользователя в Telegram бот
         const userData = {
             action: 'get_user_data',
@@ -152,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         telegram.sendData(JSON.stringify(userData));
         console.log('Отправленные данные пользователя:', userData); // Отладочный вывод
         // Отображаем имя пользователя внизу страницы
-        userFooter.innerText = Пользователь: ${user.first_name} ${user.last_name || ''} (${user.username || ''});
+        userFooter.innerText = `Пользователь: ${user.first_name} ${user.last_name || ''} (${user.username || ''})`;
 
         // Проверяем, имеет ли пользователь доступ к кнопке статистики
         if (allowedUserIds.includes(String(user.id))) {
@@ -169,18 +176,18 @@ document.addEventListener('DOMContentLoaded', () => {
     telegram.onEvent('web_app_data', function(data) {
         const profileData = JSON.parse(data);
         console.log('Получены данные профиля:', profileData); // Отладочный вывод
-        profileInfo.innerHTML = 
+        profileInfo.innerHTML = `
             <p>Имя: ${profileData.first_name} ${profileData.last_name}</p>
             <p>Username: ${profileData.username}</p>
             <p>Phone: ${profileData.phone_number}</p>
             <p>ID: ${profileData.user_id}</p>
-        ;
-        userInfo.innerHTML = 
+        `;
+        userInfo.innerHTML = `
             <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
             <span>
                 <span class="username">${profileData.first_name}</span>
                 <span class="status">Новичок</span>
             </span>
-        ;
+        `;
     });
 });
