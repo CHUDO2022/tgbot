@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         XLSX.utils.book_append_sheet(wb, ws, 'Statistics');
 
         const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-        return new Blob([wbout], { type: 'application/octet-stream' });
+        return new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     }
 
     // Функция для отправки Excel-файла второму боту
