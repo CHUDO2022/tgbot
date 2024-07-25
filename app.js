@@ -43,17 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         </span>
     `;
 
-    // Функция для обновления статистики и отправки второму боту
-    function updateProductStatistics(productId) {
-        const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
-        if (!productStatistics[productId]) {
-            productStatistics[productId] = 1;
-        } else {
-            productStatistics[productId]++;
-        }
-        localStorage.setItem('productStatistics', JSON.stringify(productStatistics));
-
-        // Отправка статистики второму боту
+    // Функция для отправки статистики второму боту
+    function sendStatisticsToSecondBot(productId) {
         const message = `Пользователь ${user.username || user.first_name} выбрал товар ${productId}`;
         fetch(secondBotUrl, {
             method: 'POST',
@@ -80,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const message = `Вы выбрали такой товар №${productId}`;
             userCard.textContent = message;
 
-            // Обновляем статистику переходов и отправляем данные второму боту
-            updateProductStatistics(productId);
+            // Отправка данных второму боту
+            sendStatisticsToSecondBot(productId);
 
             // Для отладки выводим данные в консоль
             console.log('Выбранный товар:', productId);
