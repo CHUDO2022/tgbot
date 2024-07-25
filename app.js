@@ -65,6 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             if (data.ok) {
                 console.log('Статистика отправлена второму боту:', data);
+                // Очищаем статистику после успешной отправки
+                localStorage.removeItem('productStatistics');
             } else {
                 console.error('Ошибка при отправке статистики второму боту:', data);
             }
