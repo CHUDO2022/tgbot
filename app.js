@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Создаем файл статистики...');
         const file = createStatisticsFile();
         const formData = new FormData();
-        formData.append('chat_id', '698266175'); // Замените 'YOUR_CHAT_ID' на актуальный chat_id
+
         formData.append('chat_id', '698266175'); // Ваш chat_id
         formData.append('document', file);
 
