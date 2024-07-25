@@ -4,58 +4,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const telegram = window.Telegram.WebApp;
     const userInfo = document.getElementById('user-info');
 
-    const secondBotToken = '7307212089:AAGGDLqhcmGXldUeulbkXOvGAyCl17iuCB4';  // Токен второго бота
-    const secondBotUrl = `https://api.telegram.org/bot${secondBotToken}/sendMessage`;
+    const homeBtn = document.getElementById('home-btn');
+    const profileBtn = document.getElementById('profile-btn');
+    const mainContent = document.getElementById('main-content');
+    const profileContent = document.getElementById('profile-content');
+    const profileInfo = document.getElementById('profile-info');
 
-    const user = telegram.initDataUnsafe?.user || null;
+    homeBtn.addEventListener('click', () => {
+        mainContent.classList.remove('hidden');
+        profileContent.classList.add('hidden');
+    });
 
-    // Проверка и инициализация Telegram Web Apps SDK
-    if (!user) {
-        console.error("Telegram Web Apps SDK не инициализирован. Проверьте правильность инициализации.");
-        return;
-    }
+    profileBtn.addEventListener('click', () => {
+        mainContent.classList.add('hidden');
+        profileContent.classList.remove('hidden');
 
-    console.log('Данные пользователя:', user);
-
-    // Отображение данных пользователя
-    let profName = document.createElement('p');
-    profName.innerText = `${user.first_name} ${user.last_name || ''} (${user.username || ''}) [${user.language_code || ''}]`;
-    userCard.appendChild(profName);
-
-    let userid = document.createElement('p');
-    userid.innerText = `ID: ${user.id}`;
-    userCard.appendChild(userid);
-
-    userInfo.innerHTML = `
-        <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
-        <span>
-            <span class="username">${user.first_name}</span>
-            <span class="status">Новичок</span>
-        </span>
-    `;
-
-    // Функция для отправки статистики второму боту
-    function sendStatisticsToSecondBot(productId) {
-        const message = `Пользователь ${user.username || user.first_name} (${user.id}) выбрал товар ${productId}`;
-
-        fetch(secondBotUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                chat_id: '698266175',  // Замените на ваш chat_id
-                text: message
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Статистика отправлена второму боту:', data);
-        })
-        .catch(error => {
-            console.error('Ошибка при отправке статистики второму боту:', error);
-        });
-    }
+        // Запрашиваем данные профиля пользователя у Telegram бота
+        telegram.sendData(JSON.stringify({ action: 'get_profile' }));
+    });
 
     buttons.forEach(button => {
         button.addEventListener('click', () => {
@@ -63,11 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const message = `Вы выбрали такой товар №${productId}`;
             userCard.textContent = message;
 
-            // Отправка данных второму боту
-            sendStatisticsToSecondBot(productId);
+            // Отправляем данные в Telegram бот
+            const data = { productId: productId, message: message };
+            telegram.sendData(JSON.stringify(data));
 
             // Для отладки выводим данные в консоль
-            console.log('Выбранный товар:', productId);
+            console.log('Отправленные данные:', data);
         });
     });
 
@@ -76,22 +43,23 @@ document.addEventListener('DOMContentLoaded', () => {
         telegram.close();
     });
 
-    // Обработчик события получения данных из Telegram бота
+    // Получаем данные из Telegram бота
     telegram.onEvent('web_app_data', function(data) {
         const profileData = JSON.parse(data);
-        console.log('Получены данные профиля:', profileData); // Отладочный вывод
         profileInfo.innerHTML = `
-            <p>Имя: ${profileData.first_name} ${profileData.last_name}</p>
-            <p>Username: ${profileData.username}</p>
-            <p>Phone: ${profileData.phone_number}</p>
-            <p>ID: ${profileData.user_id}</p>
-        `;
-        userInfo.innerHTML = `
-            <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
-            <span>
-                <span class="username">${profileData.first_name}</span>
-                <span class="status">Новичок</span>
-            </span>
+            <p>Имя: ${profileData.name}</p>
+            <p>Email: ${profileData.email}</p>
         `;
     });
+
+    // Получаем данные о пользователе из Telegram Web Apps API
+    const initDataUnsafe = telegram.initDataUnsafe;
+    const user = initDataUnsafe.user;
+
+    if (user) {
+        userInfo.innerHTML = `
+            <img src="${user.photo_url}" alt="User Photo">
+            <span>${user.first_name} ${user.last_name}</span>
+        `;
+    }
 });
