@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileContent = document.getElementById('profile-content');
     const statsContent = document.getElementById('stats-content');
     const profileInfo = document.getElementById('profile-info');
-    const statsInfo = document.getElementById('stats-info');
 
     const secondBotToken = '7307212089:AAGGDLqhcmGXldUeulbkXOvGAyCl17iuCB4';
     const secondBotUrl = `https://api.telegram.org/bot${secondBotToken}/sendDocument`;
