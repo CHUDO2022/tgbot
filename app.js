@@ -1,32 +1,3 @@
-Skip to content
-Navigation Menu
-CHUDO2022
-/
-tgbot
-
-Type / to search
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-1
-Insights
-Settings
-Commit
-Update app.js
- main
-@CHUDO2022
-CHUDO2022 committed 4 hours ago 
-1 parent 846cccd
-commit 18f32ac
-Showing 1 changed file with 3 additions and 2 deletions.
-  5 changes: 3 additions & 2 deletions5  
-app.js
-Copied!
-Original file line number	Diff line number	Diff line change
 document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.btn');
     const userCard = document.getElementById('usercard');
@@ -122,22 +93,3 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     });
 });
-0 comments on commit 18f32ac
-@CHUDO2022
-Comment
- 
-Leave a comment
- 
- You’re receiving notifications because you’re watching this repository.
-Footer
-© 2024 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
-Status
-Docs
-Contact
-Manage cookies
-Do not share my personal information
-Copied!
