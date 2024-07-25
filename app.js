@@ -20,9 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Список разрешенных user ID для доступа к кнопке статистики
     const allowedUserIds = ['698266175', '987654321']; // Замените на ваши user ID
 
-    // Скрываем кнопку статистики по умолчанию
-    statsBtn.style.display = 'none';
-
     // Функция для обновления статистики в localStorage
     function updateProductStatistics(productId, userId) {
         const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
