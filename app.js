@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
         db = event.target.result;
         const objectStore = db.createObjectStore('productStatistics', { keyPath: 'userId' });
         objectStore.createIndex('productId', 'productId', { unique: false });
+
+        const userLogStore = db.createObjectStore('userLogs', { keyPath: 'userId' });
+        userLogStore.createIndex('username', 'username', { unique: false });
     };
 
     // Функция для обновления статистики
@@ -56,30 +59,40 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Функция для создания текстового файла со статистикой
-    function createStatisticsFile() {
-        const transaction = db.transaction(['productStatistics'], 'readonly');
-        const objectStore = transaction.objectStore('productStatistics');
-        const request = objectStore.getAll();
+    // Функция для логирования пользователей
+    function logUser(userId, username) {
+        const transaction = db.transaction(['userLogs'], 'readwrite');
+        const objectStore = transaction.objectStore('userLogs');
 
-        request.onsuccess = () => {
-            const productStatistics = request.result;
-            let fileContent = 'Статистика переходов:\n';
-            
-            productStatistics.forEach(userStats => {
-                for (const [productId, data] of Object.entries(userStats.stats)) {
-                    fileContent += `Пользователь ${data.username || 'undefined'} (ID: ${userStats.userId}), Товар ${productId}: ${data.count} переходов\n`;
-                }
-            });
-
-            const blob = new Blob([fileContent], { type: 'text/plain' });
-            const file = new File([blob], 'statistics.txt', { type: 'text/plain' });
-            sendStatisticsToSecondBot(file);
+        objectStore.get(userId).onsuccess = (event) => {
+            if (!event.target.result) {
+                objectStore.put({ userId: userId, username: username });
+            }
         };
     }
 
-    // Функция для отправки текстового файла второму боту
-    function sendStatisticsToSecondBot(file) {
+    // Функция для создания текстового файла с логами пользователей
+    function createUserLogFile() {
+        const transaction = db.transaction(['userLogs'], 'readonly');
+        const objectStore = transaction.objectStore('userLogs');
+        const request = objectStore.getAll();
+
+        request.onsuccess = () => {
+            const userLogs = request.result;
+            let fileContent = 'Логи пользователей:\n';
+            
+            userLogs.forEach(log => {
+                fileContent += `Пользователь ${log.username || 'undefined'} (ID: ${log.userId})\n`;
+            });
+
+            const blob = new Blob([fileContent], { type: 'text/plain' });
+            const file = new File([blob], 'userLogs.txt', { type: 'text/plain' });
+            sendUserLogToBot(file);
+        };
+    }
+
+    // Функция для отправки файла с логами пользователей второму боту
+    function sendUserLogToBot(file) {
         const formData = new FormData();
         formData.append('chat_id', '698266175'); // Замените 'YOUR_CHAT_ID' на актуальный chat_id
         formData.append('document', file);
@@ -91,13 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             if (data.ok) {
-                console.log('Статистика отправлена второму боту:', data);
+                console.log('Логи пользователей отправлены второму боту:', data);
             } else {
-                console.error('Ошибка при отправке статистики второму боту:', data);
+                console.error('Ошибка при отправке логов пользователей второму боту:', data);
             }
         })
         .catch(error => {
-            console.error('Ошибка при отправке статистики второму боту:', error);
+            console.error('Ошибка при отправке логов пользователей второму боту:', error);
         });
     }
 
@@ -117,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mainContent.classList.add('hidden');
         profileContent.classList.add('hidden');
         statsContent.classList.remove('hidden');
-        createStatisticsFile();
+        createUserLogFile(); // Отправляем логи пользователей при нажатии на кнопку статистики
     });
 
     buttons.forEach(button => {
@@ -132,6 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (user) {
                 // Обновляем статистику переходов
                 updateProductStatistics(productId, user.id, user.username);
+                // Логируем пользователя
+                logUser(user.id, user.username);
 
                 // Отправляем данные в Telegram бот
                 const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
