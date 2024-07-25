@@ -14,104 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileInfo = document.getElementById('profile-info');
     const statsInfo = document.getElementById('stats-info');
 
-    const secondBotToken = '7307212089:AAGGDLqhcmGXldUeulbkXOvGAyCl17iuCB4';  // Замените на токен второго бота
-    const secondBotUrl = `https://api.telegram.org/bot${secondBotToken}/sendMessage`;
-    const chatId = '698266175';  // Замените на ваш chat_id
-
-    // Функция для обновления статистики в localStorage
-    function updateProductStatistics(productId) {
-        const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
-        if (productStatistics[productId]) {
-            productStatistics[productId]++;
-        } else {
-            productStatistics[productId] = 1;
-        }
-        localStorage.setItem('productStatistics', JSON.stringify(productStatistics));
+    // Проверка и инициализация Telegram Web Apps SDK
+    if (!telegram.initDataUnsafe) {
+        console.error("Telegram Web Apps SDK не инициализирован. Проверьте правильность инициализации.");
+        return;
     }
 
-    // Функция для отправки статистики второму боту
-    function sendStatisticsToSecondBot() {
-        const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
-        const message = Object.entries(productStatistics).map(([productId, count]) => `Товар ${productId}: ${count} переходов`).join('\n');
-        
-        fetch(secondBotUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                chat_id: chatId,
-                text: message
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Статистика отправлена второму боту:', data);
-        })
-        .catch(error => {
-            console.error('Ошибка при отправке статистики второму боту:', error);
-        });
-    }
-
-    // Функция для отображения статистики
-    function displayStatistics() {
-        const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
-        statsInfo.innerHTML = '';
-        for (const [productId, count] of Object.entries(productStatistics)) {
-            const statItem = document.createElement('p');
-            statItem.innerText = `Товар ${productId}: ${count} переходов`;
-            statsInfo.appendChild(statItem);
-        }
-    }
-
-    homeBtn.addEventListener('click', () => {
-        mainContent.classList.remove('hidden');
-        profileContent.classList.add('hidden');
-        statsContent.classList.add('hidden');
-    });
-
-    profileBtn.addEventListener('click', () => {
-        mainContent.classList.add('hidden');
-        profileContent.classList.remove('hidden');
-        statsContent.classList.add('hidden');
-    });
-
-    statsBtn.addEventListener('click', () => {
-        mainContent.classList.add('hidden');
-        profileContent.classList.add('hidden');
-        statsContent.classList.remove('hidden');
-        displayStatistics();
-        sendStatisticsToSecondBot();
-    });
-
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            const productId = button.id.replace('btn', ''); // Извлекаем номер товара из id кнопки
-            const message = `Вы выбрали такой товар №${productId}`;
-            userCard.textContent = message;
-
-            // Обновляем статистику переходов
-            updateProductStatistics(productId);
-
-            // Отправляем данные в Telegram бот
-            const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
-            telegram.sendData(JSON.stringify(data));
-
-            // Для отладки выводим данные в консоль
-            console.log('Отправленные данные:', data);
-        });
-    });
-
-    const closeBtn = document.querySelector('.close-btn');
-    closeBtn.addEventListener('click', () => {
-        telegram.close();
-    });
-
-    // Получаем данные о пользователе из Telegram Web Apps API
-    const initDataUnsafe = telegram.initDataUnsafe;
-    console.log('initDataUnsafe:', initDataUnsafe);  // Отладочный вывод
-    
-    const user = initDataUnsafe.user;
+    const user = telegram.initDataUnsafe.user;
 
     if (user) {
         console.log('Данные пользователя:', user); // Отладочный вывод
@@ -139,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             first_name: user.first_name,
             last_name: user.last_name,
             username: user.username,
-            phone_number: initDataUnsafe.user.phone_number || '',  // Проверка наличия номера телефона
+            phone_number: '',  // Telegram Web Apps API не предоставляет номер телефона
             query_id: telegram.initDataUnsafe.query_id
         };
         telegram.sendData(JSON.stringify(userData));
@@ -150,6 +59,46 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.log('Нет данных пользователя'); // Отладочный вывод
     }
+
+    // Обработчик для отображения статистики
+    statsBtn.addEventListener('click', () => {
+        mainContent.classList.add('hidden');
+        profileContent.classList.add('hidden');
+        statsContent.classList.remove('hidden');
+
+        const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
+        statsInfo.innerHTML = '';
+        for (const [productId, count] of Object.entries(productStatistics)) {
+            const statItem = document.createElement('p');
+            statItem.innerText = `Товар ${productId}: ${count} переходов`;
+            statsInfo.appendChild(statItem);
+        }
+    });
+
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            const productId = button.id.replace('btn', ''); // Извлекаем номер товара из id кнопки
+            const message = `Вы выбрали такой товар №${productId}`;
+            userCard.textContent = message;
+
+            // Обновляем статистику переходов
+            const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
+            productStatistics[productId] = (productStatistics[productId] || 0) + 1;
+            localStorage.setItem('productStatistics', JSON.stringify(productStatistics));
+
+            // Отправляем данные в Telegram бот
+            const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
+            telegram.sendData(JSON.stringify(data));
+
+            // Для отладки выводим данные в консоль
+            console.log('Отправленные данные:', data);
+        });
+    });
+
+    const closeBtn = document.querySelector('.close-btn');
+    closeBtn.addEventListener('click', () => {
+        telegram.close();
+    });
 
     // Получаем данные из Telegram бота
     telegram.onEvent('web_app_data', function(data) {
