@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для отправки статистики второму боту
     function sendStatisticsToSecondBot(productId) {
         const data = {
-            chat_id: 'YOUR_CHAT_ID',  // Замените на ваш chat_id
+            chat_id: '698266175',  // Замените на ваш chat_id
             text: JSON.stringify({
                 username: user.username,
                 first_name: user.first_name,
