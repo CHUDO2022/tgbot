@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                chat_id: '698266175',  // Замените на ваш chat_id
+                chat_id: 'YOUR_SECOND_BOT_CHAT_ID',  // Замените на ваш chat_id
                 text: message
             })
         })
