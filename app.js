@@ -52,11 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для отправки текстового файла второму боту
     function sendStatisticsToSecondBot() {
+        console.log('Создаем файл статистики...');
         const file = createStatisticsFile();
         const formData = new FormData();
-        formData.append('chat_id', '698266175'); // Замените 'YOUR_CHAT_ID' на актуальный chat_id
+        formData.append('chat_id', '698266175'); // Ваш chat_id
         formData.append('document', file);
 
+        console.log('Отправляем файл статистики боту...');
         fetch(secondBotUrl, {
             method: 'POST',
             body: formData
@@ -89,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     statsBtn.addEventListener('click', () => {
+        console.log('Нажата кнопка статистики');
         mainContent.classList.add('hidden');
         profileContent.classList.add('hidden');
         statsContent.classList.remove('hidden');
