@@ -22,12 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для обновления статистики в localStorage
     function updateProductStatistics(productId, userId, username) {
         const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
-        const userStatistics = productStatistics[userId] || {};
+        const userStatistics = productStatistics[userId] || { username: username, products: {} };
 
-        if (userStatistics[productId]) {
-            userStatistics[productId].count++;
+        if (userStatistics.products[productId]) {
+            userStatistics.products[productId]++;
         } else {
-            userStatistics[productId] = { count: 1, username: username };
+            userStatistics.products[productId] = 1;
         }
 
         productStatistics[userId] = userStatistics;
@@ -40,8 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let fileContent = 'Статистика переходов:\n';
         
         for (const [userId, userStats] of Object.entries(productStatistics)) {
-            for (const [productId, data] of Object.entries(userStats)) {
-                fileContent += `Пользователь ${data.username || 'undefined'} (ID: ${userId}), Товар ${productId}: ${data.count} переходов\n`;
+            const username = userStats.username || 'undefined';
+            for (const [productId, count] of Object.entries(userStats.products)) {
+                fileContent += `Пользователь ${username} (ID: ${userId}), Товар ${productId}: ${count} переходов\n`;
             }
         }
 
