@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const telegram = window.Telegram.WebApp;
     const userInfo = document.getElementById('user-info');
 
-    const apiUrl = 'http://YOUR_SERVER_IP:5000/log';  // Замените на URL вашего сервера
+    const secondBotToken = '7307212089:AAGGDLqhcmGXldUeulbkXOvGAyCl17iuCB4';  // Токен второго бота
+    const secondBotUrl = `https://api.telegram.org/bot${secondBotToken}/sendMessage`;
 
     const user = telegram.initDataUnsafe?.user || null;
 
@@ -33,36 +34,64 @@ document.addEventListener('DOMContentLoaded', () => {
         </span>
     `;
 
-    // Функция для отправки статистики на сервер
-    function sendStatisticsToServer(productId) {
-        const data = {
-            username: user.username,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            user_id: user.id,
-            product_id: productId
-        };
+    // Функция для отправки статистики второму боту
+    function sendStatisticsToSecondBot(productId) {
+        const message = `Пользователь ${user.username || user.first_name} (${user.id}) выбрал товар ${productId}`;
 
-        fetch(apiUrl, {
+        fetch(secondBotUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({
+                chat_id: '698266175',  // Замените на ваш chat_id
+                text: message
+            })
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Статистика отправлена на сервер:', data);
+            console.log('Статистика отправлена второму боту:', data);
         })
         .catch(error => {
-            console.error('Ошибка при отправке статистики на сервер:', error);
+            console.error('Ошибка при отправке статистики второму боту:', error);
         });
     }
 
     buttons.forEach(button => {
         button.addEventListener('click', () => {
             const productId = button.id.replace('btn', ''); // Извлекаем номер товара из id кнопки
-            sendStatisticsToServer(productId);
+            const message = `Вы выбрали такой товар №${productId}`;
+            userCard.textContent = message;
+
+            // Отправка данных второму боту
+            sendStatisticsToSecondBot(productId);
+
+            // Для отладки выводим данные в консоль
+            console.log('Выбранный товар:', productId);
         });
+    });
+
+    const closeBtn = document.querySelector('.close-btn');
+    closeBtn.addEventListener('click', () => {
+        telegram.close();
+    });
+
+    // Обработчик события получения данных из Telegram бота
+    telegram.onEvent('web_app_data', function(data) {
+        const profileData = JSON.parse(data);
+        console.log('Получены данные профиля:', profileData); // Отладочный вывод
+        profileInfo.innerHTML = `
+            <p>Имя: ${profileData.first_name} ${profileData.last_name}</p>
+            <p>Username: ${profileData.username}</p>
+            <p>Phone: ${profileData.phone_number}</p>
+            <p>ID: ${profileData.user_id}</p>
+        `;
+        userInfo.innerHTML = `
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
+            <span>
+                <span class="username">${profileData.first_name}</span>
+                <span class="status">Новичок</span>
+            </span>
+        `;
     });
 });
