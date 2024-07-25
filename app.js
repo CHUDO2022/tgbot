@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const telegram = window.Telegram.WebApp;
     const userInfo = document.getElementById('user-info');
     const userFooter = document.getElementById('user-footer');
+
     const homeBtn = document.getElementById('home-btn');
     const profileBtn = document.getElementById('profile-btn');
     const statsBtn = document.getElementById('stats-btn');
@@ -11,22 +12,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileContent = document.getElementById('profile-content');
     const statsContent = document.getElementById('stats-content');
     const profileInfo = document.getElementById('profile-info');
+
     const secondBotToken = '7307212089:AAGGDLqhcmGXldUeulbkXOvGAyCl17iuCB4';
     const secondBotUrl = `https://api.telegram.org/bot${secondBotToken}/sendDocument`;
+
     // Список разрешенных user ID для доступа к кнопке статистики
     const allowedUserIds = ['698266175', '987654321']; // Замените на ваши user ID
+
     // Функция для обновления статистики в localStorage
     function updateProductStatistics(productId, userId, username) {
         const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
         const userStatistics = productStatistics[userId] || {};
+
         if (userStatistics[productId]) {
             userStatistics[productId].count++;
         } else {
             userStatistics[productId] = { count: 1, username: username };
         }
+
         productStatistics[userId] = userStatistics;
         localStorage.setItem('productStatistics', JSON.stringify(productStatistics));
     }
+
     // Функция для создания текстового файла со статистикой
     function createStatisticsFile() {
         const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
@@ -34,17 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
         
         for (const [userId, userStats] of Object.entries(productStatistics)) {
             for (const [productId, data] of Object.entries(userStats)) {
-                fileContent += `Пользователь ${data.username} (ID: ${userId}), Товар ${productId}: ${data.count} переходов\n`;
+                fileContent += `Пользователь ${data.username || 'undefined'} (ID: ${userId}), Товар ${productId}: ${data.count} переходов\n`;
             }
         }
+
         const blob = new Blob([fileContent], { type: 'text/plain' });
         return new File([blob], 'statistics.txt', { type: 'text/plain' });
     }
+
     // Функция для отправки текстового файла второму боту
     function sendStatisticsToSecondBot() {
         const file = createStatisticsFile();
         const formData = new FormData();
-
         formData.append('chat_id', '698266175'); // Замените 'YOUR_CHAT_ID' на актуальный chat_id
         formData.append('document', file);
 
@@ -54,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(data => {
-
             if (data.ok) {
                 console.log('Статистика отправлена второму боту:', data);
             } else {
@@ -65,32 +72,39 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Ошибка при отправке статистики второму боту:', error);
         });
     }
+
     homeBtn.addEventListener('click', () => {
         mainContent.classList.remove('hidden');
         profileContent.classList.add('hidden');
         statsContent.classList.add('hidden');
     });
+
     profileBtn.addEventListener('click', () => {
         mainContent.classList.add('hidden');
         profileContent.classList.remove('hidden');
         statsContent.classList.add('hidden');
     });
+
     statsBtn.addEventListener('click', () => {
         mainContent.classList.add('hidden');
         profileContent.classList.add('hidden');
         statsContent.classList.remove('hidden');
         sendStatisticsToSecondBot();
     });
+
     buttons.forEach(button => {
         button.addEventListener('click', () => {
             const productId = button.id.replace('btn', ''); // Извлекаем номер товара из id кнопки
             const message = `Вы выбрали такой товар №${productId}`;
             userCard.textContent = message;
+
             // Получаем данные пользователя
             const user = telegram.initDataUnsafe.user;
+
             if (user) {
                 // Обновляем статистику переходов
                 updateProductStatistics(productId, user.id, user.username);
+
                 // Отправляем данные в Telegram бот
                 const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
                 telegram.sendData(JSON.stringify(data));
@@ -99,13 +113,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
     const closeBtn = document.querySelector('.close-btn');
     closeBtn.addEventListener('click', () => {
         telegram.close();
     });
+
     // Получаем данные о пользователе из Telegram Web Apps API
     const initDataUnsafe = telegram.initDataUnsafe;
     console.log('initDataUnsafe:', initDataUnsafe);  // Отладочный вывод
+
     const user = initDataUnsafe.user;
     if (user) {
         console.log('Данные пользователя:', user); // Отладочный вывод
@@ -136,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Отправленные данные пользователя:', userData); // Отладочный вывод
         // Отображаем имя пользователя внизу страницы
         userFooter.innerText = `Пользователь: ${user.first_name} ${user.last_name || ''} (${user.username || ''})`;
+
         // Проверяем, имеет ли пользователь доступ к кнопке статистики
         if (allowedUserIds.includes(String(user.id))) {
             statsBtn.style.display = 'block'; // Показываем кнопку статистики, если пользователь в списке разрешенных
@@ -146,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Нет данных пользователя'); // Отладочный вывод
         statsBtn.style.display = 'none'; // Скрываем кнопку статистики, если нет данных пользователя
     }
+
     // Получаем данные из Telegram бота
     telegram.onEvent('web_app_data', function(data) {
         const profileData = JSON.parse(data);
