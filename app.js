@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         for (const [userId, userStats] of Object.entries(productStatistics)) {
             for (const [productId, data] of Object.entries(userStats)) {
-                fileContent += `Пользователь ${data.username} (ID: ${userId}), Товар ${productId}: ${data.count} переходов\n`;
+                fileContent += `Пользователь ${data.username || 'undefined'} (ID: ${userId}), Товар ${productId}: ${data.count} переходов\n`;
             }
         }
 
