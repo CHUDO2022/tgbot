@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileInfo = document.getElementById('profile-info');
 
     const secondBotToken = '7307212089:AAGGDLqhcmGXldUeulbkXOvGAyCl17iuCB4';
-    const secondBotUrl = `https://api.telegram.org/bot${secondBotToken}/sendDocument`;
+    const secondBotUrl = `https://api.telegram.org/bot${secondBotToken}/sendMessage`;
 
     // Список разрешенных user ID для доступа к кнопке статистики
     const allowedUserIds = ['698266175', '987654321']; // Замените на ваши user ID
@@ -57,8 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Функция для создания текстового файла со статистикой
-    function createStatisticsFile() {
+    // Функция для создания сообщения со статистикой
+    function createStatisticsMessage() {
         const transaction = db.transaction(['productStatistics'], 'readonly');
         const objectStore = transaction.objectStore('productStatistics');
         const request = objectStore.getAll();
@@ -66,17 +66,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return new Promise((resolve, reject) => {
             request.onsuccess = () => {
                 const productStatistics = request.result;
-                let fileContent = 'Статистика переходов:\n';
+                let messageContent = 'Статистика переходов:\n';
                 
                 productStatistics.forEach(userStats => {
                     for (const [productId, data] of Object.entries(userStats.stats)) {
-                        fileContent += `Пользователь ${data.username || 'undefined'} (ID: ${userStats.userId}), Товар ${productId}: ${data.count} переходов\n`;
+                        messageContent += `Пользователь ${data.username || 'undefined'} (ID: ${userStats.userId}), Товар ${productId}: ${data.count} переходов\n`;
                     }
                 });
 
-                const blob = new Blob([fileContent], { type: 'text/plain' });
-                const file = new File([blob], 'statistics.txt', { type: 'text/plain' });
-                resolve(file);
+                resolve(messageContent);
             };
 
             request.onerror = (event) => {
@@ -85,16 +83,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Функция для отправки текстового файла со статистикой второму боту
+    // Функция для отправки сообщения со статистикой второму боту
     function sendStatisticsToSecondBot() {
-        createStatisticsFile().then(file => {
-            const formData = new FormData();
-            formData.append('chat_id', '698266175'); // Замените 'YOUR_CHAT_ID' на актуальный chat_id
-            formData.append('document', file);
-
+        createStatisticsMessage().then(messageContent => {
             fetch(secondBotUrl, {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: '698266175', // Замените 'YOUR_CHAT_ID' на актуальный chat_id
+                    text: messageContent
+                })
             })
             .then(response => response.json())
             .then(data => {
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Ошибка при отправке статистики второму боту:', error);
             });
         }).catch(error => {
-            console.error('Ошибка при создании файла со статистикой:', error);
+            console.error('Ошибка при создании сообщения со статистикой:', error);
         });
     }
 
