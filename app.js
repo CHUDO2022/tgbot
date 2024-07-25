@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const secondBotToken = '7307212089:AAGGDLqhcmGXldUeulbkXOvGAyCl17iuCB4';  // Замените на токен второго бота
     const secondBotUrl = `https://api.telegram.org/bot${secondBotToken}/sendMessage`;
+    const chatId = '698266175';  // Замените на ваш chat_id
 
     // Функция для обновления статистики в localStorage
     function updateProductStatistics(productId) {
@@ -39,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                chat_id: '698266175',  // Замените на ваш chat_id
+                chat_id: chatId,
                 text: message
             })
         })
