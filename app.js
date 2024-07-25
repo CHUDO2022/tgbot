@@ -27,9 +27,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const message = `Вы выбрали такой товар №${productId}`;
             userCard.textContent = message;
 
-            // Отправляем данные в Telegram бот
+            // Отправляем данные на сервер
             const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
-            telegram.sendData(JSON.stringify(data));
+            fetch('https://your_ngrok_url/webapp-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Ответ от сервера:', data);
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+            });
 
             // Для отладки выводим данные в консоль
             console.log('Отправленные данные:', data);
@@ -66,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </span>
         `;
 
-        // Отправляем данные пользователя в Telegram бот
+        // Отправляем данные пользователя на сервер
         const userData = {
             action: 'get_user_data',
             user_id: user.id,
@@ -76,7 +89,21 @@ document.addEventListener('DOMContentLoaded', () => {
             phone_number: initDataUnsafe.user.phone_number || '',  // Проверка наличия номера телефона
             query_id: telegram.initDataUnsafe.query_id
         };
-        telegram.sendData(JSON.stringify(userData));
+        fetch('https://your_ngrok_url/user-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Ответ от сервера:', data);
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+        });
+
         console.log('Отправленные данные пользователя:', userData); // Отладочный вывод
 
         // Отображаем имя пользователя внизу страницы
