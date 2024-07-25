@@ -14,24 +14,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileInfo = document.getElementById('profile-info');
     const statsInfo = document.getElementById('stats-info');
 
-    const secondBotToken = '7307212089:AAGGDLqhcmGXldUeulbkXOvGAyCl17iuCB4';  // Замените на токен второго бота
+    const secondBotToken = '7307212089:AAGGDLqhcmGXldUeulbkXOvGAyCl17iuCB4';
     const secondBotUrl = `https://api.telegram.org/bot${secondBotToken}/sendMessage`;
 
+    // Список разрешенных user ID для доступа к кнопке статистики
+    const allowedUserIds = ['698266175', '987654321']; // Замените на ваши user ID
+
+    // Скрываем кнопку статистики по умолчанию
+    statsBtn.style.display = 'none';
+
     // Функция для обновления статистики в localStorage
-    function updateProductStatistics(productId) {
+    function updateProductStatistics(productId, userId) {
         const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
-        if (productStatistics[productId]) {
-            productStatistics[productId]++;
+        const userStatistics = productStatistics[userId] || {};
+
+        if (userStatistics[productId]) {
+            userStatistics[productId]++;
         } else {
-            productStatistics[productId] = 1;
+            userStatistics[productId] = 1;
         }
+
+        productStatistics[userId] = userStatistics;
         localStorage.setItem('productStatistics', JSON.stringify(productStatistics));
     }
 
     // Функция для отправки статистики второму боту
     function sendStatisticsToSecondBot() {
         const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
-        const message = Object.entries(productStatistics).map(([productId, count]) => `Товар ${productId}: ${count} переходов`).join('\n');
+        let message = 'Статистика переходов:\n';
+        
+        for (const [userId, userStats] of Object.entries(productStatistics)) {
+            message += `Пользователь ${userId}:\n`;
+            for (const [productId, count] of Object.entries(userStats)) {
+                message += `  Товар ${productId}: ${count} переходов\n`;
+            }
+        }
 
         fetch(secondBotUrl, {
             method: 'POST',
@@ -39,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                chat_id: '698266175',  // Замените на ваш chat_id
+                chat_id: 'YOUR_CHAT_ID',
                 text: message
             })
         })
@@ -56,10 +73,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayStatistics() {
         const productStatistics = JSON.parse(localStorage.getItem('productStatistics')) || {};
         statsInfo.innerHTML = '';
-        for (const [productId, count] of Object.entries(productStatistics)) {
-            const statItem = document.createElement('p');
-            statItem.innerText = `Товар ${productId}: ${count} переходов`;
-            statsInfo.appendChild(statItem);
+        for (const [userId, userStats] of Object.entries(productStatistics)) {
+            for (const [productId, count] of Object.entries(userStats)) {
+                const statItem = document.createElement('p');
+                statItem.innerText = `Пользователь ${userId}, Товар ${productId}: ${count} переходов`;
+                statsInfo.appendChild(statItem);
+            }
         }
     }
 
@@ -89,24 +108,31 @@ document.addEventListener('DOMContentLoaded', () => {
             const message = `Вы выбрали такой товар №${productId}`;
             userCard.textContent = message;
 
-            // Обновляем статистику переходов
-            updateProductStatistics(productId);
+            // Получаем данные пользователя
+            const user = telegram.initDataUnsafe.user;
 
-            // Отправляем данные в Telegram бот
-            const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
-            telegram.sendData(JSON.stringify(data));
-            // Для отладки выводим данные в консоль
-            console.log('Отправленные данные:', data);
+            if (user) {
+                // Обновляем статистику переходов
+                updateProductStatistics(productId, user.id);
+
+                // Отправляем данные в Telegram бот
+                const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
+                telegram.sendData(JSON.stringify(data));
+                // Для отладки выводим данные в консоль
+                console.log('Отправленные данные:', data);
+            }
         });
     });
+
     const closeBtn = document.querySelector('.close-btn');
     closeBtn.addEventListener('click', () => {
         telegram.close();
     });
+
     // Получаем данные о пользователе из Telegram Web Apps API
     const initDataUnsafe = telegram.initDataUnsafe;
     console.log('initDataUnsafe:', initDataUnsafe);  // Отладочный вывод
-    
+
     const user = initDataUnsafe.user;
     if (user) {
         console.log('Данные пользователя:', user); // Отладочный вывод
@@ -137,9 +163,15 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Отправленные данные пользователя:', userData); // Отладочный вывод
         // Отображаем имя пользователя внизу страницы
         userFooter.innerText = `Пользователь: ${user.first_name} ${user.last_name || ''} (${user.username || ''})`;
+
+        // Проверяем, имеет ли пользователь доступ к кнопке статистики
+        if (allowedUserIds.includes(String(user.id))) {
+            statsBtn.style.display = 'block'; // Показываем кнопку статистики, если пользователь в списке разрешенных
+        }
     } else {
         console.log('Нет данных пользователя'); // Отладочный вывод
     }
+
     // Получаем данные из Telegram бота
     telegram.onEvent('web_app_data', function(data) {
         const profileData = JSON.parse(data);
