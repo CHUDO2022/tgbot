@@ -45,15 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для отправки статистики второму боту
     function sendStatisticsToSecondBot(productId) {
-        const data = {
-            chat_id: '698266175',  // Замените на ваш chat_id
-            text: JSON.stringify({
-                username: user.username,
-                first_name: user.first_name,
-                last_name: user.last_name,
-                user_id: user.id,
-                product_id: productId
-            })
+        const message = {
+            username: user.username,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            user_id: user.id,
+            product_id: productId
         };
 
         fetch(secondBotUrl, {
@@ -61,7 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({
+                chat_id: 'YOUR_CHAT_ID',  // Замените на ваш chat_id
+                text: JSON.stringify(message)
+            })
         })
         .then(response => response.json())
         .then(data => {
