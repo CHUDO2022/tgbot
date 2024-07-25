@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             userCard.textContent = message;
 
             // Отправляем данные в Telegram бот
-            const data = { productId: productId, message: message };
+            const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
             telegram.sendData(JSON.stringify(data));
 
             // Для отладки выводим данные в консоль
@@ -73,7 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
             first_name: user.first_name,
             last_name: user.last_name,
             username: user.username,
-            phone_number: initDataUnsafe.user.phone_number || ''  // Проверка наличия номера телефона
+            phone_number: initDataUnsafe.user.phone_number || '',  // Проверка наличия номера телефона
+            query_id: telegram.initDataUnsafe.query_id
         };
         telegram.sendData(JSON.stringify(userData));
         console.log('Отправленные данные пользователя:', userData); // Отладочный вывод
