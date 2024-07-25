@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileInfo = document.getElementById('profile-info');
     const statsInfo = document.getElementById('stats-info');
 
-    const secondBotToken = 'YOUR_SECOND_BOT_TOKEN';
+    const secondBotToken = '7307212089:AAGGDLqhcmGXldUeulbkXOvGAyCl17iuCB4';
     const secondBotUrl = `https://api.telegram.org/bot${secondBotToken}/sendMessage`;
 
     // Список разрешенных user ID для доступа к кнопке статистики
