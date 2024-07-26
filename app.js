@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Отправляем данные на сервер
             const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
-            fetch('https://your_ngrok_url/webapp-data', {
+            fetch('https://a57f-178-129-118-231.ngrok-free.app/webapp-data', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             phone_number: initDataUnsafe.user.phone_number || '',  // Проверка наличия номера телефона
             query_id: telegram.initDataUnsafe.query_id
         };
-        fetch('https://your_ngrok_url/user-data', {
+        fetch('https://a57f-178-129-118-231.ngrok-free.app/user-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
