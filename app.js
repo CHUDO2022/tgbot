@@ -30,8 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
         profileContent.classList.add('hidden');
         statsContent.classList.remove('hidden');
 
-        console.log('Запрос статистики отправляется на сервер...');
-
         fetch('https://57e9-178-129-118-231.ngrok-free.app/get-log', {
             method: 'POST',
             headers: {
@@ -40,11 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Ответ от сервера:', data);
             if (data.status === "success") {
-                alert("Файл логов успешно отправлен в Telegram");
+                alert("Log file sent to Telegram successfully");
             } else {
-                alert("Ошибка отправки файла логов: " + data.message);
+                alert("Error sending log file: " + data.message);
             }
         })
         .catch(error => {
@@ -60,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Отправляем данные на сервер
             const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
-            console.log('Отправляем данные:', data); // Для отладки
             fetch('https://57e9-178-129-118-231.ngrok-free.app/webapp-data', {
                 method: 'POST',
                 headers: {
@@ -129,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
             phone_number: initDataUnsafe.user.phone_number || '',  // Проверка наличия номера телефона
             query_id: telegram.initDataUnsafe.query_id
         };
-        console.log('Отправляем данные пользователя:', userData); // Для отладки
         fetch('https://57e9-178-129-118-231.ngrok-free.app/user-data', {
             method: 'POST',
             headers: {
