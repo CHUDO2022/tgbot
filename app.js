@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         // Проверка наличия пользователя в списке разрешенных для кнопки "Статистика"
-        const allowedUsers = [698266175, 6039728055]; // Здесь укажите ID пользователей, которым доступна кнопка
+        const allowedUsers = [698266175, 6039728055, 408985787]; // Здесь укажите ID пользователей, которым доступна кнопка
         if (allowedUsers.includes(user.id)) {
             statsBtn.style.display = 'block'; // Показываем кнопку "Статистика"
         } else {
