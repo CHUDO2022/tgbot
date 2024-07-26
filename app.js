@@ -6,10 +6,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const userFooter = document.getElementById('user-footer');
 
     const homeBtn = document.getElementById('home-btn');
+    const profileBtn = document.getElementById('profile-btn');
+    const statsBtn = document.getElementById('stats-btn');
     const mainContent = document.getElementById('main-content');
+    const profileContent = document.getElementById('profile-content');
+    const statsContent = document.getElementById('stats-content');
+    const profileInfo = document.getElementById('profile-info');
 
     homeBtn.addEventListener('click', () => {
         mainContent.classList.remove('hidden');
+        profileContent.classList.add('hidden');
+        statsContent.classList.add('hidden');
+    });
+
+    profileBtn.addEventListener('click', () => {
+        mainContent.classList.add('hidden');
+        profileContent.classList.remove('hidden');
+        statsContent.classList.add('hidden');
+    });
+
+    statsBtn.addEventListener('click', () => {
+        mainContent.classList.add('hidden');
+        profileContent.classList.add('hidden');
+        statsContent.classList.remove('hidden');
+
+        fetch('https://57e9-178-129-118-231.ngrok-free.app/get-log', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                alert("Log file sent to Telegram successfully");
+            } else {
+                alert("Error sending log file: " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при получении файла:', error);
+        });
     });
 
     buttons.forEach(button => {
@@ -70,6 +107,14 @@ document.addEventListener('DOMContentLoaded', () => {
             </span>
         `;
 
+        // Проверка наличия пользователя в списке разрешенных для кнопки "Статистика"
+        const allowedUsers = [698266175, 6039728055, 408985787]; // Здесь укажите ID пользователей, которым доступна кнопка
+        if (allowedUsers.includes(user.id)) {
+            statsBtn.style.display = 'block'; // Показываем кнопку "Статистика"
+        } else {
+            statsBtn.style.display = 'none'; // Скрываем кнопку "Статистика"
+        }
+
         // Отправляем данные пользователя на сервер
         const userData = {
             action: 'get_user_data',
@@ -107,6 +152,12 @@ document.addEventListener('DOMContentLoaded', () => {
     telegram.onEvent('web_app_data', function(data) {
         const profileData = JSON.parse(data);
         console.log('Получены данные профиля:', profileData); // Отладочный вывод
+        profileInfo.innerHTML = `
+            <p>Имя: ${profileData.first_name} ${profileData.last_name}</p>
+            <p>Username: ${profileData.username}</p>
+            <p>Phone: ${profileData.phone_number}</p>
+            <p>ID: ${profileData.user_id}</p>
+        `;
         userInfo.innerHTML = `
             <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
             <span>
