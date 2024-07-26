@@ -169,3 +169,8 @@ header {
 #user-footer {
     font-size: 14px;
 }
+
+.hidden {
+    display: none;
+}
+
