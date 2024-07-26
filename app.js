@@ -36,16 +36,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => response.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'log.txt';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                alert("Log file sent to Telegram successfully");
+            } else {
+                alert("Error sending log file: " + data.message);
+            }
         })
         .catch(error => {
             console.error('Ошибка при получении файла:', error);
