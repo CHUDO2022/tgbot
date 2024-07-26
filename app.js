@@ -6,9 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const homeBtn = document.getElementById('home-btn');
     const mainContent = document.getElementById('main-content');
     const statsBtn = document.getElementById('stats-btn');
+    const orderPage = document.getElementById('order-page');
 
     homeBtn.addEventListener('click', () => {
         mainContent.classList.remove('hidden');
+        orderPage.classList.add('hidden');
     });
 
     statsBtn.addEventListener('click', () => {
@@ -36,6 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const productId = button.id.replace('btn', ''); // Извлекаем номер товара из id кнопки
             const message = `Вы выбрали такой товар №${productId}`;
             userCard.textContent = message;
+
+            // Переход на страницу оформления заказа
+            mainContent.classList.add('hidden');
+            orderPage.classList.remove('hidden');
 
             // Отправляем данные на сервер
             const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
@@ -67,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Получаем данные о пользователе из Telegram Web Apps API
     const initDataUnsafe = telegram.initDataUnsafe;
     console.log('initDataUnsafe:', initDataUnsafe);  // Отладочный вывод
-    
+
     const user = initDataUnsafe.user;
 
     if (user) {
@@ -75,9 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let profName = document.createElement('p'); //создаем параграф
         profName.innerText = `${user.first_name} ${user.last_name || ''} (${user.username || ''}) [${user.language_code || ''}]`;
-        userCard.appendChild(profName); //добавляем 
+        userCard.appendChild(profName); //добавляем
 
-        let userid = document.createElement('p'); //создаем еще параграф 
+        let userid = document.createElement('p'); //создаем еще параграф
         userid.innerText = `ID: ${user.id}`; //показываем user_id
         userCard.appendChild(userid); //добавляем
 
