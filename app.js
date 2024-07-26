@@ -3,33 +3,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const userCard = document.getElementById('usercard');
     const telegram = window.Telegram.WebApp;
     const userInfo = document.getElementById('user-info');
-    const userFooter = document.getElementById('user-footer');
-
     const homeBtn = document.getElementById('home-btn');
-    const profileBtn = document.getElementById('profile-btn');
-    const statsBtn = document.getElementById('stats-btn');
     const mainContent = document.getElementById('main-content');
-    const profileContent = document.getElementById('profile-content');
-    const statsContent = document.getElementById('stats-content');
-    const profileInfo = document.getElementById('profile-info');
+    const statsBtn = document.getElementById('stats-btn');
 
     homeBtn.addEventListener('click', () => {
         mainContent.classList.remove('hidden');
-        profileContent.classList.add('hidden');
-        statsContent.classList.add('hidden');
-    });
-
-    profileBtn.addEventListener('click', () => {
-        mainContent.classList.add('hidden');
-        profileContent.classList.remove('hidden');
-        statsContent.classList.add('hidden');
     });
 
     statsBtn.addEventListener('click', () => {
-        mainContent.classList.add('hidden');
-        profileContent.classList.add('hidden');
-        statsContent.classList.remove('hidden');
-
         fetch('https://57e9-178-129-118-231.ngrok-free.app/get-log', {
             method: 'POST',
             headers: {
@@ -141,9 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         console.log('Отправленные данные пользователя:', userData); // Отладочный вывод
-
-        // Отображаем имя пользователя внизу страницы
-        userFooter.innerText = `Пользователь: ${user.first_name} ${user.last_name || ''} (${user.username || ''})`;
     } else {
         console.log('Нет данных пользователя'); // Отладочный вывод
     }
@@ -152,12 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
     telegram.onEvent('web_app_data', function(data) {
         const profileData = JSON.parse(data);
         console.log('Получены данные профиля:', profileData); // Отладочный вывод
-        profileInfo.innerHTML = `
-            <p>Имя: ${profileData.first_name} ${profileData.last_name}</p>
-            <p>Username: ${profileData.username}</p>
-            <p>Phone: ${profileData.phone_number}</p>
-            <p>ID: ${profileData.user_id}</p>
-        `;
         userInfo.innerHTML = `
             <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
             <span>
