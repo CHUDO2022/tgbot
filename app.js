@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statsContent.classList.remove('hidden');
 
         fetch('https://57e9-178-129-118-231.ngrok-free.app/get-log', {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
