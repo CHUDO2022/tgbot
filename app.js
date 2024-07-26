@@ -7,8 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.getElementById('main-content');
     const statsBtn = document.getElementById('stats-btn');
     const orderPage = document.getElementById('order-page');
+    const backBtn = document.getElementById('back-btn');
 
     homeBtn.addEventListener('click', () => {
+        mainContent.classList.remove('hidden');
+        orderPage.classList.add('hidden');
+    });
+
+    backBtn.addEventListener('click', () => {
         mainContent.classList.remove('hidden');
         orderPage.classList.add('hidden');
     });
