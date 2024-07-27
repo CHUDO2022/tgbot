@@ -248,4 +248,56 @@ header {
 
 .buy-btn:hover {
     transform: scale(1.05);
+}     
+
+.items-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.item {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    width: calc(50% - 10px); /* Ширина для двух колонок */
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.item:hover {
+    transform: scale(1.05);
+}
+
+.img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    object-fit: cover;
+}
+
+.btn {
+    background: linear-gradient(to right, #ff6a00, #ee0979);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: transform 0.2s;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+    .item {
+        width: 100%; /* На узких экранах показывать один товар в ряд */
+    }
 }
