@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     homeBtn.addEventListener('click', () => {
         mainContent.classList.remove('hidden');
         orderPage.classList.add('hidden');
-        homeBtn.classList.add('hidden'); // Скрываем кнопку "Главная" на главной странице
+        homeBtn.classList.add('hidden');
     });
 
     statsBtn.addEventListener('click', () => {
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Переход на страницу оформления заказа
             mainContent.classList.add('hidden');
             orderPage.classList.remove('hidden');
-            homeBtn.classList.remove('hidden'); // Показываем кнопку "Главная" на странице оформления заказа
+            homeBtn.classList.remove('hidden');
 
             // Устанавливаем изображение и текст товара на странице оформления заказа
             orderImg.src = productImg;
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         userInfo.innerHTML = `
             <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
             <span>
-                <span class="username">${user.first_name}</span>
+                <span class="username">${user.first_name} ${user.last_name || ''}</span>
                 <span class="status">Новичок</span>
             </span>
         `;
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         userInfo.innerHTML = `
             <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
             <span>
-                <span class="username">${profileData.first_name}</span>
+                <span class="username">${profileData.first_name} ${profileData.last_name || ''}</span>
                 <span class="status">Новичок</span>
             </span>
         `;
