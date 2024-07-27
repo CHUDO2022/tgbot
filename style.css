@@ -7,16 +7,18 @@ body {
 }
 
 .app-container {
-    width: 360px; /* Фиксированная ширина для предотвращения масштабирования */
+    width: 100%;
+    max-width: 360px;
     margin: 0 auto;
     padding: 10px;
+    box-sizing: border-box;
 }
 
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--tg-theme-bg-color, rgba(255, 255, 255, 0.8));
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -24,8 +26,8 @@ header {
 }
 
 .close-btn {
-    background: linear-gradient(to right, #ff6a00, #ee0979);
-    color: white;
+    background: var(--tg-theme-button-color, linear-gradient(to right, #ff6a00, #ee0979));
+    color: var(--tg-theme-button-text-color, white);
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
@@ -37,6 +39,7 @@ header {
 .app-name {
     font-size: 20px;
     font-weight: 700;
+    color: var(--tg-theme-text-color, black);
 }
 
 .user-info {
@@ -46,20 +49,20 @@ header {
 }
 
 .user-info img {
-    width: 30px; /* Уменьшенные размеры для предотвращения слипания */
+    width: 30px;
     height: 30px;
     border-radius: 50%;
 }
 
 .username {
     font-family: 'Pacifico', cursive;
-    font-size: 16px; /* Уменьшенный размер шрифта */
-    color: #333;
+    font-size: 16px;
+    color: var(--tg-theme-hint-color, #333);
 }
 
 .status {
     font-size: 10px;
-    color: #777;
+    color: var(--tg-theme-hint-color, #777);
 }
 
 .search-bar {
@@ -69,10 +72,10 @@ header {
 }
 
 .search-bar input {
-    width: 80%;
+    width: 100%;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--tg-theme-secondary-bg-color, #ddd);
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
@@ -84,8 +87,8 @@ header {
 }
 
 .nav-btn {
-    background: linear-gradient(to right, #2193b0, #6dd5ed);
-    color: white;
+    background: var(--tg-theme-button-color, linear-gradient(to right, #2193b0, #6dd5ed));
+    color: var(--tg-theme-button-text-color, white);
     border: none;
     padding: 5px 10px;
     border-radius: 20px;
@@ -108,16 +111,17 @@ header {
 }
 
 .card {
-    background: linear-gradient(to right, #ffecd2, #fcb69f);
-    border: 1px solid #ddd;
+    background: var(--tg-theme-bg-color, linear-gradient(to right, #ffecd2, #fcb69f));
+    border: 1px solid var(--tg-theme-secondary-bg-color, #ddd);
     border-radius: 10px;
     padding: 10px;
-    width: calc(50% - 10px); /* Фиксированная ширина для предотвращения масштабирования */
+    width: calc(50% - 10px);
     text-align: center;
     cursor: pointer;
     transition: transform 0.2s;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    font-size: 12px; /* Уменьшенный размер шрифта */
+    font-size: 12px;
+    color: var(--tg-theme-text-color, black);
 }
 
 .card:hover {
@@ -125,8 +129,8 @@ header {
 }
 
 .points-section, .invite-section {
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid #ddd;
+    background: var(--tg-theme-bg-color, rgba(255, 255, 255, 0.8));
+    border: 1px solid var(--tg-theme-secondary-bg-color, #ddd);
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 10px;
@@ -137,10 +141,12 @@ header {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 5px;
+    color: var(--tg-theme-text-color, black);
 }
 
 .points-value, .invite-text {
     font-size: 14px;
+    color: var(--tg-theme-text-color, black);
 }
 
 .items-wrapper {
@@ -151,10 +157,10 @@ header {
 }
 
 .item {
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid #ddd;
+    background: var(--tg-theme-bg-color, rgba(255, 255, 255, 0.8));
+    border: 1px solid var(--tg-theme-secondary-bg-color, #ddd);
     border-radius: 10px;
-    width: calc(50% - 10px); /* Фиксированная ширина для предотвращения масштабирования */
+    width: calc(50% - 10px);
     padding: 10px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -174,8 +180,8 @@ header {
 }
 
 .btn {
-    background: linear-gradient(to right, #56ab2f, #a8e063);
-    color: white;
+    background: var(--tg-theme-button-color, linear-gradient(to right, #56ab2f, #a8e063));
+    color: var(--tg-theme-button-text-color, white);
     border: none;
     padding: 5px 10px;
     border-radius: 20px;
@@ -197,7 +203,7 @@ header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--tg-theme-bg-color, rgba(255, 255, 255, 0.8));
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -222,7 +228,7 @@ header {
 }
 
 .order-img {
-    width: 180px; /* Уменьшенный размер изображения */
+    width: 180px;
     height: auto;
     margin-bottom: 10px;
     border-radius: 10px;
@@ -242,20 +248,4 @@ header {
 
 .buy-btn:hover {
     transform: scale(1.05);
-}
-
-/* Адаптивный дизайн для мобильных устройств */
-@media (max-width: 768px) {
-    .app-container {
-        width: 100%; /* Восстанавливаем ширину для мобильных устройств */
-        padding: 0;
-    }
-
-    .close-btn, .nav-btn, .card, .btn, .buy-btn {
-        font-size: 14px; /* Единый размер шрифта */
-    }
-
-    .card, .item {
-        width: calc(50% - 10px); /* Единая ширина для карточек и элементов */
-    }
 }
