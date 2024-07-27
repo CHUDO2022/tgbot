@@ -7,8 +7,7 @@ body {
 }
 
 .app-container {
-    width: 100%;
-    max-width: 1200px;
+    width: 360px; /* Фиксированная ширина для предотвращения масштабирования */
     margin: 0 auto;
     padding: 10px;
 }
@@ -18,24 +17,25 @@ header {
     justify-content: space-between;
     align-items: center;
     background: rgba(255, 255, 255, 0.8);
-    padding: 10px 20px;
+    padding: 10px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .close-btn {
     background: linear-gradient(to right, #ff6a00, #ee0979);
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
     font-weight: 500;
+    font-size: 14px;
 }
 
 .app-name {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
 }
 
@@ -46,26 +46,26 @@ header {
 }
 
 .user-info img {
-    width: 40px;
-    height: 40px;
+    width: 30px; /* Уменьшенные размеры для предотвращения слипания */
+    height: 30px;
     border-radius: 50%;
 }
 
 .username {
     font-family: 'Pacifico', cursive;
-    font-size: 18px;
+    font-size: 16px; /* Уменьшенный размер шрифта */
     color: #333;
 }
 
 .status {
-    font-size: 12px;
+    font-size: 10px;
     color: #777;
 }
 
 .search-bar {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .search-bar input {
@@ -79,7 +79,7 @@ header {
 .navigation {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     gap: 10px;
 }
 
@@ -87,10 +87,11 @@ header {
     background: linear-gradient(to right, #2193b0, #6dd5ed);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 5px 10px;
     border-radius: 20px;
     cursor: pointer;
     font-weight: 500;
+    font-size: 14px;
     transition: transform 0.2s;
 }
 
@@ -100,22 +101,23 @@ header {
 
 .cards-container {
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
-    margin-bottom: 20px;
+    justify-content: space-between;
     gap: 10px;
+    margin-bottom: 10px;
 }
 
 .card {
     background: linear-gradient(to right, #ffecd2, #fcb69f);
     border: 1px solid #ddd;
     border-radius: 10px;
-    padding: 15px;
-    width: calc(50% - 10px);
+    padding: 10px;
+    width: calc(50% - 10px); /* Фиксированная ширина для предотвращения масштабирования */
     text-align: center;
     cursor: pointer;
     transition: transform 0.2s;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    font-size: 12px; /* Уменьшенный размер шрифта */
 }
 
 .card:hover {
@@ -126,33 +128,33 @@ header {
     background: rgba(255, 255, 255, 0.8);
     border: 1px solid #ddd;
     border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 20px;
+    padding: 10px;
+    margin-bottom: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .points-title, .invite-title {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .points-value, .invite-text {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .items-wrapper {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .item {
     background: rgba(255, 255, 255, 0.8);
     border: 1px solid #ddd;
     border-radius: 10px;
-    width: calc(50% - 10px);
+    width: calc(50% - 10px); /* Фиксированная ширина для предотвращения масштабирования */
     padding: 10px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -175,10 +177,11 @@ header {
     background: linear-gradient(to right, #56ab2f, #a8e063);
     color: white;
     border: none;
-    padding: 10px;
+    padding: 5px 10px;
     border-radius: 20px;
     cursor: pointer;
     font-weight: 500;
+    font-size: 14px;
     transition: transform 0.2s;
 }
 
@@ -195,19 +198,19 @@ header {
     flex-direction: column;
     align-items: center;
     background: rgba(255, 255, 255, 0.8);
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     text-align: center;
 }
 
 .order-title {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: #ff6a00;
     background: linear-gradient(to right, #ffecd2, #fcb69f);
-    padding: 10px;
+    padding: 5px 10px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
@@ -219,9 +222,9 @@ header {
 }
 
 .order-img {
-    width: 200px;
+    width: 180px; /* Уменьшенный размер изображения */
     height: auto;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border-radius: 10px;
 }
 
@@ -229,10 +232,11 @@ header {
     background: linear-gradient(to right, #ff6a00, #ee0979);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 5px 10px;
     border-radius: 20px;
     cursor: pointer;
     font-weight: 500;
+    font-size: 14px;
     transition: transform 0.2s;
 }
 
@@ -242,17 +246,16 @@ header {
 
 /* Адаптивный дизайн для мобильных устройств */
 @media (max-width: 768px) {
-    .cards-container, .items-wrapper {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
-        gap: 10px;
+    .app-container {
+        width: 100%; /* Восстанавливаем ширину для мобильных устройств */
+        padding: 0;
+    }
+
+    .close-btn, .nav-btn, .card, .btn, .buy-btn {
+        font-size: 14px; /* Единый размер шрифта */
     }
 
     .card, .item {
-        width: 100%;
-    }
-
-    .order-img {
-        width: 100%;
+        width: calc(50% - 10px); /* Единая ширина для карточек и элементов */
     }
 }
