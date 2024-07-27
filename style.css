@@ -157,7 +157,7 @@ header {
 }
 
 .item {
-    background: var(--tg-theme-bg-color, rgba(255, 255, 255, 0.8));
+    background: rgba(255, 255, 255, 0.5);
     border: 1px solid var(--tg-theme-secondary-bg-color, #ddd);
     border-radius: 10px;
     width: calc(50% - 10px);
@@ -180,7 +180,7 @@ header {
 }
 
 .btn {
-    background: linear-gradient(to right, #56ab2f, #a8e063);
+    background: linear-gradient(to right, #ff6a00, #ee0979);
     color: white;
     border: none;
     padding: 5px 10px;
