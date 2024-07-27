@@ -180,8 +180,8 @@ header {
 }
 
 .btn {
-    background: var(--tg-theme-button-color, linear-gradient(to right, #56ab2f, #a8e063));
-    color: var(--tg-theme-button-text-color, white);
+    background: linear-gradient(to right, #56ab2f, #a8e063);
+    color: white;
     border: none;
     padding: 5px 10px;
     border-radius: 20px;
