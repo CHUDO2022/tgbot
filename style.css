@@ -129,7 +129,7 @@ header {
 }
 
 .points-section, .invite-section {
-    background: var(--tg-theme-bg-color, rgba(255, 255, 255, 0.8));
+    background: white;
     border: 1px solid var(--tg-theme-secondary-bg-color, #ddd);
     border-radius: 10px;
     padding: 10px;
@@ -157,7 +157,7 @@ header {
 }
 
 .item {
-    background: rgba(255, 255, 255, 0.5);
+    background: white;
     border: 1px solid var(--tg-theme-secondary-bg-color, #ddd);
     border-radius: 10px;
     width: calc(50% - 10px);
