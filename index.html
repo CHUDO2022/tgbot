@@ -1,66 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sale_iPhone</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="app-container">
         <header>
-            <button class="close-btn">Close</button>
+            <button class="close-btn">Закрыть</button>
             <span class="app-name">Sale_iPhone</span>
             <div id="user-info" class="user-info"></div>
         </header>
         <div class="search-bar">
-            <input type="text" placeholder="Найти кроссовки">
+            <input type="text" placeholder="Найти товары Apple">
         </div>
         <div class="navigation">
-            <button id="home-btn">Главная</button>
-            <button id="stats-btn">Статистика</button>
+            <button id="home-btn" class="nav-btn hidden">Главная</button> <!-- Кнопка по умолчанию скрыта -->
+            <button id="stats-btn" class="nav-btn" style="display: none;">Статистика</button>
         </div>
         <div id="main-content">
             <div class="cards-container">
                 <button class="card" id="card1">Зови друзей! +500Р</button>
-                <button class="card" id="card2">Знакомьтесь, Poizon!</button>
-                <button class="card" id="card3">Что умеет Unicorn?</button>
-                <button class="card" id="card4">3 способа заказать кроссовки</button>
+                <button class="card" id="card2">Знакомьтесь, SaleAPPLE!</button>
+                <button class="card" id="card3">Что умеет наш бот?</button>
+                <button class="card" id="card4">3 способа заказать товары Apple</button>
+                <button class="card" id="card5">Заказывай сейчас — плати потом</button>
+                <button class="card" id="card6">Как выбрать размер Iphone? 🤔</button>
+                <button class="card" id="card7">500 Iphone в наличии</button>
+                <button class="card" id="card8">Построй свой бизнес на товарах Apple</button>
             </div>
-            <div class="container">
-                <div class="items-wrapper">
-                    <div class="item">
-                        <img src="https://opis-cdn.tinkoffjournal.ru/mercury/best-iphones-short-1.nuuqgo7p7bnz..png" alt="Product 1" class="img">
-                        <button class="btn" id="btn1">Add</button>
-                    </div>
-                    <div class="item">
-                        <img src="https://opis-cdn.tinkoffjournal.ru/mercury/best-iphones-2.g82vmp0ybhyv..jpg" alt="Product 2" class="img">
-                        <button class="btn" id="btn2">Add</button>
-                    </div>
-                    <div class="item">
-                        <img src="https://www.apple.com/v/ipad/home/ck/images/overview/welcome/welcome_hero_startframe__t2k4bw3ehv2a_xlarge.jpg" alt="Product 3" class="img">
-                        <button class="btn" id="btn3">Add</button>
-                    </div>
-                    <div class="item">
-                        <img src="https://opis-cdn.tinkoffjournal.ru/mercury/best-iphones-short-1.nuuqgo7p7bnz..png" alt="Product 4" class="img">
-                        <button class="btn" id="btn4">Add</button>
-                    </div>
-                    <div class="item">
-                        <img src="https://store-apple.msk.ru/image/cache/catalog/tovary/macbook/air-m2-2022/apple-macbook-air-m2-midnight-2022-800x800.jpg" alt="Product 5" class="img">
-                        <button class="btn" id="btn5">Add</button>
-                    </div>
-                    <div class="item">
-                        <img src="https://www.apple.com/v/ipad/home/ck/images/overview/welcome/welcome_hero_startframe__t2k4bw3ehv2a_xlarge.jpg" alt="Product 6" class="img">
-                        <button class="btn" id="btn6">Add</button>
-                    </div>
+            <div class="points-section">
+                <div class="points-title">Баллы</div>
+                <div class="points-value">0 Р</div>
+            </div>
+            <div class="invite-section">
+                <div class="invite-title">Зови друзей</div>
+                <div class="invite-text">Дарим по 500Р - тебе и приведенному другу</div>
+            </div>
+            <div class="items-wrapper">
+                <div class="item">
+                    <img src="https://opis-cdn.tinkoffjournal.ru/mercury/best-iphones-short-1.nuuqgo7p7bnz..png" alt="Product 1" class="img" id="img1">
+                    <button class="btn" id="btn1">Добавить</button>
+                </div>
+                <div class="item">
+                    <img src="https://opis-cdn.tinkoffjournal.ru/mercury/best-iphones-2.g82vmp0ybhyv..jpg" alt="Product 2" class="img" id="img2">
+                    <button class="btn" id="btn2">Добавить</button>
+                </div>
+                <div class="item">
+                    <img src="https://www.apple.com/v/ipad/home/ck/images/overview/welcome/welcome_hero_startframe__t2k4bw3ehv2a_xlarge.jpg" alt="Product 3" class="img" id="img3">
+                    <button class="btn" id="btn3">Добавить</button>
+                </div>
+                <div class="item">
+                    <img src="https://opis-cdn.tinkoffjournal.ru/mercury/best-iphones-short-1.nuuqgo7p7bnz..png" alt="Product 4" class="img" id="img4">
+                    <button class="btn" id="btn4">Добавить</button>
+                </div>
+                <div class="item">
+                    <img src="https://store-apple.msk.ru/image/cache/catalog/tovary/macbook/air-m2-2022/apple-macbook-air-m2-midnight-2022-800x800.jpg" alt="Product 5" class="img" id="img5">
+                    <button class="btn" id="btn5">Добавить</button>
+                </div>
+                <div class="item">
+                    <img src="https://www.apple.com/v/ipad/home/ck/images/overview/welcome/welcome_hero_startframe__t2k4bw3ehv2a_xlarge.jpg" alt="Product 6" class="img" id="img6">
+                    <button class="btn" id="btn6">Добавить</button>
                 </div>
             </div>
-            <div id="usercard" class="usercard"></div>
+            <div id="usercard" class="usercard hidden"></div>
         </div>
         <div id="order-page" class="hidden">
-            <h2>Оформление заказа</h2>
-            <button id="back-btn">Назад</button>
-            <!-- Здесь будет содержимое страницы оформления заказа -->
+            <h2 class="order-title">Оформление заказа</h2>
+            <div class="order-details">
+                <img src="" alt="Product Image" id="order-img" class="order-img">
+                <p id="order-text">Вы точно хотите купить данный товар?</p>
+                <button class="buy-btn">Купить</button>
+            </div>
         </div>
     </div>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
