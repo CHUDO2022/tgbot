@@ -39,6 +39,29 @@ header {
     font-weight: 700;
 }
 
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.username {
+    font-family: 'Pacifico', cursive;
+    font-size: 18px;
+    color: #333;
+}
+
+.status {
+    font-size: 12px;
+    color: #777;
+}
+
 .search-bar {
     display: flex;
     justify-content: center;
@@ -182,8 +205,8 @@ header {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 20px;
-    color: #ff6a00; /* Добавляем цвет текста */
-    background: linear-gradient(to right, #ffecd2, #fcb69f); /* Градиентный фон */
+    color: #ff6a00;
+    background: linear-gradient(to right, #ffecd2, #fcb69f);
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
