@@ -1,22 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.btn');
-    const userCard = document.getElementById('usercard');
     const telegram = window.Telegram.WebApp;
     const userInfo = document.getElementById('user-info');
     const homeBtn = document.getElementById('home-btn');
     const mainContent = document.getElementById('main-content');
     const statsBtn = document.getElementById('stats-btn');
     const orderPage = document.getElementById('order-page');
-    const backBtn = document.getElementById('back-btn');
+    const orderImg = document.getElementById('order-img');
+    const orderText = document.getElementById('order-text');
 
     homeBtn.addEventListener('click', () => {
         mainContent.classList.remove('hidden');
         orderPage.classList.add('hidden');
-    });
-
-    backBtn.addEventListener('click', () => {
-        mainContent.classList.remove('hidden');
-        orderPage.classList.add('hidden');
+        homeBtn.classList.add('hidden'); // Скрываем кнопку "Главная" на главной странице
     });
 
     statsBtn.addEventListener('click', () => {
@@ -42,12 +38,17 @@ document.addEventListener('DOMContentLoaded', () => {
     buttons.forEach(button => {
         button.addEventListener('click', () => {
             const productId = button.id.replace('btn', ''); // Извлекаем номер товара из id кнопки
+            const productImg = document.getElementById(`img${productId}`).src; // Получаем ссылку на изображение товара
             const message = `Вы выбрали такой товар №${productId}`;
-            userCard.textContent = message;
 
             // Переход на страницу оформления заказа
             mainContent.classList.add('hidden');
             orderPage.classList.remove('hidden');
+            homeBtn.classList.remove('hidden'); // Показываем кнопку "Главная" на странице оформления заказа
+
+            // Устанавливаем изображение и текст товара на странице оформления заказа
+            orderImg.src = productImg;
+            orderText.textContent = "Вы точно хотите купить данный товар?";
 
             // Отправляем данные на сервер
             const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
@@ -87,11 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let profName = document.createElement('p'); //создаем параграф
         profName.innerText = `${user.first_name} ${user.last_name || ''} (${user.username || ''}) [${user.language_code || ''}]`;
-        userCard.appendChild(profName); //добавляем
+        userInfo.appendChild(profName); //добавляем
 
         let userid = document.createElement('p'); //создаем еще параграф
         userid.innerText = `ID: ${user.id}`; //показываем user_id
-        userCard.appendChild(userid); //добавляем
+        userInfo.appendChild(userid); //добавляем
 
         userInfo.innerHTML = `
             <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
