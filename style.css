@@ -5,6 +5,7 @@
     --text-color: #ffffff;
     --highlight-color: #007aff;
     --close-button-color: #ff3b30;
+    --invite-text-color: #ffffff;
     --font-family: 'Roboto', sans-serif;
     --title-font-family: 'Roboto', sans-serif;
 }
@@ -37,7 +38,7 @@ header {
 }
 
 .close-btn {
-    background: var(--close-button-color);
+    background: linear-gradient(45deg, #ff4081, #7c4dff); /* Градиентная кнопка */
     color: white;
     border: none;
     padding: 5px 10px;
@@ -147,7 +148,7 @@ header {
     right: 5px;
     font-size: 9px; /* Уменьшено с 11px */
     font-family: var(--title-font-family);
-    color: #000000;
+    color: var(--invite-text-color); /* Цвет текста изменяется динамически */
     background: transparent;
     padding: 2px 5px;
     font-weight: 700;
@@ -234,12 +235,12 @@ header {
 }
 
 .invite-title {
-    color: #fff;
+    color: var(--invite-text-color); /* Цвет текста изменяется динамически */
     font-size: 18px;
 }
 
 .invite-text {
-    color: #fff;
+    color: var(--invite-text-color); /* Цвет текста изменяется динамически */
     font-size: 14px;
     text-align: center;
 }
