@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const orderPage = document.getElementById('order-page');
     const orderImg = document.getElementById('order-img');
     const orderText = document.getElementById('order-text');
+    const inviteTitle = document.querySelector('.invite-title');
+    const inviteText = document.querySelector('.invite-text');
 
     // Адаптация темы интерфейса под профиль пользователя в Telegram
     const themeParams = telegram.themeParams;
@@ -17,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.style.setProperty('--text-color', themeParams.text_color || '#ffffff');
     document.documentElement.style.setProperty('--highlight-color', themeParams.link_color || '#007aff');
     document.documentElement.style.setProperty('--close-button-color', themeParams.button_text_color || '#ff3b30');
+    document.documentElement.style.setProperty('--invite-text-color', themeParams.text_color || '#000000'); // Цвет текста для кнопки "Зови друзей"
 
     homeBtn.addEventListener('click', () => {
         mainContent.classList.remove('hidden');
