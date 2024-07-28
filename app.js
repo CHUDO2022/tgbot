@@ -9,6 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const orderImg = document.getElementById('order-img');
     const orderText = document.getElementById('order-text');
 
+    // Адаптация темы интерфейса под профиль пользователя в Telegram
+    const themeParams = telegram.themeParams;
+    document.documentElement.style.setProperty('--background-color', themeParams.bg_color || '#232e3c');
+    document.documentElement.style.setProperty('--card-background-color', themeParams.secondary_bg_color || '#17212b');
+    document.documentElement.style.setProperty('--button-background-color', themeParams.button_color || '#232e3c');
+    document.documentElement.style.setProperty('--text-color', themeParams.text_color || '#ffffff');
+    document.documentElement.style.setProperty('--highlight-color', themeParams.link_color || '#007aff');
+    document.documentElement.style.setProperty('--close-button-color', themeParams.button_text_color || '#ff3b30');
+
     homeBtn.addEventListener('click', () => {
         mainContent.classList.remove('hidden');
         orderPage.classList.add('hidden');
