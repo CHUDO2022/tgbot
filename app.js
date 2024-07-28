@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.style.setProperty('--close-button-color', themeParams.button_text_color || '#ff3b30');
     document.documentElement.style.setProperty('--invite-text-color', themeParams.text_color || '#000000'); // Цвет текста для кнопки "Зови друзей"
 
+    // Изменение цвета текста кнопки "Зови друзей"
+    inviteTitle.style.color = themeParams.text_color || '#000000';
+    inviteText.style.color = themeParams.text_color || '#000000';
+
     homeBtn.addEventListener('click', () => {
         mainContent.classList.remove('hidden');
         orderPage.classList.add('hidden');
