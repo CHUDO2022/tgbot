@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.btn');
+    const tabs = document.querySelectorAll('.tab-button');
+    const items = document.querySelectorAll('.item');
     const telegram = window.Telegram.WebApp;
     const userInfo = document.getElementById('user-info');
     const homeBtn = document.getElementById('home-btn');
@@ -57,16 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const productImg = document.getElementById(`img${productId}`).src; // Получаем ссылку на изображение товара
             const message = `Вы выбрали такой товар №${productId}`;
 
-            // Переход на страницу оформления заказа
-            mainContent.classList.add('hidden');
-            orderPage.classList.remove('hidden');
-            homeBtn.classList.remove('hidden');
-
-            // Устанавливаем изображение и текст товара на странице оформления заказа
-            orderImg.src = productImg;
-            orderText.textContent = "Вы точно хотите купить данный товар?";
-
-            // Отправляем данные на сервер
+            // Логирование на сервер перед переходом
             const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
             fetch('https://57e9-178-129-118-231.ngrok-free.app/webapp-data', {
                 method: 'POST',
@@ -78,6 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 console.log('Ответ от сервера:', data);
+
+                // После успешного логирования выполняем переход на страницу оформления заказа
+                window.location.href = `order.html?product_id=${productId}&product_img=${encodeURIComponent(productImg)}`;
             })
             .catch(error => {
                 console.error('Ошибка:', error);
@@ -102,13 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (user) {
         console.log('Данные пользователя:', user); // Отладочный вывод
 
-        let profName = document.createElement('p'); //создаем параграф
+        let profName = document.createElement('p'); // создаем параграф
         profName.innerText = `${user.first_name} ${user.last_name || ''} (${user.username || ''}) [${user.language_code || ''}]`;
-        userInfo.appendChild(profName); //добавляем
+        userInfo.appendChild(profName); // добавляем
 
-        let userid = document.createElement('p'); //создаем еще параграф
-        userid.innerText = `ID: ${user.id}`; //показываем user_id
-        userInfo.appendChild(userid); //добавляем
+        let userid = document.createElement('p'); // создаем еще параграф
+        userid.innerText = `ID: ${user.id}`; // показываем user_id
+        userInfo.appendChild(userid); // добавляем
 
         userInfo.innerHTML = `
             <img src="https://cdn-icons-png.flaticon.com/512/149/149452.png" alt="User Icon">
@@ -168,4 +164,28 @@ document.addEventListener('DOMContentLoaded', () => {
             </span>
         `;
     });
+
+    // Логика переключения вкладок и отображения соответствующих карточек товаров
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetCategory = tab.getAttribute('data-tab');
+
+            // Скрываем все карточки и показываем только те, которые соответствуют выбранной категории
+            items.forEach(item => {
+                const itemCategory = item.getAttribute('data-category');
+                if (itemCategory === targetCategory) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Обновляем активную вкладку
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+        });
+    });
+
+    // Изначально показываем карточки первой вкладки
+    tabs[0].click();
 });
