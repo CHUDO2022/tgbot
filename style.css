@@ -38,7 +38,7 @@ header {
 }
 
 .close-btn {
-    background: linear-gradient(45deg, #ff4081, #7c4dff); /* Градиентная кнопка */
+    background: linear-gradient(45deg, #ff4081, #7c4dff);
     color: white;
     border: none;
     padding: 5px 10px;
@@ -105,6 +105,45 @@ header {
     transform: scale(1.05);
 }
 
+.tabs-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    -ms-overflow-style: none;  /* для IE и Edge */
+    scrollbar-width: none;  /* для Firefox */
+}
+
+.tabs-container::-webkit-scrollbar {
+    display: none; /* для Chrome, Safari и Opera */
+}
+
+.tabs {
+    display: inline-flex;
+}
+
+.tab-button {
+    background-color: var(--button-background-color);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    margin-right: 10px;
+    transition: transform 0.2s;
+    white-space: nowrap;
+}
+
+.tab-button:hover {
+    transform: scale(1.05);
+}
+
+.tab-button.active {
+    background-color: var(--highlight-color);
+}
+
 .slider-container {
     display: flex;
     justify-content: flex-start;
@@ -146,9 +185,9 @@ header {
     top: 5px;
     left: 5px;
     right: 5px;
-    font-size: 9px; /* Уменьшено с 11px */
+    font-size: 9px;
     font-family: var(--title-font-family);
-    color: var(--invite-text-color); /* Цвет текста изменяется динамически */
+    color: var(--invite-text-color);
     background: transparent;
     padding: 2px 5px;
     font-weight: 700;
@@ -235,48 +274,49 @@ header {
 }
 
 .invite-title {
-    color: var(--invite-text-color); /* Цвет текста изменяется динамически */
+    color: var(--invite-text-color);
     font-size: 18px;
 }
 
 .invite-text {
-    color: var(--invite-text-color); /* Цвет текста изменяется динамически */
+    color: var(--invite-text-color);
     font-size: 14px;
     text-align: center;
 }
 
-.items-wrapper {
+.catalog {
+    padding: 20px;
+}
+
+.products-list {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .item {
     background: var(--card-background-color);
     border: 1px solid #444;
     border-radius: 10px;
-    flex: 1 1 calc(50% - 10px); /* Adjusted width to fit two columns */
-    padding: 10px;
+    flex: 1 1 calc(45% - 10px); /* Уменьшена ширина карточек */
+    max-width: calc(45% - 10px); /* Ограничение ширины карточек */
+    padding: 8px; /* Уменьшены отступы внутри карточек */
     text-align: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     transition: transform 0.2s;
     color: var(--text-color);
 }
 
-.item:hover {
-    transform: scale(1.05);
-}
-
-.img {
+.item img {
     width: 100%;
     height: auto;
     border-radius: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 8px; /* Уменьшен отступ снизу */
     object-fit: cover;
 }
 
-.btn {
+.item button {
     background: var(--button-background-color);
     color: var(--text-color);
     border: none;
@@ -288,8 +328,39 @@ header {
     transition: transform 0.2s;
 }
 
-.btn:hover {
+.item button:hover {
     transform: scale(1.05);
+}
+
+/* Дополнительные стили для адаптивности */
+@media (max-width: 600px) {
+    .item {
+        flex: 1 1 calc(50% - 10px); /* Две колонки на экранах до 600px */
+    }
+
+    .btn {
+        font-size: 12px;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+    .item {
+        flex: 1 1 calc(33.33% - 10px); /* Три колонки на экранах от 601px до 900px */
+    }
+
+    .btn {
+        font-size: 13px;
+    }
+}
+
+@media (min-width: 901px) {
+    .item {
+        flex: 1 1 calc(25% - 10px); /* Четыре колонки на экранах от 901px и выше */
+    }
+
+    .btn {
+        font-size: 14px;
+    }
 }
 
 .hidden {
@@ -345,154 +416,4 @@ header {
 
 .buy-btn:hover {
     transform: scale(1.05);
-}
-
-@media (max-width: 600px) {
-    .app-container {
-        padding: 5px;
-    }
-
-    .story-item {
-        width: 70px;
-        height: 70px;
-    }
-
-    .story-item-title {
-        font-size: 8px; /* Уменьшено с 9px */
-    }
-
-    .item {
-        flex: 1 1 calc(50% - 10px); /* Adjusted width for two columns on smaller screens */
-    }
-
-    .close-btn {
-        padding: 5px;
-        font-size: 12px;
-    }
-
-    .app-name {
-        font-size: 18px;
-    }
-
-    .nav-btn {
-        font-size: 12px;
-    }
-
-    .points-title, .invite-title, .action-btn {
-        font-size: 16px;
-    }
-
-    .points-value, .invite-text, .action-btn span {
-        font-size: 12px;
-    }
-
-    .action-btn {
-        font-size: 14px;
-        padding: 10px;
-    }
-
-    .buy-btn {
-        font-size: 12px;
-        padding: 5px;
-    }
-}
-
-@media (min-width: 601px) and (max-width: 900px) {
-    .app-container {
-        padding: 10px;
-    }
-
-    .story-item {
-        width: 80px;
-        height: 80px;
-    }
-
-    .story-item-title {
-        font-size: 9px; /* Уменьшено с 10px */
-    }
-
-    .item {
-        flex: 1 1 calc(33.33% - 10px); /* Three columns on medium screens */
-    }
-
-    .close-btn {
-        padding: 6px;
-        font-size: 13px;
-    }
-
-    .app-name {
-        font-size: 20px;
-    }
-
-    .nav-btn {
-        font-size: 13px;
-    }
-
-    .points-title, .invite-title, .action-btn {
-        font-size: 17px;
-    }
-
-    .points-value, .invite-text, .action-btn span {
-        font-size: 13px;
-    }
-
-    .action-btn {
-        font-size: 15px;
-        padding: 12px;
-    }
-
-    .buy-btn {
-        font-size: 13px;
-        padding: 6px;
-    }
-}
-
-@media (min-width: 901px) {
-    .app-container {
-        padding: 15px;
-    }
-
-    .story-item {
-        width: 90px;
-        height: 90px;
-    }
-
-    .story-item-title {
-        font-size: 10px; /* Уменьшено с 11px */
-    }
-
-    .item {
-        flex: 1 1 calc(25% - 10px); /* Four columns on large screens */
-    }
-
-    .close-btn {
-        padding: 8px;
-        font-size: 14px;
-    }
-
-    .app-name {
-        font-size: 22px;
-    }
-
-    .nav-btn {
-        font-size: 14px;
-    }
-
-    .points-title, .invite-title, .action-btn {
-        font-size: 18px;
-    }
-
-    .points-value, .invite-text, .action-btn span {
-        font-size: 14px;
-    }
-
-    .action-btn {
-        font-size: 16px;
-        padding: 15px;
-    }
-
-    .buy-btn {
-        font-size: 14px;
-        padding: 7px;
-    }
 }
