@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     statsBtn.addEventListener('click', () => {
-        fetch('https://5945-31-8-241-75.ngrok-free.app/get-log', {
+        fetch('https://222a-31-8-241-75.ngrok-free.app/get-log', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Логирование на сервер перед переходом
             const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
-            fetch('https://5945-31-8-241-75.ngrok-free.app/webapp-data', {
+            fetch('https://222a-31-8-241-75.ngrok-free.app/webapp-data', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
             phone_number: initDataUnsafe.user.phone_number || '',  // Проверка наличия номера телефона
             query_id: telegram.initDataUnsafe.query_id
         };
-        fetch('https://5945-31-8-241-75.ngrok-free.app/user-data', {
+        fetch('https://222a-31-8-241-75.ngrok-free.app/user-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
