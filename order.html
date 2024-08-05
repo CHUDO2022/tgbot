@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h2 class="order-title">Оформление заказа</h2>
+        </header>
+        <div class="order-details">
+            <img src="" alt="Product Image" id="order-img" class="order-img">
+            <p id="order-text">Вы точно хотите купить данный товар?</p>
+            <button class="buy-btn">Купить</button>
+        </div>
+        <button class="back-btn">Назад</button>
+    </div>
+    <script>
+        // Получение параметров из URL
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get('product_id');
+        const productImg = params.get('product_img');
+
+        // Установка данных на странице
+        document.getElementById('order-img').src = productImg;
+        document.getElementById('order-text').textContent = `Вы точно хотите купить товар №${productId}?`;
+
+        // Обработчик для кнопки "Назад"
+        document.querySelector('.back-btn').addEventListener('click', () => {
+            window.history.back();
+        });
+    </script>
+</body>
+</html>
