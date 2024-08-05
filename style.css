@@ -105,146 +105,6 @@ header {
     transform: scale(1.05);
 }
 
-.slider-container {
-    display: flex;
-    justify-content: flex-start;
-    overflow-x: auto;
-    gap: 10px;
-    padding-bottom: 10px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.slider-container::-webkit-scrollbar {
-    display: none;
-}
-
-.story-item {
-    flex: 0 0 auto;
-    width: 90px;
-    height: 90px;
-    border-radius: 10px;
-    background: var(--card-background-color);
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.story-item img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-}
-
-.story-item-title {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    font-size: 9px; /* Уменьшено с 11px */
-    font-family: var(--title-font-family);
-    color: var(--invite-text-color); /* Цвет текста изменяется динамически */
-    background: transparent;
-    padding: 2px 5px;
-    font-weight: 700;
-    text-align: left;
-}
-
-.top-section, .bottom-section {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.points-section, .invite-section, .bottom-section .action-btn {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--card-background-color);
-    border: none;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    color: var(--text-color);
-}
-
-.points-section {
-    background: linear-gradient(45deg, #ff4081, #7c4dff);
-}
-
-.points-title, .invite-title, .action-btn {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.points-value, .invite-text, .action-btn span {
-    font-size: 14px;
-}
-
-.action-btn {
-    background: #007aff;
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 16px;
-    transition: transform 0.2s;
-    text-align: center;
-}
-
-.select-order-btn {
-    background: #007aff;
-}
-
-.calculate-cost-btn {
-    background: #333;
-}
-
-.action-btn:hover {
-    transform: scale(1.05);
-}
-
-.arrow {
-    font-size: 20px;
-    transition: transform 0.2s;
-}
-
-.points-value::before {
-    content: '₽';
-    font-size: 24px;
-    margin-right: 5px;
-}
-
-.invite-section {
-    background: var(--card-background-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-}
-
-.invite-title {
-    color: var(--invite-text-color); /* Цвет текста изменяется динамически */
-    font-size: 18px;
-}
-
-.invite-text {
-    color: var(--invite-text-color); /* Цвет текста изменяется динамически */
-    font-size: 14px;
-    text-align: center;
-}
-
 .items-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -256,7 +116,7 @@ header {
     background: var(--card-background-color);
     border: 1px solid #444;
     border-radius: 10px;
-    flex: 1 1 calc(50% - 10px); /* Adjusted width to fit two columns */
+    flex: 1 1 calc(50% - 10px); /* Двухколоночный макет */
     padding: 10px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -352,17 +212,8 @@ header {
         padding: 5px;
     }
 
-    .story-item {
-        width: 70px;
-        height: 70px;
-    }
-
-    .story-item-title {
-        font-size: 8px; /* Уменьшено с 9px */
-    }
-
     .item {
-        flex: 1 1 calc(50% - 10px); /* Adjusted width for two columns on smaller screens */
+        flex: 1 1 calc(50% - 10px); /* Двухколоночный макет на малых экранах */
     }
 
     .close-btn {
@@ -394,105 +245,5 @@ header {
     .buy-btn {
         font-size: 12px;
         padding: 5px;
-    }
-}
-
-@media (min-width: 601px) and (max-width: 900px) {
-    .app-container {
-        padding: 10px;
-    }
-
-    .story-item {
-        width: 80px;
-        height: 80px;
-    }
-
-    .story-item-title {
-        font-size: 9px; /* Уменьшено с 10px */
-    }
-
-    .item {
-        flex: 1 1 calc(33.33% - 10px); /* Three columns on medium screens */
-    }
-
-    .close-btn {
-        padding: 6px;
-        font-size: 13px;
-    }
-
-    .app-name {
-        font-size: 20px;
-    }
-
-    .nav-btn {
-        font-size: 13px;
-    }
-
-    .points-title, .invite-title, .action-btn {
-        font-size: 17px;
-    }
-
-    .points-value, .invite-text, .action-btn span {
-        font-size: 13px;
-    }
-
-    .action-btn {
-        font-size: 15px;
-        padding: 12px;
-    }
-
-    .buy-btn {
-        font-size: 13px;
-        padding: 6px;
-    }
-}
-
-@media (min-width: 901px) {
-    .app-container {
-        padding: 15px;
-    }
-
-    .story-item {
-        width: 90px;
-        height: 90px;
-    }
-
-    .story-item-title {
-        font-size: 10px; /* Уменьшено с 11px */
-    }
-
-    .item {
-        flex: 1 1 calc(25% - 10px); /* Four columns on large screens */
-    }
-
-    .close-btn {
-        padding: 8px;
-        font-size: 14px;
-    }
-
-    .app-name {
-        font-size: 22px;
-    }
-
-    .nav-btn {
-        font-size: 14px;
-    }
-
-    .points-title, .invite-title, .action-btn {
-        font-size: 18px;
-    }
-
-    .points-value, .invite-text, .action-btn span {
-        font-size: 14px;
-    }
-
-    .action-btn {
-        font-size: 16px;
-        padding: 15px;
-    }
-
-    .buy-btn {
-        font-size: 14px;
-        padding: 7px;
     }
 }
