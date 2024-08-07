@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const orderText = document.getElementById('order-text');
     const inviteTitle = document.querySelector('.invite-title');
     const inviteText = document.querySelector('.invite-text');
+    const moreCategoriesBtn = document.getElementById('more-categories-btn');
+    const moreCategoriesModal = document.getElementById('more-categories-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const modalTabButtons = document.querySelectorAll('.modal-tab-button');
 
     // Адаптация темы интерфейса под профиль пользователя в Telegram
     const themeParams = telegram.themeParams;
@@ -183,6 +187,38 @@ document.addEventListener('DOMContentLoaded', () => {
             // Обновляем активную вкладку
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
+        });
+    });
+
+    // Открытие и закрытие модального окна
+    moreCategoriesBtn.addEventListener('click', () => {
+        moreCategoriesModal.classList.remove('hidden');
+        moreCategoriesModal.style.display = 'block';
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        moreCategoriesModal.classList.add('hidden');
+        moreCategoriesModal.style.display = 'none';
+    });
+
+    modalTabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetCategory = button.getAttribute('data-tab');
+
+            items.forEach(item => {
+                const itemCategory = item.getAttribute('data-category');
+                if (itemCategory === targetCategory) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Обновляем активную вкладку
+            tabs.forEach(t => t.classList.remove('active'));
+            button.classList.add('active');
+            moreCategoriesModal.classList.add('hidden'); // Закрываем модальное окно
+            moreCategoriesModal.style.display = 'none';
         });
     });
 
