@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.btn');
+    const productList = document.getElementById('product-list');
     const tabs = document.querySelectorAll('.tab-button');
-    const items = document.querySelectorAll('.item');
+    const modalTabButtons = document.querySelectorAll('.modal-tab-button');
+    const moreCategoriesBtn = document.getElementById('more-categories-btn');
+    const moreCategoriesModal = document.getElementById('more-categories-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
     const telegram = window.Telegram.WebApp;
     const userInfo = document.getElementById('user-info');
     const homeBtn = document.getElementById('home-btn');
@@ -12,10 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const orderText = document.getElementById('order-text');
     const inviteTitle = document.querySelector('.invite-title');
     const inviteText = document.querySelector('.invite-text');
-    const moreCategoriesBtn = document.getElementById('more-categories-btn');
-    const moreCategoriesModal = document.getElementById('more-categories-modal');
-    const closeModalBtn = document.getElementById('close-modal-btn');
-    const modalTabButtons = document.querySelectorAll('.modal-tab-button');
 
     // Адаптация темы интерфейса под профиль пользователя в Telegram
     const themeParams = telegram.themeParams;
@@ -25,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.style.setProperty('--text-color', themeParams.text_color || '#ffffff');
     document.documentElement.style.setProperty('--highlight-color', themeParams.link_color || '#007aff');
     document.documentElement.style.setProperty('--close-button-color', themeParams.button_text_color || '#ff3b30');
-    document.documentElement.style.setProperty('--invite-text-color', themeParams.text_color || '#000000'); // Цвет текста для кнопки "Зови друзей"
+    document.documentElement.style.setProperty('--invite-text-color', themeParams.text_color || '#000000');
 
     // Изменение цвета текста кнопки "Зови друзей"
     inviteTitle.style.color = themeParams.text_color || '#000000';
@@ -38,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     statsBtn.addEventListener('click', () => {
-        fetch('https://222a-31-8-241-75.ngrok-free.app/get-log', {
+        fetch('http://5.35.29.56:8000/get-log', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -57,36 +56,136 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            const productId = button.id.replace('btn', ''); // Извлекаем номер товара из id кнопки
-            const productImg = document.getElementById(`img${productId}`).src; // Получаем ссылку на изображение товара
-            const message = `Вы выбрали такой товар №${productId}`;
-
-            // Логирование на сервер перед переходом
-            const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
-            fetch('https://222a-31-8-241-75.ngrok-free.app/webapp-data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
+    // Функция для загрузки продуктов с сервера
+    function loadProducts() {
+        fetch('http://5.35.29.56:8000/get-products')
             .then(response => response.json())
             .then(data => {
-                console.log('Ответ от сервера:', data);
+                const products = data.products;
 
-                // После успешного логирования выполняем переход на страницу оформления заказа
-                window.location.href = `order.html?product_id=${productId}&product_img=${encodeURIComponent(productImg)}`;
+                // Создаем карточки для всех продуктов
+                products.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.classList.add('item');
+                    productCard.setAttribute('data-category', product.category);
+
+                    // HTML для карточки товара
+                    productCard.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}" class="img">
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <p>Цена: ${product.price} ₽</p>
+                            ${product.old_price ? `<p>Старая цена: <s>${product.old_price} ₽</s></p>` : ''}
+                            <button class="btn" id="btn${product.id}">Добавить</button>
+                        </div>
+                    `;
+
+                    // Добавление карточки товара в контейнер
+                    productList.appendChild(productCard);
+                });
+
+                // Обновляем обработчики событий на новых кнопках "Добавить"
+                attachButtonEvents();
+
+                // Изначально показываем товары первой вкладки
+                showCategory('tab1');
             })
-            .catch(error => {
-                console.error('Ошибка:', error);
-            });
+            .catch(error => console.error('Ошибка при получении данных:', error));
+    }
 
-            // Для отладки выводим данные в консоль
-            console.log('Отправленные данные:', data);
+    // Функция для отображения товаров определенной категории
+    function showCategory(category) {
+        const items = document.querySelectorAll('.item');
+        items.forEach(item => {
+            if (item.getAttribute('data-category') === category) {
+                item.style.display = 'block';  // показываем товары из выбранной категории
+            } else {
+                item.style.display = 'none';  // скрываем товары из других категорий
+            }
+        });
+    }
+
+    // Функция для обработки событий на кнопках "Добавить"
+    function attachButtonEvents() {
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const productId = button.id.replace('btn', ''); // Извлекаем номер товара из id кнопки
+                const productImg = document.querySelector(`#btn${productId}`).closest('.item').querySelector('img').src; // Получаем ссылку на изображение товара
+                const message = `Вы выбрали такой товар №${productId}`;
+
+                // Логирование на сервер перед переходом
+                const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
+                fetch('http://5.35.29.56:8000/webapp-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Ответ от сервера:', data);
+
+                    // После успешного логирования выполняем переход на страницу оформления заказа
+                    window.location.href = `order.html?product_id=${productId}&product_img=${encodeURIComponent(productImg)}`;
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+
+                // Для отладки выводим данные в консоль
+                console.log('Отправленные данные:', data);
+            });
+        });
+    }
+
+    // Обработчик кликов по вкладкам
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetCategory = tab.getAttribute('data-tab');
+
+            // Убираем класс активной вкладки у всех и добавляем к текущей
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Показать товары соответствующей категории
+            showCategory(targetCategory);
         });
     });
+
+    // Открытие и закрытие модального окна
+    moreCategoriesBtn.addEventListener('click', () => {
+        moreCategoriesModal.classList.remove('hidden');
+        moreCategoriesModal.style.display = 'block';
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        moreCategoriesModal.classList.add('hidden');
+        moreCategoriesModal.style.display = 'none';
+    });
+
+    modalTabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetCategory = button.getAttribute('data-tab');
+
+            // Закрываем модальное окно
+            moreCategoriesModal.classList.add('hidden');
+            moreCategoriesModal.style.display = 'none';
+
+            // Показать товары соответствующей категории
+            showCategory(targetCategory);
+
+            // Обновляем активную вкладку (но не в верхней навигации, чтобы логика осталась простой)
+            tabs.forEach(t => t.classList.remove('active'));
+        });
+    });
+
+    // Изначально показываем карточки первой вкладки
+    tabs[0].click();
+
+    // Загрузка товаров при инициализации страницы
+    loadProducts();
 
     const closeBtn = document.querySelector('.close-btn');
     closeBtn.addEventListener('click', () => {
@@ -136,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
             phone_number: initDataUnsafe.user.phone_number || '',  // Проверка наличия номера телефона
             query_id: telegram.initDataUnsafe.query_id
         };
-        fetch('https://222a-31-8-241-75.ngrok-free.app/user-data', {
+        fetch('http://5.35.29.56:8000/user-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -168,60 +267,4 @@ document.addEventListener('DOMContentLoaded', () => {
             </span>
         `;
     });
-
-    // Логика переключения вкладок и отображения соответствующих карточек товаров
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const targetCategory = tab.getAttribute('data-tab');
-
-            // Скрываем все карточки и показываем только те, которые соответствуют выбранной категории
-            items.forEach(item => {
-                const itemCategory = item.getAttribute('data-category');
-                if (itemCategory === targetCategory) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-
-            // Обновляем активную вкладку
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-        });
-    });
-
-    // Открытие и закрытие модального окна
-    moreCategoriesBtn.addEventListener('click', () => {
-        moreCategoriesModal.classList.remove('hidden');
-        moreCategoriesModal.style.display = 'block';
-    });
-
-    closeModalBtn.addEventListener('click', () => {
-        moreCategoriesModal.classList.add('hidden');
-        moreCategoriesModal.style.display = 'none';
-    });
-
-    modalTabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetCategory = button.getAttribute('data-tab');
-
-            items.forEach(item => {
-                const itemCategory = item.getAttribute('data-category');
-                if (itemCategory === targetCategory) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-
-            // Обновляем активную вкладку
-            tabs.forEach(t => t.classList.remove('active'));
-            button.classList.add('active');
-            moreCategoriesModal.classList.add('hidden'); // Закрываем модальное окно
-            moreCategoriesModal.style.display = 'none';
-        });
-    });
-
-    // Изначально показываем карточки первой вкладки
-    tabs[0].click();
 });
