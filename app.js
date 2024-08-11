@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     statsBtn.addEventListener('click', () => {
-        fetch('http://5.35.29.56:8000/get-log', {
+        fetch('https://gadgetmark.ru/get-log', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для загрузки продуктов с сервера
     function loadProducts() {
-        fetch('http://5.35.29.56:8000/get-products')
+        fetch('https://gadgetmark.ru/get-products')
             .then(response => response.json())
             .then(data => {
                 const products = data.products;
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Логирование на сервер перед переходом
                 const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
-                fetch('http://5.35.29.56:8000/webapp-data', {
+                fetch('https://gadgetmark.ru/webapp-data', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
             phone_number: initDataUnsafe.user.phone_number || '',  // Проверка наличия номера телефона
             query_id: telegram.initDataUnsafe.query_id
         };
-        fetch('http://5.35.29.56:8000/user-data', {
+        fetch('https://gadgetmark.ru/user-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
