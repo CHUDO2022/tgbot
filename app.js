@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     statsBtn.addEventListener('click', () => {
-        fetch('https://gadgetmark.ru/get-log', {
+        fetch('http://127.0.0.1:8000/get-log', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для загрузки продуктов с сервера
     function loadProducts() {
-        fetch('https://gadgetmark.ru/get-products')
+        fetch('http://127.0.0.1:8000/get-products')
             .then(response => response.json())
             .then(data => {
                 const products = data.products;
@@ -68,14 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     const productCard = document.createElement('div');
                     productCard.classList.add('item');
                     productCard.setAttribute('data-category', product.category);
+                    productCard.dataset.colors = JSON.stringify(product.colors || []);
+                    productCard.dataset.memory = JSON.stringify(product.memory || []);
+                    productCard.dataset.connectivity = JSON.stringify(product.connectivity || []);
 
                     // HTML для карточки товара
                     productCard.innerHTML = `
                         <img src="${product.image}" alt="${product.name}" class="img">
                         <div class="product-info">
                             <h3>${product.name}</h3>
-                            <p>Цена: ${product.price} ₽</p>
-                            ${product.old_price ? `<p>Старая цена: <s>${product.old_price} ₽</s></p>` : ''}
+                            <p class="price">Цена: ${product.price} ₽</p>
+                            ${product.old_price ? `<p class="old-price">Старая цена: <s>${product.old_price} ₽</s></p>` : ''}
                             <button class="btn" id="btn${product.id}">Добавить</button>
                         </div>
                     `;
@@ -105,37 +108,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Функция для обработки событий на кнопках "Добавить"
+    // Обработчики для кнопок "Добавить"
     function attachButtonEvents() {
         const buttons = document.querySelectorAll('.btn');
         buttons.forEach(button => {
             button.addEventListener('click', () => {
-                const productId = button.id.replace('btn', ''); // Извлекаем номер товара из id кнопки
-                const productImg = document.querySelector(`#btn${productId}`).closest('.item').querySelector('img').src; // Получаем ссылку на изображение товара
-                const message = `Вы выбрали такой товар №${productId}`;
+                const productId = button.id.replace('btn', '');
+                const productCard = document.querySelector(`#btn${productId}`).closest('.item');
+                const productImg = productCard.querySelector('img').src;
+                const productName = productCard.querySelector('h3').textContent;
+                const productPrice = productCard.querySelector('.price').textContent.replace('Цена: ', '').replace(' ₽', '');
+                const productOldPrice = productCard.querySelector('.old-price') ? productCard.querySelector('.old-price').textContent.replace('Старая цена: ', '').replace(' ₽', '') : '';
 
-                // Логирование на сервер перед переходом
-                const data = { productId: productId, message: message, query_id: telegram.initDataUnsafe.query_id };
-                fetch('https://gadgetmark.ru/webapp-data', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Ответ от сервера:', data);
+                const product = {
+                    id: productId,
+                    image: productImg,
+                    name: productName,
+                    price: productPrice,
+                    old_price: productOldPrice,
+                    colors: productCard.dataset.colors ? JSON.parse(productCard.dataset.colors) : [],
+                    memory: productCard.dataset.memory ? JSON.parse(productCard.dataset.memory) : [],
+                    connectivity: productCard.dataset.connectivity ? JSON.parse(productCard.dataset.connectivity) : []
+                };
 
-                    // После успешного логирования выполняем переход на страницу оформления заказа
-                    window.location.href = `order.html?product_id=${productId}&product_img=${encodeURIComponent(productImg)}`;
-                })
-                .catch(error => {
-                    console.error('Ошибка:', error);
-                });
-
-                // Для отладки выводим данные в консоль
-                console.log('Отправленные данные:', data);
+                // Переход на страницу оформления заказа с передачей данных через URL
+                window.location.href = `order.html?product_data=${encodeURIComponent(JSON.stringify(product))}`;
             });
         });
     }
@@ -235,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
             phone_number: initDataUnsafe.user.phone_number || '',  // Проверка наличия номера телефона
             query_id: telegram.initDataUnsafe.query_id
         };
-        fetch('https://gadgetmark.ru/user-data', {
+        fetch('http://127.0.0.1:8000/user-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
