@@ -1,0 +1,138 @@
+:root {
+    --bg-color: #232e3c;
+    --container-bg-color: #2c3e50;
+    --text-color: #f5f5f5;
+    --button-bg-color: #3498db;
+    --button-hover-color: #2980b9;
+    --price-color: #ff4d4f;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 600px;
+    margin: 20px;
+    padding: 20px;
+    background-color: var(--container-bg-color);
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.product-image {
+    width: 100%;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
+}
+
+.product-info {
+    text-align: center;
+}
+
+.product-name {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.product-price {
+    font-size: 26px;
+    color: var(--price-color);
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.product-old-price {
+    font-size: 20px;
+    color: #b2b2b2;
+    text-decoration: line-through;
+    margin-bottom: 20px;
+}
+
+.option-section {
+    margin-bottom: 20px;
+}
+
+.color-options,
+.memory-options,
+.connectivity-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.color-option,
+.memory-option,
+.connectivity-option {
+    padding: 12px 20px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: var(--button-bg-color);
+    color: var(--text-color);
+    text-align: center;
+    flex-grow: 1;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.color-option.selected,
+.memory-option.selected,
+.connectivity-option.selected {
+    background-color: var(--button-hover-color);
+    transform: scale(1.05);
+}
+
+.info-section {
+    margin-bottom: 20px;
+    background-color: var(--container-bg-color);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reviews img {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pay-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    font-size: 20px;
+    text-align: center;
+    color: #fff;
+    background: linear-gradient(90deg, var(--button-bg-color), var(--button-hover-color));
+    border: none;
+    border-radius: 15px;
+    margin-top: 20px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.pay-button:hover {
+    background: linear-gradient(90deg, var(--button-hover-color), var(--button-bg-color));
+    transform: translateY(-2px);
+}
