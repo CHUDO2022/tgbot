@@ -476,15 +476,16 @@ header {
     list-style: none;
     padding: 0;
     margin-top: 0;
-    background: var(--card-background-color);
+    background: rgba(23, 33, 43, 0.9);  /* Полупрозрачный фон */
     border: 1px solid #ddd;
     border-top: none;
     position: absolute;
-    width: calc(100% - 20px);  /* Ширина списка автодополнения соответствует ширине строки поиска */
+    width: 80%;  /* Уменьшена ширина списка */
     max-height: 200px;  /* Ограничение высоты списка */
     overflow-y: auto;  /* Добавляем прокрутку, если список длинный */
     z-index: 10;
-    left: 10px;
+    left: 10%;
+    border-radius: 5px;  /* Округленные углы */
 }
 
 .autocomplete-list li {
@@ -493,6 +494,7 @@ header {
 }
 
 .autocomplete-list li:hover {
-    background-color: var(--highlight-color);
+    background-color: rgba(0, 122, 255, 0.8);  /* Полупрозрачный цвет при наведении */
     color: var(--text-color);
 }
+
