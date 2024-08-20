@@ -480,8 +480,11 @@ header {
     border: 1px solid #ddd;
     border-top: none;
     position: absolute;
-    width: 100%;
+    width: calc(100% - 20px);  /* Ширина списка автодополнения соответствует ширине строки поиска */
+    max-height: 200px;  /* Ограничение высоты списка */
+    overflow-y: auto;  /* Добавляем прокрутку, если список длинный */
     z-index: 10;
+    left: 10px;
 }
 
 .autocomplete-list li {
@@ -493,4 +496,5 @@ header {
     background-color: var(--highlight-color);
     color: var(--text-color);
 }
+
 
