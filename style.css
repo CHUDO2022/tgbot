@@ -470,4 +470,27 @@ header {
 
 .buy-btn:hover {
     transform: scale(1.05);
+}        
+
+.autocomplete-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 0;
+    background: var(--card-background-color);
+    border: 1px solid #ddd;
+    border-top: none;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
 }
+
+.autocomplete-list li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.autocomplete-list li:hover {
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+}
+
