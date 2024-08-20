@@ -201,6 +201,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (user) {
         console.log('Данные пользователя:', user); // Отладочный вывод
 
+        // Сохранение данных пользователя в localStorage для использования на других страницах
+        localStorage.setItem('telegramUser', JSON.stringify(user));
+
         let profName = document.createElement('p'); // создаем параграф
         profName.innerText = `${user.first_name} ${user.last_name || ''} (${user.username || ''}) [${user.language_code || ''}]`;
         userInfo.appendChild(profName); // добавляем
@@ -268,4 +271,3 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     });
 });
-
