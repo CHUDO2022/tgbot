@@ -15,6 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const orderText = document.getElementById('order-text');
     const inviteTitle = document.querySelector('.invite-title');
     const inviteText = document.querySelector('.invite-text');
+    const searchInput = document.querySelector('.search-bar input');
+    const autoCompleteList = document.createElement('ul');
+    autoCompleteList.className = 'autocomplete-list';
+    document.querySelector('.search-bar').appendChild(autoCompleteList);
+
+    let productNames = [];  // Массив для хранения названий товаров
 
     // Адаптация темы интерфейса под профиль пользователя в Telegram
     const themeParams = telegram.themeParams;
@@ -62,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 const products = data.products;
+                productNames = products.map(product => product.name); // Сохраняем названия товаров
 
                 // Создаем карточки для всех продуктов
                 products.forEach(product => {
@@ -107,6 +114,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.style.display = 'none';  // скрываем товары из других категорий
             }
         });
+    }
+
+    // Функция для отображения автодополнения
+    function showAutoComplete(text) {
+        const matches = productNames.filter(name => name.toLowerCase().startsWith(text.toLowerCase()));
+        autoCompleteList.innerHTML = '';
+        matches.forEach(match => {
+            const li = document.createElement('li');
+            li.textContent = match;
+            li.addEventListener('click', () => {
+                searchInput.value = match;
+                autoCompleteList.innerHTML = '';  // Очищаем список после выбора
+                searchProducts();  // Вызываем функцию поиска товаров
+            });
+            autoCompleteList.appendChild(li);
+        });
+    }
+
+    // Функция для поиска товаров и отображения автодополнения
+    function searchProducts() {
+        const searchText = searchInput.value.toLowerCase();
+        const items = document.querySelectorAll('.item');
+        items.forEach(item => {
+            const productName = item.querySelector('h3').textContent.toLowerCase();
+            if (productName.includes(searchText)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+        if (searchText.length > 0) {
+            showAutoComplete(searchText);
+        } else {
+            autoCompleteList.innerHTML = '';  // Очищаем список, если поле ввода пусто
+        }
     }
 
     // Обработчики для кнопок "Добавить"
@@ -270,4 +312,10 @@ document.addEventListener('DOMContentLoaded', () => {
             </span>
         `;
     });
+
+    // Обработчик для ввода в строку поиска
+    searchInput.addEventListener('input', searchProducts);
+
+    // Загрузка товаров при инициализации страницы
+    loadProducts();
 });
