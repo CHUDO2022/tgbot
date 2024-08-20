@@ -3,368 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Товар</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --bg-color: #232e3c;
-            --container-bg-color: #2c3e50;
-            --text-color: #f5f5f5;
-            --button-bg-color: #3498db;
-            --button-hover-color: #2980b9;
-            --price-color: #ff4d4f;
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #232e3c;
-            --container-bg-color: #2c3e50;
-            --text-color: #f5f5f5;
-            --button-bg-color: #3498db;
-            --button-hover-color: #2980b9;
-            --price-color: #ff4d4f;
-        }
-
-        [data-theme="light"] {
-            --bg-color: #f0f2f5;
-            --container-bg-color: #ffffff;
-            --text-color: #333;
-            --button-bg-color: #007bff;
-            --button-hover-color: #0056b3;
-            --price-color: #ff4d4f;
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 20px;
-            padding: 20px;
-            background-color: var(--container-bg-color);
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-        }
-
-        .product-image {
-            width: 100%;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s;
-        }
-
-        .product-image:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        .product-info {
-            text-align: center;
-        }
-
-        .product-name {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--text-color);
-        }
-
-        .product-price {
-            font-size: 26px;
-            color: var(--price-color);
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .product-old-price {
-            font-size: 20px;
-            color: #b2b2b2;
-            text-decoration: line-through;
-            margin-bottom: 20px;
-        }
-
-        .option-section {
-            margin-bottom: 20px;
-        }
-
-        .option-section h3 {
-            margin-bottom: 10px;
-            font-weight: 500;
-            color: var(--text-color);
-        }
-
-        .color-options,
-        .memory-options,
-        .connectivity-options {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .color-option {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            cursor: pointer;
-            transition: border-color 0.3s, transform 0.3s;
-        }
-
-        .color-option.active {
-            border-color: var(--price-color);
-            transform: scale(1.1);
-        }
-
-        .memory-option,
-        .connectivity-option {
-            padding: 12px 20px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s, color 0.3s, transform 0.3s;
-            background-color: var(--button-bg-color);
-            color: var(--text-color);
-        }
-
-        .memory-option:hover,
-        .connectivity-option:hover {
-            background-color: var(--button-hover-color);
-            color: #fff;
-            transform: scale(1.05);
-        }
-
-        .memory-option.active,
-        .connectivity-option.active {
-            background-color: var(--button-hover-color);
-            color: #fff;
-            border-color: var(--button-hover-color);
-        }
-
-        .info-section {
-            margin-bottom: 20px;
-            background-color: var(--container-bg-color);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s;
-        }
-
-        .info-section:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        .info-section h3 {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--text-color);
-        }
-
-        .info-section p {
-            margin-bottom: 10px;
-            color: #d1d1d1;
-            font-size: 16px;
-        }
-
-        .info-section i {
-            color: #007bff;
-            margin-right: 8px;
-        }
-
-        .reviews {
-            margin-top: 20px;
-            background-color: var(--container-bg-color);
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .reviews img {
-            width: 100%;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-
-        .reviews img:hover {
-            transform: scale(1.05);
-        }
-
-        .pay-button {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            font-size: 20px;
-            text-align: center;
-            color: #fff;
-            background: linear-gradient(90deg, var(--button-bg-color), var(--button-hover-color));
-            border: none;
-            border-radius: 15px;
-            margin-top: 20px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.3s;
-        }
-
-        .pay-button:hover {
-            background: linear-gradient(90deg, var(--button-hover-color), var(--button-bg-color));
-            transform: translateY(-2px);
-        }
-
-        /* Адаптивность */
-        @media (max-width: 480px) {
-            .memory-option,
-            .connectivity-option {
-                flex: 1 1 48%;
-                margin-bottom: 10px;
-            }
-
-            .info-section {
-                padding: 15px;
-            }
-
-            .reviews img {
-                height: 150px;
-                object-fit: cover;
-            }
-        }
-    </style>
+    <title>Заказ Unicorn</title>
+    <link rel="stylesheet" href="order.css">
 </head>
 <body>
     <div class="container">
-        <img src="https://via.placeholder.com/600x400" alt="Product Image" class="product-image" id="product-image">
-        
+        <!-- Описание продукта -->
+        <img id="product-img" src="" alt="Изображение продукта" class="product-image">
         <div class="product-info">
-            <h1 class="product-name" id="product-name">Название товара</h1>
-            <p class="product-price" id="product-price">11 135 ₽</p>
-            <p class="product-old-price" id="product-old-price">11 735 ₽</p>
+            <h3 id="product-name">Название продукта</h3>
+            <p id="product-price" class="product-price"></p>
+            <p id="product-old-price" class="product-old-price"></p>
+            <p id="product-description" class="product-description"></p>  <!-- Новый элемент для описания -->
         </div>
 
+        <!-- Опции выбора -->
         <div class="option-section">
-            <h3>Цвет</h3>
-            <div class="color-options">
-                <div class="color-option" style="background-color: black;" data-color="Черный"></div>
-                <div class="color-option" style="background-color: white;" data-color="Белый"></div>
-                <div class="color-option" style="background-color: gray;" data-color="Серый"></div>
-                <div class="color-option" style="background-color: beige;" data-color="Бежевый"></div>
-            </div>
+            <h3>Выберите цвет</h3>
+            <div id="color-options" class="options"></div>
         </div>
-
         <div class="option-section">
-            <h3>Память</h3>
-            <div class="memory-options">
-                <div class="memory-option" data-memory="128 ГБ">128 ГБ</div>
-                <div class="memory-option" data-memory="256 ГБ">256 ГБ</div>
-            </div>
+            <h3>Выберите память</h3>
+            <div id="memory-options" class="options"></div>
         </div>
-
         <div class="option-section">
-            <h3>Связь</h3>
-            <div class="connectivity-options">
-                <div class="connectivity-option" data-connectivity="dual-SIM">dual-SIM</div>
-            </div>
+            <h3>Выберите связь</h3>
+            <div id="connectivity-options" class="options"></div>
         </div>
 
+        <!-- Информация о доставке и безопасности -->
         <div class="info-section">
-            <h3><i class="fas fa-shipping-fast"></i>Доставка</h3>
+            <h3>Доставка</h3>
             <p>Среднее время доставки 20–25 дней. После оплаты вы сможете отслеживать статусы доставки и получать уведомления об их изменении.</p>
         </div>
-
         <div class="info-section">
-            <h3><i class="fas fa-shield-alt"></i>Страховка и безопасность</h3>
+            <h3>Страховка и безопасность</h3>
             <p>В стоимость товара входит его полное страхование. Мы несем ответственность, чтобы вы получили свой заказ в целости и сохранности.</p>
         </div>
-
         <div class="info-section">
-            <h3><i class="fas fa-certificate"></i>Строго оригинал</h3>
+            <h3>Строго оригинал</h3>
             <p>Мы гарантируем, что все купленные товары в Unicorn оригинальные и прошли проверку на подлинность. Если по каким-то причинам у вас на руках окажется подделка — мы вернем деньги в двойном размере.</p>
         </div>
 
+        <!-- Отзывы -->
         <div class="reviews">
             <h3>Отзывы</h3>
-            <img src="https://via.placeholder.com/600x300" alt="Reviews">
+            <img src="https://via.placeholder.com/600x300" alt="Отзывы">
         </div>
 
-        <button class="pay-button">Перейти к оплате</button>
+        <!-- Кнопка перехода к оплате -->
+        <button id="pay-button" class="pay-button">Перейти к оплате</button>
     </div>
 
-    <script>
-        // Получение параметров из URL
-        const params = new URLSearchParams(window.location.search);
-        const productImg = params.get('product_img');
-        const productName = params.get('product_name');
-        const productPrice = params.get('product_price');
-        const productOldPrice = params.get('product_old_price');
+    <!-- Модальное окно для сбора данных о пользователе -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Введите ваши данные</h2>
+            <form id="user-form">
+                <label for="full-name">ФИО:</label>
+                <input type="text" id="full-name" name="full-name" required>
+                <label for="phone-number">Номер телефона:</label>
+                <input type="tel" id="phone-number" name="phone-number" required>
+                <label for="email">Электронная почта:</label>
+                <input type="email" id="email" name="email" required>
+                <button type="submit" class="submit-button">Отправить</button>
+            </form>
+        </div>
+    </div>
 
-        // Установка данных на странице
-        if (productImg) {
-            document.getElementById('product-image').src = productImg;
-        } else {
-            document.getElementById('product-image').src = 'https://via.placeholder.com/600x400';
-        }
+    <!-- Модальное окно для проверки опций -->
+    <div id="option-check-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-option-check">&times;</span>
+            <h2>Подтвердите действие</h2>
+            <p id="option-check-message">Пожалуйста, выберите все опции товара перед отправкой заказа.</p>
+            <button class="submit-button" id="close-option-check-button">OK</button>
+        </div>
+    </div>
 
-        if (productName) {
-            document.getElementById('product-name').textContent = productName;
-        }
-
-        if (productPrice) {
-            document.getElementById('product-price').textContent = `${productPrice} ₽`;
-        }
-
-        if (productOldPrice) {
-            document.getElementById('product-old-price').textContent = `${productOldPrice} ₽`;
-        } else {
-            document.getElementById('product-old-price').style.display = 'none';
-        }
-
-        // Обработчики выбора опций
-        const colorOptions = document.querySelectorAll('.color-option');
-        const memoryOptions = document.querySelectorAll('.memory-option');
-        const connectivityOptions = document.querySelectorAll('.connectivity-option');
-
-        colorOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                colorOptions.forEach(o => o.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        memoryOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                memoryOptions.forEach(o => o.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        connectivityOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                connectivityOptions.forEach(o => o.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        // Telegram Web Apps API: установка темы
-        if (window.Telegram.WebApp) {
-            const theme = window.Telegram.WebApp.colorScheme;
-            document.body.dataset.theme = theme === 'dark' ? 'dark' : 'light';
-        }
-    </script>
+    <script src="order.js"></script>
 </body>
 </html>
