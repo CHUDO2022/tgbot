@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     productCard.dataset.colors = JSON.stringify(product.colors || []);
                     productCard.dataset.memory = JSON.stringify(product.memory || []);
                     productCard.dataset.connectivity = JSON.stringify(product.connectivity || []);
+                    productCard.dataset.description = product.description;  // Сохраняем описание в атрибуте
 
                     // HTML для карточки товара
                     productCard.innerHTML = `
@@ -117,15 +118,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const productCard = document.querySelector(`#btn${productId}`).closest('.item');
                 const productImg = productCard.querySelector('img').src;
                 const productName = productCard.querySelector('h3').textContent;
-                const productPrice = productCard.querySelector('.price').textContent.replace('Цена: ', '').replace(' ₽', '');
-                const productOldPrice = productCard.querySelector('.old-price') ? productCard.querySelector('.old-price').textContent.replace('Старая цена: ', '').replace(' ₽', '') : '';
+                const productPrice = parseFloat(productCard.querySelector('.price').textContent.replace('Цена: ', '').replace(' ₽', ''));
+                const productOldPrice = productCard.querySelector('.old-price') ? parseFloat(productCard.querySelector('.old-price').textContent.replace('Старая цена: ', '').replace(' ₽', '')) : '';
+                const productDescription = productCard.dataset.description;  // Получаем описание
 
                 const product = {
-                    id: productId,
+                    id: parseInt(productId, 10),  // Преобразуем productId в число
                     image: productImg,
                     name: productName,
                     price: productPrice,
                     old_price: productOldPrice,
+                    description: productDescription,  // Добавляем описание в объект
                     colors: productCard.dataset.colors ? JSON.parse(productCard.dataset.colors) : [],
                     memory: productCard.dataset.memory ? JSON.parse(productCard.dataset.memory) : [],
                     connectivity: productCard.dataset.connectivity ? JSON.parse(productCard.dataset.connectivity) : []
@@ -265,3 +268,4 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     });
 });
+
