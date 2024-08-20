@@ -7,6 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Извлечение данных пользователя из localStorage
+    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+
+    if (!telegramUser) {
+        console.error("Данные пользователя не найдены. Убедитесь, что они были сохранены на главной странице.");
+        return;
+    }
+
     // Обновляем UI с данными продукта
     const productImg = document.getElementById('product-img');
     const productName = document.getElementById('product-name');
@@ -92,9 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const fullName = document.getElementById("full-name").value;
         const phoneNumber = document.getElementById("phone-number").value;
         const email = document.getElementById("email").value;
-
-        // Получение данных пользователя из Telegram Web Apps API
-        const telegramUser = window.Telegram.WebApp.initDataUnsafe.user;
 
         const orderData = {
             product_id: productData.id,
