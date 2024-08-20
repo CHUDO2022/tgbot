@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             li.addEventListener('click', () => {
                 searchInput.value = match;
                 autoCompleteList.innerHTML = '';  // Очищаем список после выбора
+                searchInput.value = '';  // Очищаем поле поиска после выбора
                 searchProducts();  // Вызываем функцию поиска товаров
             });
             autoCompleteList.appendChild(li);
