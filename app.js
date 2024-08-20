@@ -151,6 +151,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Закрытие списка автодополнения при клике вне поля поиска
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('.search-bar')) {
+            autoCompleteList.innerHTML = '';  // Очищаем список при клике вне поля поиска
+        }
+    });
+
     // Обработчики для кнопок "Добавить"
     function attachButtonEvents() {
         const buttons = document.querySelectorAll('.btn');
