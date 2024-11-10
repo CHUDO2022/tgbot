@@ -7,24 +7,33 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Извлечение данных пользователя из localStorage
+    const telegram = window.Telegram.WebApp;
     let telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
-    // Проверка наличия данных пользователя
-    if (!telegramUser) {
-        // Получаем данные из Telegram Web App API
-        const telegram = window.Telegram.WebApp;
+    // Функция для получения данных пользователя из Telegram API
+    function getTelegramUser() {
         const initDataUnsafe = telegram.initDataUnsafe;
-        telegramUser = initDataUnsafe.user;
+        const user = initDataUnsafe?.user || null;
 
-        // Сохраняем данные пользователя в localStorage, если они найдены
-        if (telegramUser) {
-            localStorage.setItem('telegramUser', JSON.stringify(telegramUser));
+        if (user) {
+            localStorage.setItem('telegramUser', JSON.stringify(user));
+            return user;
         } else {
-            alert("Ошибка: не удалось получить данные пользователя из Telegram.");
             console.error("Нет данных пользователя из Telegram Web App API.");
-            return;
+            return null;
         }
+    }
+
+    // Если данные пользователя отсутствуют в localStorage, загружаем их из Telegram API
+    if (!telegramUser) {
+        telegramUser = getTelegramUser();
+    }
+
+    // Проверяем наличие user_id и показываем ошибку, если данные отсутствуют
+    if (!telegramUser || !telegramUser.id) {
+        alert("Ошибка: данные пользователя не найдены. Попробуйте перезагрузить страницу.");
+        console.error("Ошибка: не удалось получить user_id.");
+        return;
     }
 
     // Обновляем UI с данными продукта
@@ -68,11 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const phoneNumber = document.getElementById('phone-number').value;
         const email = document.getElementById('email').value;
 
-        if (!telegramUser || !telegramUser.id) {
-            alert("Ошибка: данные пользователя не найдены.");
-            return;
-        }
-
         const orderData = {
             product_id: productData.id,
             user_data: {
@@ -104,5 +108,15 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Ошибка:', error);
             alert('Произошла ошибка. Попробуйте снова.');
         });
+    });
+
+    // Получаем данные из Telegram бота (если они обновляются после инициализации)
+    telegram.onEvent('web_app_data', function(data) {
+        const profileData = JSON.parse(data);
+        if (profileData && profileData.id) {
+            telegramUser = profileData;
+            localStorage.setItem('telegramUser', JSON.stringify(profileData));
+            console.log('Обновленные данные пользователя:', profileData);
+        }
     });
 });
