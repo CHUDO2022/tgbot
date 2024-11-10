@@ -3,117 +3,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const productData = JSON.parse(urlParams.get('product_data'));
 
     if (!productData) {
-        showError("Нет данных о продукте в URL");
+        alert("Ошибка: нет данных о продукте.");
         return;
     }
 
-    // Извлечение данных пользователя из localStorage
-    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+    // Обновляем информацию о продукте
+    document.getElementById('product-img').src = productData.image;
+    document.getElementById('product-name').textContent = productData.name;
+    document.getElementById('product-price').textContent = `${productData.price} ₽`;
+    if (productData.old_price) {
+        document.getElementById('product-old-price').textContent = `${productData.old_price} ₽`;
+    }
+    document.getElementById('product-description').textContent = productData.description;
 
-    if (!telegramUser) {
-        console.error("Данные пользователя не найдены. Убедитесь, что они были сохранены на главной странице.");
-        return;
+    // Загрузка отзывов
+    const reviewsList = document.getElementById('reviews-list');
+    if (productData.reviews && productData.reviews.length > 0) {
+        productData.reviews.forEach(review => {
+            const li = document.createElement('li');
+            li.textContent = review;
+            reviewsList.appendChild(li);
+        });
+    } else {
+        const noReviews = document.createElement('li');
+        noReviews.textContent = 'Отзывов пока нет';
+        reviewsList.appendChild(noReviews);
     }
 
-    // Обновляем UI с данными продукта
-    const productImg = document.getElementById('product-img');
-    const productName = document.getElementById('product-name');
-    const productPrice = document.getElementById('product-price');
-    const productOldPrice = document.getElementById('product-old-price');
-    const productDescription = document.getElementById('product-description');
+    // Обработчик кнопки оплаты
+    document.getElementById('pay-button').addEventListener('click', () => {
+        document.getElementById('modal').style.display = 'flex';
+    });
 
-    if (productImg) productImg.src = productData.image;
-    if (productName) productName.textContent = productData.name;
-    if (productPrice) productPrice.textContent = `${productData.price} ₽`;
-    if (productOldPrice && productData.old_price) {
-        productOldPrice.textContent = `${productData.old_price} ₽`;
-    }
-    if (productDescription) productDescription.textContent = productData.description;
+    // Закрытие модального окна
+    document.querySelector('.close').addEventListener('click', () => {
+        document.getElementById('modal').style.display = 'none';
+    });
 
-    const setupOptions = (containerId, options, className, useBackgroundColor = false) => {
-        const container = document.getElementById(containerId);
-        if (container && options) {
-            options.forEach(option => {
-                const div = document.createElement('div');
-                div.className = className;
-                if (useBackgroundColor) {
-                    div.style.backgroundColor = option.toLowerCase();
-                    div.setAttribute('data-value', option);
-                } else {
-                    div.textContent = option;
-                }
-                div.addEventListener('click', () => {
-                    container.querySelectorAll(`.${className}`).forEach(opt => opt.classList.remove('selected'));
-                    div.classList.add('selected');
-                });
-                container.appendChild(div);
-            });
-        }
-    };
-
-    setupOptions('color-options', productData.colors, 'color-option', true);
-    setupOptions('memory-options', productData.memory, 'memory-option');
-    setupOptions('connectivity-options', productData.connectivity, 'connectivity-option');
-
-    // Модальные окна и обработка ошибок
-    const modal = document.getElementById("modal");
-    const btn = document.getElementById("pay-button");
-    const span = document.querySelector(".close");
-
-    const optionCheckModal = document.getElementById("option-check-modal");
-    const closeOptionCheckBtn = document.getElementById("close-option-check-button");
-    const closeOptionCheckSpan = document.querySelector(".close-option-check");
-
-    function showOptionCheckModal(message) {
-        document.getElementById("option-check-message").textContent = message;
-        optionCheckModal.style.display = "block";
-    }
-
-    closeOptionCheckBtn.onclick = () => optionCheckModal.style.display = "none";
-    closeOptionCheckSpan.onclick = () => optionCheckModal.style.display = "none";
-
-    window.onclick = event => {
-        if (event.target === optionCheckModal) {
-            optionCheckModal.style.display = "none";
-        } else if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
-
-    btn.onclick = () => {
-        const selectedOptions = {
-            color: document.querySelector('.color-option.selected')?.getAttribute('data-value')?.toLowerCase(),
-            memory: document.querySelector('.memory-option.selected')?.textContent.toLowerCase(),
-            connectivity: document.querySelector('.connectivity-option.selected')?.textContent.toLowerCase(),
-        };
-
-        if (!selectedOptions.color || !selectedOptions.memory || !selectedOptions.connectivity) {
-            showOptionCheckModal('Пожалуйста, выберите все опции товара перед отправкой заказа.');
-        } else {
-            modal.style.display = "block";
-        }
-    };
-
-    document.getElementById("user-form").addEventListener("submit", function(event) {
+    // Отправка данных заказа
+    document.getElementById('user-form').addEventListener('submit', (event) => {
         event.preventDefault();
 
-        const fullName = document.getElementById("full-name").value;
-        const phoneNumber = document.getElementById("phone-number").value;
-        const email = document.getElementById("email").value;
+        const fullName = document.getElementById('full-name').value;
+        const phoneNumber = document.getElementById('phone-number').value;
+        const email = document.getElementById('email').value;
 
         const orderData = {
             product_id: productData.id,
-            selectedOptions: {
-                color: document.querySelector('.color-option.selected')?.getAttribute('data-value')?.toLowerCase(),
-                memory: document.querySelector('.memory-option.selected')?.textContent.toLowerCase(),
-                connectivity: document.querySelector('.connectivity-option.selected')?.textContent.toLowerCase(),
-            },
             user_data: {
-                user_id: telegramUser.id,  // ID пользователя из Telegram
                 full_name: fullName,
                 phone_number: phoneNumber,
-                email: email,
-                username: telegramUser.username  // Имя пользователя из Telegram
+                email: email
             }
         };
 
@@ -127,15 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             if (data.status === "success") {
-                modal.style.display = "none";
-                window.location.href = "https://t.me/QSale_iphone_bot"; // Замените ссылку на вашу
+                alert("Заказ успешно оформлен!");
+                window.location.href = "https://t.me/QSale_iphone_bot";
             } else {
-                showOptionCheckModal(data.message);
+                alert("Ошибка при оформлении заказа: " + data.message);
             }
         })
         .catch(error => {
-            showOptionCheckModal('Произошла ошибка при обработке заказа. Пожалуйста, попробуйте снова.');
-            console.error('Error:', error);
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка. Попробуйте снова.');
         });
     });
 });
