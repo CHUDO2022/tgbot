@@ -17,44 +17,32 @@
             <span class="app-name">Sale_iPhone</span>
             <div id="user-info" class="user-info"></div>
         </header>
-
-        <!-- Поле поиска товаров -->
         <div class="search-bar">
             <input type="text" placeholder="Найти товары Apple">
         </div>
-
-        <!-- Навигация -->
         <div class="navigation">
             <button id="home-btn" class="nav-btn hidden">Главная</button>
-            <button id="stats-btn" class="nav-btn">Статистика</button>
+            <button id="stats-btn" class="nav-btn" style="display: none;">Статистика</button>
         </div>
 
-        <!-- Слайдер с акциями -->
         <div class="slider-container">
             <div class="story-item">
-                <img src="media/1.png" alt="Зови друзей! +500Р">
+                <img src="media/1.png" alt="Зови друзей! +500Р" class="story-item-image">
                 <div class="story-item-title">Зови друзей! +500Р</div>
             </div>
-            <!-- Другие слайды аналогично -->
-        </div>
-
-        <!-- Основной контент -->
-        <div class="top-section">
-            <div class="points-section">
-                <div class="points-title">Баллы</div>
-                <div class="points-value">0</div>
+            <div class="story-item">
+                <img src="media/2.png" alt="Знакомьтесь, SaleIphone!" class="story-item-image">
+                <div class="story-item-title">Знакомьтесь, SaleIphone!</div>
             </div>
-            <div class="invite-section">
-                <div class="invite-title">Зови друзей</div>
-                <div class="invite-text">Дарим по 500Р - тебе и приведенному другу</div>
+            <div class="story-item">
+                <img src="media/3.png" alt="Что умеет наш бот?" class="story-item-image">
+                <div class="story-item-title">Что умеет наш бот?</div>
             </div>
         </div>
 
-        <!-- Каталог товаров -->
         <h2>Каталог</h2>
         <div id="product-list" class="products-list"></div>
 
-        <!-- Дополнительные категории -->
         <div id="more-categories-modal" class="modal hidden">
             <div class="modal-content">
                 <span id="close-modal-btn" class="close-modal-btn">&times;</span>
@@ -63,8 +51,6 @@
                 <button class="modal-tab-button" data-tab="tab6">Виниловые пластинки</button>
             </div>
         </div>
-
-        <div id="usercard" class="usercard hidden"></div>
     </div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
