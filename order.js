@@ -7,7 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Обновляем информацию о продукте
+    // Извлечение данных пользователя из localStorage
+    let telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+
+    // Проверка наличия данных пользователя
+    if (!telegramUser) {
+        // Получаем данные из Telegram Web App API
+        const telegram = window.Telegram.WebApp;
+        const initDataUnsafe = telegram.initDataUnsafe;
+        telegramUser = initDataUnsafe.user;
+
+        // Сохраняем данные пользователя в localStorage, если они найдены
+        if (telegramUser) {
+            localStorage.setItem('telegramUser', JSON.stringify(telegramUser));
+        } else {
+            alert("Ошибка: не удалось получить данные пользователя из Telegram.");
+            console.error("Нет данных пользователя из Telegram Web App API.");
+            return;
+        }
+    }
+
+    // Обновляем UI с данными продукта
     document.getElementById('product-img').src = productData.image;
     document.getElementById('product-name').textContent = productData.name;
     document.getElementById('product-price').textContent = `${productData.price} ₽`;
@@ -48,12 +68,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const phoneNumber = document.getElementById('phone-number').value;
         const email = document.getElementById('email').value;
 
+        if (!telegramUser || !telegramUser.id) {
+            alert("Ошибка: данные пользователя не найдены.");
+            return;
+        }
+
         const orderData = {
             product_id: productData.id,
             user_data: {
+                user_id: telegramUser.id,
                 full_name: fullName,
                 phone_number: phoneNumber,
-                email: email
+                email: email,
+                username: telegramUser.username || ''
             }
         };
 
