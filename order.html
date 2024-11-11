@@ -3,34 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Оформление Заказа</title>
+    <title>Заказ Unicorn</title>
     <link rel="stylesheet" href="order.css">
 </head>
 <body>
     <div class="container">
-        <!-- Информация о продукте -->
+        <!-- Описание продукта -->
         <img id="product-img" src="" alt="Изображение продукта" class="product-image">
         <div class="product-info">
             <h3 id="product-name">Название продукта</h3>
             <p id="product-price" class="product-price"></p>
             <p id="product-old-price" class="product-old-price"></p>
-            <p id="product-description" class="product-description"></p>
+            <p id="product-description" class="product-description"></p>  <!-- Новый элемент для описания -->
         </div>
 
-        <!-- Раздел с отзывами -->
-        <div class="reviews-section">
-            <h3>Отзывы</h3>
-            <ul id="reviews-list" class="reviews-list"></ul>
+        <!-- Опции выбора -->
+        <div class="option-section">
+            <h3>Выберите цвет</h3>
+            <div id="color-options" class="options"></div>
+        </div>
+        <div class="option-section">
+            <h3>Выберите память</h3>
+            <div id="memory-options" class="options"></div>
+        </div>
+        <div class="option-section">
+            <h3>Выберите связь</h3>
+            <div id="connectivity-options" class="options"></div>
         </div>
 
         <!-- Информация о доставке и безопасности -->
         <div class="info-section">
             <h3>Доставка</h3>
-            <p>Среднее время доставки 20-25 дней. После оплаты вы сможете отслеживать статусы доставки.</p>
+            <p>Среднее время доставки 20–25 дней. После оплаты вы сможете отслеживать статусы доставки и получать уведомления об их изменении.</p>
         </div>
         <div class="info-section">
             <h3>Страховка и безопасность</h3>
-            <p>В стоимость товара входит его полное страхование. Мы гарантируем получение оригинального товара.</p>
+            <p>В стоимость товара входит его полное страхование. Мы несем ответственность, чтобы вы получили свой заказ в целости и сохранности.</p>
+        </div>
+        <div class="info-section">
+            <h3>Строго оригинал</h3>
+            <p>Мы гарантируем, что все купленные товары в Unicorn оригинальные и прошли проверку на подлинность. Если по каким-то причинам у вас на руках окажется подделка — мы вернем деньги в двойном размере.</p>
+        </div>
+
+        <!-- Отзывы -->
+        <div class="reviews">
+            <h3>Отзывы</h3>
+            <img src="https://via.placeholder.com/600x300" alt="Отзывы">
         </div>
 
         <!-- Кнопка перехода к оплате -->
@@ -44,13 +62,23 @@
             <h2>Введите ваши данные</h2>
             <form id="user-form">
                 <label for="full-name">ФИО:</label>
-                <input type="text" id="full-name" required>
+                <input type="text" id="full-name" name="full-name" required>
                 <label for="phone-number">Номер телефона:</label>
-                <input type="tel" id="phone-number" required>
+                <input type="tel" id="phone-number" name="phone-number" required>
                 <label for="email">Электронная почта:</label>
-                <input type="email" id="email" required>
+                <input type="email" id="email" name="email" required>
                 <button type="submit" class="submit-button">Отправить</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно для проверки опций -->
+    <div id="option-check-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-option-check">&times;</span>
+            <h2>Подтвердите действие</h2>
+            <p id="option-check-message">Пожалуйста, выберите все опции товара перед отправкой заказа.</p>
+            <button class="submit-button" id="close-option-check-button">OK</button>
         </div>
     </div>
 
