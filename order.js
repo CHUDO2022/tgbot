@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const orderData = {
             product_id: productData.id,
             user_data: {
-                user_id: User.id,
+                user_id: telegramUser.id,
                 full_name: fullName,
                 phone_number: phoneNumber,
                 email: email,
