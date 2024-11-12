@@ -7,19 +7,37 @@
     <link rel="stylesheet" href="order.css">
 </head>
 <body>
-    <div id="order-page">
-        <div id="image-slider" class="slider"></div>
-        <div id="review-slider" class="slider"></div>
+    <div class="order-container">
+        <!-- Основное изображение товара -->
+        <div class="main-image-container">
+            <img id="product-img" alt="Изображение товара" class="main-img">
+        </div>
 
-        <img id="product-img" alt="Изображение товара" class="main-img">
-        <h2 id="product-name"></h2>
-        <p id="product-price"></p>
-        <p id="product-old-price" class="old-price"></p>
-        <p id="stock-status"></p>
-        <p id="product-description"></p>
-        <button id="pay-button">Перейти к оплате</button>
+        <!-- Слайдер изображений товара -->
+        <div class="slider-container">
+            <h3>Изображения товара:</h3>
+            <div id="image-slider" class="slider"></div>
+        </div>
 
-        <!-- Модальное окно оформления заказа -->
+        <!-- Слайдер отзывов -->
+        <div class="slider-container">
+            <h3>Отзывы:</h3>
+            <div id="review-slider" class="slider"></div>
+        </div>
+
+        <!-- Информация о товаре -->
+        <div class="product-info">
+            <h2 id="product-name"></h2>
+            <p id="product-price" class="price"></p>
+            <p id="product-old-price" class="old-price"></p>
+            <p id="stock-status" class="stock-status"></p>
+            <p id="product-description"></p>
+        </div>
+
+        <!-- Кнопка оформления заказа -->
+        <button id="pay-button" class="pay-button">Перейти к оплате</button>
+
+        <!-- Модальное окно для оформления заказа -->
         <div id="modal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
@@ -28,16 +46,8 @@
                     <input type="text" id="full-name" placeholder="ФИО" required>
                     <input type="tel" id="phone-number" placeholder="Телефон" required>
                     <input type="email" id="email" placeholder="Email" required>
-                    <button type="submit">Отправить заказ</button>
+                    <button type="submit" class="submit-button">Отправить заказ</button>
                 </form>
-            </div>
-        </div>
-
-        <!-- Модальное окно проверки опций -->
-        <div id="option-check-modal" class="modal">
-            <div class="modal-content">
-                <span id="close-option-check-button" class="close">&times;</span>
-                <p id="option-check-message"></p>
             </div>
         </div>
     </div>
