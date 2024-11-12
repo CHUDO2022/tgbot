@@ -10,8 +10,6 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
     background-color: var(--bg-color);
     color: var(--text-color);
     display: flex;
@@ -37,14 +35,12 @@ body {
 #product-availability {
     font-size: 18px;
     margin-bottom: 20px;
-    text-align: center;
 }
 
 .slider-container, .reviews-container {
     width: 100%;
     height: 300px;
     overflow: hidden;
-    border-radius: var(--border-radius);
     margin-bottom: 20px;
 }
 
@@ -63,9 +59,4 @@ button {
     border: none;
     border-radius: var(--border-radius);
     cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: var(--button-hover-color);
 }
