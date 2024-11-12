@@ -1,62 +1,120 @@
-:root {
-    --bg-color: #1b263b;
-    --container-bg-color: #2c3e50;
-    --text-color: #f5f5f5;
-    --button-bg-color: #3498db;
-    --button-hover-color: #2980b9;
-    --price-color: #e74c3c;
-    --border-radius: 10px;
-}
-
+/* Основные стили страницы */
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
-.container {
-    max-width: 600px;
+    background-color: #232e3c;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
     padding: 20px;
-    background-color: var(--container-bg-color);
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.product-image {
+#order-page {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.main-img {
     width: 100%;
-    border-radius: var(--border-radius);
+    max-width: 400px;
+    border-radius: 10px;
     margin-bottom: 20px;
 }
 
-#product-availability {
+#product-name {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+#product-price {
+    font-size: 20px;
+    color: #00ff00;
+}
+
+.old-price {
     font-size: 18px;
-    margin-bottom: 20px;
+    color: #ff3b30;
+    text-decoration: line-through;
 }
 
-.slider-container, .reviews-container {
-    width: 100%;
-    height: 300px;
-    overflow: hidden;
-    margin-bottom: 20px;
+#stock-status {
+    font-size: 18px;
+    margin: 10px 0;
 }
 
-.slider-image, .review-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: none;
+#product-description {
+    margin: 20px 0;
+    font-size: 16px;
 }
 
 button {
-    width: 100%;
-    padding: 15px;
-    background-color: var(--button-bg-color);
-    color: #fff;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #007aff;
+    color: #ffffff;
     border: none;
-    border-radius: var(--border-radius);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #005bb5;
+}
+
+/* Стили для слайдера */
+.slider {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.slider img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Стили модальных окон */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #17212b;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    color: #ff3b30;
+    cursor: pointer;
+}
+
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: none;
+}
+
+input[type="submit"] {
+    background-color: #007aff;
+    color: #ffffff;
     cursor: pointer;
 }
