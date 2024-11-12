@@ -8,101 +8,93 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Элементы страницы
-    const imageSlider = document.getElementById('slides');
+    // Извлечение данных пользователя из localStorage
+    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+
+    // Проверка наличия данных пользователя
+    if (!telegramUser) {
+        console.error("Данные пользователя не найдены.");
+        return;
+    }
+
+    // Обновляем UI с данными продукта
     const productName = document.getElementById('product-name');
     const productPrice = document.getElementById('product-price');
     const productOldPrice = document.getElementById('product-old-price');
-    const inStockStatus = document.getElementById('in-stock-status');
     const productDescription = document.getElementById('product-description');
-    const userForm = document.getElementById('user-form');
+    const inStockStatus = document.getElementById('in-stock-status');
+    const slidesContainer = document.getElementById('slides');
+    const prevSlideBtn = document.getElementById('prev-slide');
+    const nextSlideBtn = document.getElementById('next-slide');
 
-    // Установка данных о продукте
-    productName.textContent = productData.name;
-    productPrice.textContent = `${productData.price} ₽`;
-    if (productData.old_price) {
-        productOldPrice.textContent = `Старая цена: ${productData.old_price} ₽`;
-    }
-    inStockStatus.textContent = productData.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
-    inStockStatus.className = productData.in_stock === 'Да' ? 'in-stock' : 'out-of-stock';
-    productDescription.textContent = productData.description;
+    let currentSlideIndex = 0;
 
-    // Создание слайдера изображений
+    // Проверка наличия изображений
     if (productData.images && productData.images.length > 0) {
-        console.log('Загрузка изображений:', productData.images);
-
         productData.images.forEach((imageUrl, index) => {
             const img = document.createElement('img');
             img.src = imageUrl;
-            img.alt = `Изображение ${index + 1}`;
+            img.alt = productData.name;
             img.classList.add('slider-img');
 
-            // Обработка ошибки загрузки изображения
-            img.onerror = () => {
-                img.src = 'https://via.placeholder.com/600x300';
-                console.error(`Ошибка загрузки изображения: ${imageUrl}`);
-            };
+            // Отображаем только первый слайд по умолчанию
+            if (index === 0) {
+                img.style.display = 'block';
+            } else {
+                img.style.display = 'none';
+            }
 
-            imageSlider.appendChild(img);
+            slidesContainer.appendChild(img);
         });
     } else {
-        console.error('Нет изображений для загрузки.');
+        // Если изображений нет, показываем заглушку
         const placeholderImg = document.createElement('img');
         placeholderImg.src = 'https://via.placeholder.com/600x300';
-        placeholderImg.alt = 'Изображение отсутствует';
+        placeholderImg.alt = 'Изображение недоступно';
         placeholderImg.classList.add('slider-img');
-        imageSlider.appendChild(placeholderImg);
+        slidesContainer.appendChild(placeholderImg);
     }
 
-    // Логика слайдера
-    let currentSlide = 0;
-    const slides = imageSlider.querySelectorAll('.slider-img');
+    // Обработчики кнопок навигации слайдера
+    prevSlideBtn.addEventListener('click', () => {
+        changeSlide(-1);
+    });
 
-    function showSlide(index) {
-        slides.forEach((slide, i) => {
-            slide.style.display = i === index ? 'block' : 'none';
-        });
+    nextSlideBtn.addEventListener('click', () => {
+        changeSlide(1);
+    });
+
+    function changeSlide(direction) {
+        const slides = document.querySelectorAll('.slider-img');
+        slides[currentSlideIndex].style.display = 'none';
+        currentSlideIndex = (currentSlideIndex + direction + slides.length) % slides.length;
+        slides[currentSlideIndex].style.display = 'block';
     }
 
-    // Кнопки навигации слайдера
-    document.getElementById('prev-slide').addEventListener('click', () => {
-        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-        showSlide(currentSlide);
-    });
+    // Установка данных о продукте в UI
+    productName.textContent = productData.name;
+    productPrice.textContent = `${productData.price} ₽`;
+    productOldPrice.textContent = productData.old_price ? `Старая цена: ${productData.old_price} ₽` : '';
+    productDescription.textContent = productData.description;
+    inStockStatus.textContent = productData.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
+    inStockStatus.className = productData.in_stock === 'Да' ? 'in-stock' : 'out-of-stock';
 
-    document.getElementById('next-slide').addEventListener('click', () => {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    });
-
-    // Инициализация слайдера
-    showSlide(currentSlide);
-
-    // Обработчик формы заказа
-    userForm.addEventListener('submit', (event) => {
+    // Обработчик отправки формы заказа
+    document.getElementById('user-form').addEventListener('submit', function(event) {
         event.preventDefault();
 
         const fullName = document.getElementById('full-name').value;
         const phoneNumber = document.getElementById('phone-number').value;
         const email = document.getElementById('email').value;
 
-        // Проверка на заполненность полей
-        if (!fullName || !phoneNumber || !email) {
-            alert('Пожалуйста, заполните все поля формы.');
-            return;
-        }
-
         const orderData = {
             product_id: productData.id,
-            selectedOptions: {
-                color: productData.colors ? productData.colors[0] : 'Не указан',
-                memory: productData.memory ? productData.memory[0] : 'Не указана',
-                connectivity: productData.connectivity ? productData.connectivity[0] : 'Не указано',
-            },
             user_data: {
+                user_id: telegramUser.id,
                 full_name: fullName,
                 phone_number: phoneNumber,
                 email: email,
+                username: telegramUser.username
             }
         };
 
@@ -116,16 +108,16 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.status === 'success') {
-                alert('Ваш заказ успешно отправлен!');
-                window.location.href = 'https://t.me/QSale_iphone_bot';
+            if (data.status === "success") {
+                alert("Заказ успешно оформлен!");
+                window.location.href = "https://t.me/QSale_iphone_bot";
             } else {
-                alert(`Ошибка при отправке заказа: ${data.message}`);
+                alert("Ошибка при оформлении заказа: " + data.message);
             }
         })
         .catch(error => {
-            console.error('Ошибка при отправке заказа:', error);
-            alert('Произошла ошибка. Пожалуйста, попробуйте снова.');
+            console.error('Ошибка:', error);
+            alert("Произошла ошибка при обработке заказа.");
         });
     });
 });
