@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Извлечение данных пользователя из localStorage
     const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
     // Проверка наличия данных пользователя
@@ -17,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Обновляем UI с данными продукта
     const productImg = document.getElementById('product-img');
     const productName = document.getElementById('product-name');
     const productPrice = document.getElementById('product-price');
@@ -26,20 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const stockStatus = document.getElementById('stock-status');
     const imageSlider = document.getElementById('image-slider');
     const reviewSlider = document.getElementById('review-slider');
+    const btn = document.getElementById("pay-button");
 
-    // Установка данных о продукте в UI
-    if (productImg && productData.image) {
-        productImg.src = productData.image;
-        productImg.onerror = () => {
-            productImg.src = 'https://via.placeholder.com/600x300';
-        };
-    }
-
+    // Установка данных о продукте
+    productImg.src = productData.image || 'https://via.placeholder.com/600x300';
     productName.textContent = productData.name || 'Название не указано';
     productPrice.textContent = productData.price ? `${productData.price} ₽` : 'Цена не указана';
-    if (productOldPrice && productData.old_price) {
-        productOldPrice.textContent = `${productData.old_price} ₽`;
-    }
+    productOldPrice.textContent = productData.old_price ? `${productData.old_price} ₽` : '';
     productDescription.textContent = productData.description || 'Описание отсутствует';
 
     // Проверка наличия товара
@@ -52,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Создаем слайдер изображений
-    if (imageSlider && productData.images && productData.images.length > 0) {
+    if (productData.images && productData.images.length > 0) {
         productData.images.forEach(imgUrl => {
             const img = document.createElement('img');
             img.src = imgUrl;
@@ -65,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Создаем слайдер отзывов
-    if (reviewSlider && productData.reviews && productData.reviews.length > 0) {
+    if (productData.reviews && productData.reviews.length > 0) {
         productData.reviews.forEach(reviewUrl => {
             const reviewImg = document.createElement('img');
             reviewImg.src = reviewUrl;
@@ -74,51 +65,18 @@ document.addEventListener('DOMContentLoaded', () => {
             reviewSlider.appendChild(reviewImg);
         });
     } else {
-        reviewSlider.textContent = 'Изображения отзывов отсутствуют';
+        reviewSlider.textContent = 'Отзывы отсутствуют';
     }
 
-    // Настройка опций
-    const setupOptions = (containerId, options, className, useBackgroundColor = false) => {
-        const container = document.getElementById(containerId);
-        if (container && options) {
-            options.forEach(option => {
-                const div = document.createElement('div');
-                div.className = className;
-                if (useBackgroundColor) {
-                    div.style.backgroundColor = option.toLowerCase();
-                    div.setAttribute('data-value', option);
-                } else {
-                    div.textContent = option;
-                }
-                div.addEventListener('click', () => {
-                    container.querySelectorAll(`.${className}`).forEach(opt => opt.classList.remove('selected'));
-                    div.classList.add('selected');
-                });
-                container.appendChild(div);
-            });
-        }
-    };
-
-    // Настройка опций для цвета, памяти и связи
-    setupOptions('color-options', productData.colors, 'color-option', true);
-    setupOptions('memory-options', productData.memory, 'memory-option');
-    setupOptions('connectivity-options', productData.connectivity, 'connectivity-option');
-
     // Обработчик кнопки "Перейти к оплате"
-    const modal = document.getElementById("modal");
-    const btn = document.getElementById("pay-button");
     btn.onclick = () => {
-        const selectedOptions = {
-            color: document.querySelector('.color-option.selected')?.getAttribute('data-value'),
-            memory: document.querySelector('.memory-option.selected')?.textContent,
-            connectivity: document.querySelector('.connectivity-option.selected')?.textContent,
-        };
-
-        if (!selectedOptions.color || !selectedOptions.memory || !selectedOptions.connectivity) {
-            alert('Пожалуйста, выберите все опции товара перед отправкой заказа.');
-        } else {
-            modal.style.display = "block";
+        if (productData.in_stock !== 'Да') {
+            alert('Товар отсутствует в наличии. Заказ невозможен.');
+            return;
         }
+
+        const modal = document.getElementById("modal");
+        modal.style.display = "block";
     };
 
     // Обработчик отправки формы заказа
@@ -131,11 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const orderData = {
             product_id: productData.id,
-            selectedOptions: {
-                color: selectedOptions.color,
-                memory: selectedOptions.memory,
-                connectivity: selectedOptions.connectivity,
-            },
             user_data: {
                 user_id: telegramUser.id,
                 full_name: fullName,
@@ -155,10 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             if (data.status === "success") {
-                modal.style.display = "none";
+                alert('Заказ успешно оформлен!');
                 window.location.href = "https://t.me/QSale_iphone_bot";
             } else {
-                alert(data.message);
+                alert(data.message || 'Ошибка при оформлении заказа.');
             }
         })
         .catch(error => {
@@ -166,4 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
         });
     });
+
+    // Закрытие модального окна
+    const closeModalBtn = document.querySelector(".close");
+    closeModalBtn.onclick = () => {
+        const modal = document.getElementById("modal");
+        modal.style.display = "none";
+    };
 });
