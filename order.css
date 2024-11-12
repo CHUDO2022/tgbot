@@ -1,102 +1,172 @@
+/* Основные стили для страницы оформления заказа */
 body {
     background-color: #232e3c;
     color: #ffffff;
     font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     padding: 20px;
 }
 
-.order-container {
+#main-content {
     max-width: 600px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.main-image-container {
-    margin-bottom: 20px;
-}
-
-.main-img {
     width: 100%;
-    max-width: 400px;
-    border-radius: 10px;
 }
 
-.slider-container {
+header h1 {
+    text-align: center;
+    color: #ffffff;
+}
+
+.product-details {
+    position: relative;
+    width: 100%;
     margin: 20px 0;
 }
 
-.slider {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    padding: 10px;
+.slider-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-.slider img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
+.slide {
+    display: none;
+}
+
+.slide img {
+    width: 100%;
     border-radius: 10px;
 }
 
-.product-info {
-    margin-bottom: 20px;
+.dots-container {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot.active {
+    background-color: #717171;
+}
+
+.slider-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 18px;
+}
+
+#prev-slide {
+    left: 10px;
+}
+
+#next-slide {
+    right: 10px;
+}
+
+.product-info-container {
+    text-align: left;
+    margin: 20px 0;
 }
 
 .price {
     font-size: 20px;
-    font-weight: bold;
+    color: #00ff00;
 }
 
 .old-price {
-    color: #ff3b30;
+    font-size: 16px;
+    color: #ff0000;
     text-decoration: line-through;
 }
 
 .stock-status {
-    color: #ff3b30;
+    font-size: 18px;
 }
 
-.pay-button {
-    padding: 10px 20px;
-    font-size: 18px;
+.in-stock {
+    color: #00ff00;
+}
+
+.out-of-stock {
+    color: #ff0000;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
     background-color: #007aff;
     color: #ffffff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
 }
 
-.pay-button:hover {
-    background-color: #005bb5;
+.btn:hover {
+    background-color: #0056b3;
 }
 
 .modal {
     display: none;
     position: fixed;
-    top: 0;
+    z-index: 1000;
     left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
+    overflow: auto;
     background-color: rgba(0, 0, 0, 0.8);
-    justify-content: center;
-    align-items: center;
 }
 
 .modal-content {
-    background-color: #17212b;
+    background-color: #333;
+    margin: 15% auto;
     padding: 20px;
     border-radius: 10px;
-    text-align: center;
     max-width: 400px;
-    width: 90%;
+    text-align: center;
 }
 
-.close {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 24px;
+.close-option-check {
     color: #ff3b30;
+    float: right;
+    font-size: 24px;
     cursor: pointer;
 }
