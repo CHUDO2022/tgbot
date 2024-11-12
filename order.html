@@ -15,26 +15,19 @@
         <p id="product-availability"></p>
         <p id="product-description"></p>
         <div id="slider-container" class="slider-container"></div>
+        <div id="reviews-container" class="reviews-container"></div>
 
-        <button id="pay-button" class="pay-button">Перейти к оплате</button>
+        <button id="pay-button">Перейти к оплате</button>
 
         <div id="modal" class="modal">
-            <div class="modal-content">
-                <form id="user-form">
-                    <label for="full-name">ФИО:</label>
-                    <input type="text" id="full-name" required>
-
-                    <label for="phone-number">Телефон:</label>
-                    <input type="tel" id="phone-number" required>
-
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" required>
-
-                    <button type="submit" class="submit-button">Отправить заказ</button>
-                </form>
-            </div>
+            <form id="user-form">
+                <input type="text" id="full-name" placeholder="ФИО" required>
+                <input type="tel" id="phone-number" placeholder="Телефон" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <button type="submit">Отправить заказ</button>
+            </form>
         </div>
     </div>
+    <script src="order.js"></script>
 </body>
-<script src="order.js"></script>
 </html>
