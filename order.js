@@ -43,12 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Установка данных о продукте в UI
-    if (productName) productName.textContent = productData.name || 'Название не указано';
-    if (productPrice) productPrice.textContent = `${productData.price || 0} ₽`;
-    if (productOldPrice && productData.old_price) {
-        productOldPrice.textContent = `${productData.old_price} ₽`;
-    }
-    if (productDescription) productDescription.textContent = productData.description || 'Описание недоступно';
+    productName.textContent = productData.name || 'Название не указано';
+    productPrice.textContent = productData.price ? `${productData.price} ₽` : 'Цена не указана';
+    productOldPrice.textContent = productData.old_price ? `${productData.old_price} ₽` : '';
+    productDescription.textContent = productData.description || 'Описание недоступно';
 
     // Создание слайдера для изображений
     if (sliderContainer && Array.isArray(productData.images) && productData.images.length > 0) {
