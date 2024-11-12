@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const productData = JSON.parse(urlParams.get('product_data'));
 
     // Проверка наличия данных о продукте
-    if (!productData) {
+    if (!productData || typeof productData !== 'object') {
         alert("Ошибка: нет данных о продукте.");
         return;
     }
@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Обновляем UI с данными продукта
+    const productImg = document.getElementById('product-img');
     const productName = document.getElementById('product-name');
     const productPrice = document.getElementById('product-price');
     const productOldPrice = document.getElementById('product-old-price');
@@ -26,25 +27,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const sliderContainer = document.getElementById('slider-container');
 
     // Проверка наличия товара и отображение статуса
-    if (productData.in_stock) {
-        productAvailability.textContent = "В наличии";
-        productAvailability.style.color = "green";
+    const inStock = productData.in_stock === 'Да';
+    productAvailability.textContent = inStock ? "В наличии" : "Нет в наличии";
+    productAvailability.style.color = inStock ? "green" : "red";
+
+    // Установка основного изображения товара
+    if (productImg && productData.image) {
+        productImg.src = productData.image;
+        productImg.onerror = () => {
+            productImg.src = 'https://via.placeholder.com/600x300';
+            console.error('Ошибка загрузки изображения, заменяем на заглушку.');
+        };
     } else {
-        productAvailability.textContent = "Нет в наличии";
-        productAvailability.style.color = "red";
+        productImg.src = 'https://via.placeholder.com/600x300';
     }
 
     // Установка данных о продукте в UI
-    if (productName) productName.textContent = productData.name;
-    if (productPrice) productPrice.textContent = `${productData.price} ₽`;
+    if (productName) productName.textContent = productData.name || 'Название не указано';
+    if (productPrice) productPrice.textContent = `${productData.price || 0} ₽`;
     if (productOldPrice && productData.old_price) {
         productOldPrice.textContent = `${productData.old_price} ₽`;
     }
-    if (productDescription) productDescription.textContent = productData.description;
+    if (productDescription) productDescription.textContent = productData.description || 'Описание недоступно';
 
     // Создание слайдера для изображений
-    if (sliderContainer && productData.images && productData.images.length > 0) {
-        sliderContainer.innerHTML = ''; // Очищаем контейнер
+    if (sliderContainer && Array.isArray(productData.images) && productData.images.length > 0) {
+        sliderContainer.innerHTML = ''; // Очистка контейнера
 
         productData.images.forEach((imageUrl) => {
             const img = document.createElement('img');
@@ -53,15 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
             img.classList.add('slider-image');
             sliderContainer.appendChild(img);
         });
-    } else {
-        sliderContainer.textContent = "Изображения недоступны";
-    }
 
-    // Инициализация слайдера (простая реализация)
-    let currentSlide = 0;
-    const images = sliderContainer.querySelectorAll('.slider-image');
-
-    if (images.length > 0) {
+        // Инициализация слайдера
+        let currentSlide = 0;
+        const images = sliderContainer.querySelectorAll('.slider-image');
         images[currentSlide].style.display = 'block';
 
         setInterval(() => {
@@ -69,6 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
             currentSlide = (currentSlide + 1) % images.length;
             images[currentSlide].style.display = 'block';
         }, 3000);
+    } else {
+        sliderContainer.textContent = "Изображения недоступны";
     }
 
     // Обработчик кнопки "Перейти к оплате"
@@ -76,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById("modal");
 
     btn.onclick = () => {
-        if (!productData.in_stock) {
+        if (!inStock) {
             alert("Товар отсутствует на складе. Невозможно оформить заказ.");
             return;
         }
