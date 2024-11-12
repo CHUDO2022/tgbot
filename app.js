@@ -62,14 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Функция для загрузки продуктов с сервера
+// Функция для загрузки продуктов с сервера
     function loadProducts() {
         fetch('https://gadgetmark.ru/get-products')
             .then(response => response.json())
             .then(data => {
                 const products = data.products;
-                productNames = products.map(product => product.name); // Сохраняем названия товаров
-
+                productNames = products.map(product => product.name);
+    
                 // Создаем карточки для всех продуктов
                 products.forEach(product => {
                     const productCard = document.createElement('div');
@@ -78,31 +78,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     productCard.dataset.colors = JSON.stringify(product.colors || []);
                     productCard.dataset.memory = JSON.stringify(product.memory || []);
                     productCard.dataset.connectivity = JSON.stringify(product.connectivity || []);
-                    productCard.dataset.description = product.description;  // Сохраняем описание в атрибуте
-
-                    // HTML для карточки товара
+                    productCard.dataset.description = product.description;
+    
+                    // Проверка наличия товара
+                    const stockStatus = product.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
+                    const stockClass = product.in_stock === 'Да' ? 'in-stock' : 'out-of-stock';
+    
+                    // HTML для карточки товара с учетом слайдера изображений и статуса наличия
                     productCard.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}" class="img">
+                        <div class="image-slider">
+                            ${product.images.map(img => `<img src="${img}" alt="${product.name}" class="slider-img">`).join('')}
+                        </div>
                         <div class="product-info">
                             <h3>${product.name}</h3>
                             <p class="price">Цена: ${product.price} ₽</p>
                             ${product.old_price ? `<p class="old-price">Старая цена: <s>${product.old_price} ₽</s></p>` : ''}
+                            <p class="${stockClass}">${stockStatus}</p>
                             <button class="btn" id="btn${product.id}">Добавить</button>
                         </div>
                     `;
-
+    
                     // Добавление карточки товара в контейнер
                     productList.appendChild(productCard);
                 });
-
+    
                 // Обновляем обработчики событий на новых кнопках "Добавить"
                 attachButtonEvents();
-
-                // Изначально показываем товары первой вкладки
+                initImageSliders();
                 showCategory('tab1');
             })
             .catch(error => console.error('Ошибка при получении данных:', error));
     }
+
 
     // Функция для отображения товаров определенной категории
     function showCategory(category) {
