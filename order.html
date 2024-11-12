@@ -4,63 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оформление заказа</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="main-content">
-        <!-- Заголовок страницы -->
-        <header>
-            <h1>Оформление заказа</h1>
-        </header>
+    <div id="order-container" class="order-page">
+        <button id="close-modal" class="close-btn">×</button>
+        <h1>Оформление заказа</h1>
 
-        <!-- Секция слайдера изображений товара -->
-        <div class="product-details">
-            <div id="image-slider" class="slider-container"></div>
-            <div id="slider-dots" class="dots-container"></div>
-            <button id="prev-slide" class="slider-button">❮</button>
-            <button id="next-slide" class="slider-button">❯</button>
+        <!-- Слайдер изображений -->
+        <div id="image-slider" class="slider-container">
+            <div id="slides"></div>
+            <button id="prev-slide" class="slider-nav">❮</button>
+            <button id="next-slide" class="slider-nav">❯</button>
         </div>
 
         <!-- Информация о продукте -->
-        <div class="product-info-container">
+        <div id="product-info" class="product-details">
             <h2 id="product-name"></h2>
-            <p id="product-price" class="price"></p>
-            <p id="product-old-price" class="old-price"></p>
-            <p id="in-stock-status" class="stock-status"></p>
+            <p id="product-price" class="product-price"></p>
+            <p id="product-old-price" class="product-old-price"></p>
+            <p id="in-stock-status"></p>
             <p id="product-description"></p>
         </div>
 
-        <!-- Форма для ввода данных пользователя -->
-        <form id="user-form">
+        <!-- Форма заказа -->
+        <form id="user-form" class="order-form">
             <div class="form-group">
                 <label for="full-name">ФИО:</label>
-                <input type="text" id="full-name" name="full-name" required>
+                <input type="text" id="full-name" placeholder="Введите ваше имя" required>
             </div>
+
             <div class="form-group">
                 <label for="phone-number">Номер телефона:</label>
-                <input type="tel" id="phone-number" name="phone-number" required>
+                <input type="tel" id="phone-number" placeholder="Введите номер телефона" required>
             </div>
+
             <div class="form-group">
                 <label for="email">Электронная почта:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" placeholder="Введите ваш email" required>
             </div>
-            <button type="submit" id="pay-button" class="btn">Перейти к оплате</button>
+
+            <button type="submit" id="pay-button" class="submit-btn">Перейти к оплате</button>
         </form>
 
-        <!-- Модальное окно для сообщений -->
-        <div id="option-check-modal" class="modal">
-            <div class="modal-content">
-                <span class="close-option-check">&times;</span>
-                <p id="option-check-message"></p>
-                <button id="close-option-check-button" class="btn">Закрыть</button>
-            </div>
-        </div>
-
-        <!-- Пользовательская информация -->
-        <div id="user-info" class="user-info"></div>
+        <button id="close-order" class="close-order-btn">Закрыть</button>
     </div>
 
-    <!-- Подключаем скрипт для оформления заказа -->
     <script src="order.js"></script>
 </body>
 </html>
