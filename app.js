@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const products = data.products;
                 productNames = products.map(product => product.name);
 
-                // Создаем карточки для всех продуктов
+                // Создаём карточки для всех продуктов
                 products.forEach(product => {
                     const productCard = document.createElement('div');
                     productCard.classList.add('item');
@@ -41,9 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     productCard.dataset.memory = JSON.stringify(product.memory || []);
                     productCard.dataset.connectivity = JSON.stringify(product.connectivity || []);
                     productCard.dataset.description = product.description;
+                    productCard.dataset.images = JSON.stringify(product.images || []);
 
-                    // Используем одно изображение для карточки товара
-                    const mainImage = product.image || product.images[0];
+                    const mainImage = product.image || (product.images && product.images[0]);
                     const stockStatus = product.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
                     const stockClass = product.in_stock === 'Да' ? 'in-stock' : 'out-of-stock';
 
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Ошибка при получении данных:', error));
     }
 
-    // Функция для отображения товаров определенной категории
+    // Функция для отображения товаров определённой категории
     function showCategory(category) {
         const items = document.querySelectorAll('.item');
         items.forEach(item => {
@@ -127,8 +127,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Открытие и закрытие модального окна
+    moreCategoriesBtn.addEventListener('click', () => {
+        moreCategoriesModal.classList.remove('hidden');
+        moreCategoriesModal.style.display = 'block';
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        moreCategoriesModal.classList.add('hidden');
+        moreCategoriesModal.style.display = 'none';
+    });
+
+    modalTabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetCategory = button.getAttribute('data-tab');
+            moreCategoriesModal.classList.add('hidden');
+            showCategory(targetCategory);
+        });
+    });
+
     // Изначально показываем карточки первой вкладки
     tabs[0].click();
 
+    // Загрузка товаров при инициализации страницы
     loadProducts();
 });
