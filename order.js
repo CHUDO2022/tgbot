@@ -4,12 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Проверка наличия данных о продукте
     if (!productData) {
-        alert("Ошибка: данные о продукте не найдены.");
+        alert("Ошибка: нет данных о продукте.");
         return;
     }
 
     // Извлечение данных пользователя из localStorage
     const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+
+    // Проверка наличия данных пользователя
     if (!telegramUser) {
         console.error("Данные пользователя не найдены.");
         return;
@@ -21,86 +23,119 @@ document.addEventListener('DOMContentLoaded', () => {
     const productPrice = document.getElementById('product-price');
     const productOldPrice = document.getElementById('product-old-price');
     const productDescription = document.getElementById('product-description');
-    const availabilityStatus = document.getElementById('availability-status');
+    const stockStatus = document.getElementById('stock-status');
     const imageSlider = document.getElementById('image-slider');
-    const reviewSection = document.getElementById('review-section');
+    const reviewSlider = document.getElementById('review-slider');
 
     // Установка данных о продукте в UI
     if (productImg && productData.image) {
         productImg.src = productData.image;
         productImg.onerror = () => {
             productImg.src = 'https://via.placeholder.com/600x300';
-            console.error('Ошибка загрузки изображения, заменяем на заглушку.');
         };
     }
 
-    if (productName) productName.textContent = productData.name;
-    if (productPrice) productPrice.textContent = productData.price ? `${productData.price} ₽` : 'Цена не указана';
+    productName.textContent = productData.name || 'Название не указано';
+    productPrice.textContent = productData.price ? `${productData.price} ₽` : 'Цена не указана';
     if (productOldPrice && productData.old_price) {
         productOldPrice.textContent = `${productData.old_price} ₽`;
     }
-    if (productDescription) productDescription.textContent = productData.description;
-    if (availabilityStatus) {
-        availabilityStatus.textContent = productData.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
-        availabilityStatus.style.color = productData.in_stock === 'Да' ? 'green' : 'red';
+    productDescription.textContent = productData.description || 'Описание отсутствует';
+
+    // Проверка наличия товара
+    if (productData.in_stock === 'Да') {
+        stockStatus.textContent = 'В наличии';
+        stockStatus.style.color = 'green';
+    } else {
+        stockStatus.textContent = 'Нет в наличии';
+        stockStatus.style.color = 'red';
     }
 
-    // Функция для создания слайдера изображений
-    function createImageSlider(images) {
-        imageSlider.innerHTML = '';
-        if (images && images.length > 0) {
-            images.forEach((imageUrl) => {
-                const img = document.createElement('img');
-                img.src = imageUrl;
-                img.alt = 'Изображение товара';
-                img.classList.add('slider-image');
-                imageSlider.appendChild(img);
+    // Создаем слайдер изображений
+    if (imageSlider && productData.images && productData.images.length > 0) {
+        productData.images.forEach(imgUrl => {
+            const img = document.createElement('img');
+            img.src = imgUrl;
+            img.alt = 'Изображение товара';
+            img.classList.add('slider-img');
+            imageSlider.appendChild(img);
+        });
+    } else {
+        imageSlider.textContent = 'Дополнительные изображения недоступны';
+    }
+
+    // Создаем слайдер отзывов
+    if (reviewSlider && productData.reviews && productData.reviews.length > 0) {
+        productData.reviews.forEach(reviewUrl => {
+            const reviewImg = document.createElement('img');
+            reviewImg.src = reviewUrl;
+            reviewImg.alt = 'Отзыв о товаре';
+            reviewImg.classList.add('review-img');
+            reviewSlider.appendChild(reviewImg);
+        });
+    } else {
+        reviewSlider.textContent = 'Изображения отзывов отсутствуют';
+    }
+
+    // Настройка опций
+    const setupOptions = (containerId, options, className, useBackgroundColor = false) => {
+        const container = document.getElementById(containerId);
+        if (container && options) {
+            options.forEach(option => {
+                const div = document.createElement('div');
+                div.className = className;
+                if (useBackgroundColor) {
+                    div.style.backgroundColor = option.toLowerCase();
+                    div.setAttribute('data-value', option);
+                } else {
+                    div.textContent = option;
+                }
+                div.addEventListener('click', () => {
+                    container.querySelectorAll(`.${className}`).forEach(opt => opt.classList.remove('selected'));
+                    div.classList.add('selected');
+                });
+                container.appendChild(div);
             });
-        } else {
-            imageSlider.innerHTML = '<p>Изображения недоступны</p>';
         }
-    }
+    };
 
-    // Функция для отображения отзывов
-    function displayReviews(reviews) {
-        reviewSection.innerHTML = '';
-        if (reviews && reviews.length > 0) {
-            reviews.forEach((reviewUrl) => {
-                const img = document.createElement('img');
-                img.src = reviewUrl;
-                img.alt = 'Изображение отзыва';
-                img.classList.add('review-image');
-                reviewSection.appendChild(img);
-            });
-        } else {
-            reviewSection.innerHTML = '<p>Отзывы отсутствуют</p>';
-        }
-    }
-
-    // Инициализируем слайдер изображений и отзывы
-    createImageSlider(productData.images);
-    displayReviews(productData.reviews);
+    // Настройка опций для цвета, памяти и связи
+    setupOptions('color-options', productData.colors, 'color-option', true);
+    setupOptions('memory-options', productData.memory, 'memory-option');
+    setupOptions('connectivity-options', productData.connectivity, 'connectivity-option');
 
     // Обработчик кнопки "Перейти к оплате"
-    const payButton = document.getElementById('pay-button');
-    payButton.addEventListener('click', () => {
-        if (productData.in_stock !== 'Да') {
-            alert('Товар отсутствует на складе.');
-            return;
+    const modal = document.getElementById("modal");
+    const btn = document.getElementById("pay-button");
+    btn.onclick = () => {
+        const selectedOptions = {
+            color: document.querySelector('.color-option.selected')?.getAttribute('data-value'),
+            memory: document.querySelector('.memory-option.selected')?.textContent,
+            connectivity: document.querySelector('.connectivity-option.selected')?.textContent,
+        };
+
+        if (!selectedOptions.color || !selectedOptions.memory || !selectedOptions.connectivity) {
+            alert('Пожалуйста, выберите все опции товара перед отправкой заказа.');
+        } else {
+            modal.style.display = "block";
         }
-        document.getElementById('modal').style.display = 'block';
-    });
+    };
 
     // Обработчик отправки формы заказа
-    document.getElementById('user-form').addEventListener('submit', (event) => {
+    document.getElementById("user-form").addEventListener("submit", function(event) {
         event.preventDefault();
 
-        const fullName = document.getElementById('full-name').value;
-        const phoneNumber = document.getElementById('phone-number').value;
-        const email = document.getElementById('email').value;
+        const fullName = document.getElementById("full-name").value;
+        const phoneNumber = document.getElementById("phone-number").value;
+        const email = document.getElementById("email").value;
 
         const orderData = {
             product_id: productData.id,
+            selectedOptions: {
+                color: selectedOptions.color,
+                memory: selectedOptions.memory,
+                connectivity: selectedOptions.connectivity,
+            },
             user_data: {
                 user_id: telegramUser.id,
                 full_name: fullName,
@@ -110,7 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // Отправка данных заказа на сервер
         fetch('https://gadgetmark.ru/validate-order', {
             method: 'POST',
             headers: {
@@ -120,16 +154,16 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.status === 'success') {
-                alert('Заказ успешно оформлен!');
-                window.location.href = 'https://t.me/QSale_iphone_bot';
+            if (data.status === "success") {
+                modal.style.display = "none";
+                window.location.href = "https://t.me/QSale_iphone_bot";
             } else {
-                alert('Ошибка при оформлении заказа: ' + data.message);
+                alert(data.message);
             }
         })
         .catch(error => {
-            alert('Произошла ошибка при отправке заказа. Попробуйте позже.');
-            console.error('Ошибка:', error);
+            alert('Произошла ошибка при обработке заказа.');
+            console.error('Error:', error);
         });
     });
 });
