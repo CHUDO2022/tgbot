@@ -4,26 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оформление заказа</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="order-container" class="order-page">
-        <button id="close-modal" class="close-btn">×</button>
+    <div class="container">
         <h1>Оформление заказа</h1>
 
         <!-- Слайдер изображений -->
-        <div id="image-slider" class="slider-container">
-            <div id="slides"></div>
-            <button id="prev-slide" class="slider-nav">❮</button>
-            <button id="next-slide" class="slider-nav">❯</button>
+        <div class="slider-wrapper">
+            <button id="prev-btn" class="slider-btn">❮</button>
+            <img id="image-slider" src="https://via.placeholder.com/600x300" alt="Изображение товара" class="product-image">
+            <button id="next-btn" class="slider-btn">❯</button>
         </div>
 
-        <!-- Информация о продукте -->
-        <div id="product-info" class="product-details">
+        <!-- Информация о товаре -->
+        <div id="product-details">
             <h2 id="product-name"></h2>
-            <p id="product-price" class="product-price"></p>
-            <p id="product-old-price" class="product-old-price"></p>
-            <p id="in-stock-status"></p>
+            <p id="product-price"></p>
+            <p id="product-old-price"></p>
+            <p id="stock-status"></p>
             <p id="product-description"></p>
         </div>
 
@@ -44,10 +43,10 @@
                 <input type="email" id="email" placeholder="Введите ваш email" required>
             </div>
 
-            <button type="submit" id="pay-button" class="submit-btn">Перейти к оплате</button>
+            <button type="submit" class="submit-btn">Перейти к оплате</button>
         </form>
 
-        <button id="close-order" class="close-order-btn">Закрыть</button>
+        <button id="close-btn" class="close-btn">Закрыть</button>
     </div>
 
     <script src="order.js"></script>
