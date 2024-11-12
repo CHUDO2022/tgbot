@@ -7,19 +7,41 @@
     <link rel="stylesheet" href="order.css">
 </head>
 <body>
-    <div class="container">
-        <img id="product-img" class="product-image" src="" alt="Изображение товара">
-        <h1 id="product-name"></h1>
+    <div id="order-page">
+        <div id="image-slider" class="slider"></div>
+        <div id="review-slider" class="slider"></div>
+
+        <img id="product-img" alt="Изображение товара" class="main-img">
+        <h2 id="product-name"></h2>
         <p id="product-price"></p>
-        <p id="product-old-price"></p>
-        <p id="product-availability"></p>
+        <p id="product-old-price" class="old-price"></p>
+        <p id="stock-status"></p>
         <p id="product-description"></p>
-
-        <div id="slider-container" class="slider-container"></div>
-        <div id="reviews-container" class="reviews-container"></div>
-
         <button id="pay-button">Перейти к оплате</button>
+
+        <!-- Модальное окно оформления заказа -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>Оформление заказа</h3>
+                <form id="user-form">
+                    <input type="text" id="full-name" placeholder="ФИО" required>
+                    <input type="tel" id="phone-number" placeholder="Телефон" required>
+                    <input type="email" id="email" placeholder="Email" required>
+                    <button type="submit">Отправить заказ</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Модальное окно проверки опций -->
+        <div id="option-check-modal" class="modal">
+            <div class="modal-content">
+                <span id="close-option-check-button" class="close">&times;</span>
+                <p id="option-check-message"></p>
+            </div>
+        </div>
     </div>
+
     <script src="order.js"></script>
 </body>
 </html>
