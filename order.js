@@ -9,61 +9,71 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const imageSlider = document.getElementById('image-slider');
-    const reviewSlider = document.getElementById('review-slider');
+    const reviewsSlider = document.getElementById('reviews-slider');
     const images = productData.images || [];
     const reviews = productData.reviews || [];
-    let currentImageIndex = 0;
-    let currentReviewIndex = 0;
+    let currentIndex = 0;
+    let reviewIndex = 0;
 
-    // Функция обновления слайдера изображений товара
+    // Функция для обновления слайдера изображений товара
     function updateImageSlider() {
-        if (images.length > 0) {
-            imageSlider.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
-        } else {
-            imageSlider.innerHTML = '<p>Изображения отсутствуют</p>';
-        }
+        imageSlider.innerHTML = `<img src="${images[currentIndex]}" class="slider-img">`;
     }
 
-    // Функция обновления слайдера отзывов
-    function updateReviewSlider() {
+    // Функция для обновления слайдера отзывов
+    function updateReviewsSlider() {
         if (reviews.length > 0) {
-            reviewSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
+            reviewsSlider.innerHTML = `<img src="${reviews[reviewIndex]}" class="review-img">`;
         } else {
-            reviewSlider.innerHTML = '<p>Отзывы отсутствуют</p>';
+            reviewsSlider.innerHTML = `<p>Отзывы отсутствуют</p>`;
         }
     }
 
     updateImageSlider();
-    updateReviewSlider();
+    updateReviewsSlider();
 
-    // Обработчики свайпа для изображений товара
-    imageSlider.addEventListener('touchstart', (e) => startX = e.touches[0].clientX);
-    imageSlider.addEventListener('touchend', (e) => {
-        const swipeDistance = e.changedTouches[0].clientX - startX;
+    // Обработчики для свайпа изображений
+    imageSlider.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    });
+
+    imageSlider.addEventListener('touchmove', (e) => {
+        currentX = e.touches[0].clientX;
+    });
+
+    imageSlider.addEventListener('touchend', () => {
+        const swipeDistance = currentX - startX;
         const swipeThreshold = 50;
 
         if (swipeDistance > swipeThreshold) {
-            currentImageIndex = (currentImageIndex === 0) ? images.length - 1 : currentImageIndex - 1;
+            currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
         } else if (swipeDistance < -swipeThreshold) {
-            currentImageIndex = (currentImageIndex === images.length - 1) ? 0 : currentImageIndex + 1;
+            currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
         }
 
         updateImageSlider();
     });
 
-    // Обработчики свайпа для отзывов
-    reviewSlider.addEventListener('touchstart', (e) => startX = e.touches[0].clientX);
-    reviewSlider.addEventListener('touchend', (e) => {
-        const swipeDistance = e.changedTouches[0].clientX - startX;
+    // Обработчики для свайпа отзывов
+    reviewsSlider.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    });
+
+    reviewsSlider.addEventListener('touchmove', (e) => {
+        currentX = e.touches[0].clientX;
+    });
+
+    reviewsSlider.addEventListener('touchend', () => {
+        const swipeDistance = currentX - startX;
         const swipeThreshold = 50;
 
         if (swipeDistance > swipeThreshold) {
-            currentReviewIndex = (currentReviewIndex === 0) ? reviews.length - 1 : currentReviewIndex - 1;
+            reviewIndex = (reviewIndex === 0) ? reviews.length - 1 : reviewIndex - 1;
         } else if (swipeDistance < -swipeThreshold) {
-            currentReviewIndex = (currentReviewIndex === reviews.length - 1) ? 0 : currentReviewIndex + 1;
+            reviewIndex = (reviewIndex === reviews.length - 1) ? 0 : reviewIndex + 1;
         }
 
-        updateReviewSlider();
+        updateReviewsSlider();
     });
 
     // Заполняем информацию о продукте
@@ -72,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('product-description').textContent = productData.description;
     document.getElementById('stock-status').textContent = productData.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
 
-    // Открытие модального окна при нажатии на "Перейти к оплате"
+    // Обработка кнопки "Перейти к оплате"
     const payButton = document.getElementById('pay-button');
     const modal = document.getElementById('user-modal');
     const closeModal = document.querySelector('.close-modal');
@@ -83,47 +93,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     closeModal.addEventListener('click', () => {
         modal.style.display = 'none';
-    });
-
-    // Обработка отправки формы
-    const form = document.getElementById('user-form');
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        const fullName = document.getElementById('full-name').value;
-        const phoneNumber = document.getElementById('phone-number').value;
-        const email = document.getElementById('email').value;
-
-        const orderData = {
-            product_id: productData.id,
-            user_id: telegramUser.id,
-            user_data: {
-                full_name: fullName,
-                phone_number: phoneNumber,
-                email: email,
-                username: telegramUser.username
-            }
-        };
-
-        fetch('https://gadgetmark.ru/validate-order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(orderData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === "success") {
-                alert("Заказ успешно отправлен!");
-                window.location.href = "https://t.me/QSale_iphone_bot";
-            } else {
-                alert(`Ошибка при отправке заказа: ${data.message}`);
-            }
-        })
-        .catch(error => {
-            alert("Произошла ошибка при отправке заказа.");
-            console.error('Ошибка:', error);
-        });
     });
 });
