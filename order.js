@@ -16,16 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    console.log(`Данные товара:`, productData);
-    console.log(`Данные пользователя: user_id = ${telegramUser.id}, username = ${telegramUser.username}`);
+    console.log(`Данные пользователя загружены: user_id = ${telegramUser.id}, username = ${telegramUser.username}`);
 
     const imageSlider = document.getElementById('image-slider');
     const reviewsSlider = document.getElementById('reviews-slider');
     const images = productData.images || [];
     const reviews = productData.reviews || [];
     let currentIndex = 0;
-    let startX = 0;
-    let currentX = 0;
 
     // Обновление слайдера изображений
     function updateImageSlider() {
@@ -39,33 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
         startX = e.touches[0].clientX;
     });
 
-    imageSlider.addEventListener('touchmove', (e) => {
-        currentX = e.touches[0].clientX;
-    });
-
     imageSlider.addEventListener('touchend', () => {
         const swipeDistance = currentX - startX;
-        const swipeThreshold = 50;
-
-        if (swipeDistance > swipeThreshold) {
+        if (swipeDistance > 50) {
             currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
-        } else if (swipeDistance < -swipeThreshold) {
+        } else if (swipeDistance < -50) {
             currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
         }
-
         updateImageSlider();
     });
-
-    // Обновление слайдера отзывов
-    function updateReviewsSlider() {
-        if (reviews.length === 0) {
-            reviewsSlider.innerHTML = `<p>Отзывы отсутствуют</p>`;
-        } else {
-            reviewsSlider.innerHTML = `<img src="${reviews[currentIndex]}" class="slider-img">`;
-        }
-    }
-
-    updateReviewsSlider();
 
     // Открытие модального окна
     const payButton = document.getElementById('pay-button');
@@ -73,6 +52,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModal = document.querySelector('.close-modal');
 
     payButton.addEventListener('click', () => {
+        console.log("Нажата кнопка 'Перейти к оплате'");
+        console.log(`Данные telegramUser перед открытием модального окна: ${JSON.stringify(telegramUser)}`);
+
+        if (!telegramUser || !telegramUser.id) {
+            alert("Ошибка: не загружены данные пользователя или отсутствует user_id.");
+            console.error("user_id отсутствует при нажатии на 'Перейти к оплате'.");
+            return;
+        }
+
         modal.style.display = 'block';
     });
 
@@ -91,23 +79,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const orderData = {
             product_id: productData.id,
-            user_id: telegramUser.id,
+            user_id: telegramUser?.id,
             user_data: {
                 full_name: fullName,
                 phone_number: phoneNumber,
                 email: email,
-                username: telegramUser.username
+                username: telegramUser?.username
             }
         };
 
-        // Дополнительная проверка user_id перед отправкой
+        // Логируем данные перед отправкой
+        console.log("Перед отправкой:");
+        console.log(`telegramUser из localStorage: ${JSON.stringify(telegramUser)}`);
+        console.log(`orderData: ${JSON.stringify(orderData)}`);
+
         if (!orderData.user_id) {
-            alert("Ошибка: user_id отсутствует перед отправкой на сервер.");
-            console.error("user_id отсутствует в данных заказа:", orderData);
+            alert("Ошибка: user_id отсутствует перед отправкой.");
+            console.error("user_id отсутствует:", orderData);
             return;
         }
-
-        console.log("Отправка данных на сервер:", orderData);
 
         fetch('https://gadgetmark.ru/validate-order', {
             method: 'POST',
