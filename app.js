@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     productCard.dataset.connectivity = JSON.stringify(product.connectivity || []);
                     productCard.dataset.description = product.description;
                     productCard.dataset.images = JSON.stringify(product.images || []);
+                    
 
                     const mainImage = product.image || (product.images && product.images[0]);
                     const stockStatus = product.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
@@ -122,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const product = {
                     id: parseInt(productId, 10),
                     images: JSON.parse(productCard.dataset.images || '[]'),
+                    reviews: JSON.parse(productCard.dataset.reviews || '[]'),
                     name: productCard.querySelector('h3').textContent,
                     price: parseFloat(productCard.querySelector('.price').textContent.replace('Цена: ', '').replace(' ₽', '')),
                     old_price: productCard.querySelector('.old-price') ? parseFloat(productCard.querySelector('.old-price').textContent.replace('Старая цена: ', '').replace(' ₽', '')) : '',
