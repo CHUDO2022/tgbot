@@ -1,29 +1,37 @@
-body {
-    background-color: #1c1c1c;
-    color: #ffffff;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
     font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #232e3c;
+    color: #ffffff;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    min-height: 100vh;
+    justify-content: flex-start;
+    padding: 20px;
 }
 
-#order-container {
-    width: 90%;
-    max-width: 500px;
+.container {
+    width: 100%;
+    max-width: 600px;
 }
 
-h2 {
+h1 {
     text-align: center;
-    color: #fff;
+    margin-bottom: 20px;
 }
 
-.slider-container {
-    position: relative;
+.slider {
     width: 100%;
     height: 300px;
-    overflow: hidden;
     margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
 }
 
 .slider-img {
@@ -32,66 +40,85 @@ h2 {
     object-fit: cover;
 }
 
-#pay-button {
+.product-info {
+    margin-bottom: 20px;
+}
+
+.price {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.stock-status {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.btn {
     display: block;
     width: 100%;
     padding: 10px;
-    margin: 20px 0;
     background-color: #007aff;
-    color: #fff;
+    color: #ffffff;
     border: none;
     border-radius: 5px;
+    font-size: 1em;
     cursor: pointer;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.btn:hover {
+    background-color: #005bb5;
 }
 
 .modal {
     display: none;
     position: fixed;
-    z-index: 1000;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
-    background-color: #2c3e50;
-    margin: 10% auto;
+    background-color: #17212b;
     padding: 20px;
-    width: 80%;
-    max-width: 400px;
     border-radius: 10px;
-    color: #fff;
+    width: 90%;
+    max-width: 400px;
 }
 
 .close-modal {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 1.5em;
     cursor: pointer;
-    color: #aaa;
-    float: right;
-    font-size: 28px;
+    color: #ff3b30;
 }
 
-.form-group {
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+input {
+    padding: 10px;
     margin-bottom: 15px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #2a2f38;
+    color: #ffffff;
 }
 
-input[type="text"],
-input[type="email"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #555;
-    border-radius: 5px;
-    background-color: #34495e;
-    color: #fff;
-}
-
-button[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    background-color: #007aff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+input::placeholder {
+    color: #aaaaaa;
 }
