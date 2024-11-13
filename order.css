@@ -1,124 +1,207 @@
+/* Основные стили */
 body {
-    font-family: Arial, sans-serif;
     background-color: #232e3c;
     color: #ffffff;
+    font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
-.order-page {
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: #17212b;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+h1 {
+    margin-top: 20px;
+    color: #ffffff;
 }
 
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    color: #ff3b30;
-    font-size: 24px;
-    cursor: pointer;
+h2 {
+    color: #ffffff;
+    margin: 10px 0;
 }
 
-.slider-container {
+p {
+    margin: 10px 0;
+    color: #ffffff;
+}
+
+/* Стили слайдера изображений */
+#image-slider {
     position: relative;
-    width: 100%;
+    width: 600px;
     height: 300px;
+    margin: 20px auto;
     overflow: hidden;
     border-radius: 10px;
-    margin-bottom: 20px;
 }
 
-.slider-img {
+#product-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: none;
+    border-radius: 10px;
 }
 
-.slider-nav {
+#prev-button,
+#next-button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     background-color: rgba(0, 0, 0, 0.5);
-    color: #fff;
+    color: #ffffff;
     border: none;
     padding: 10px;
-    cursor: pointer;
     border-radius: 50%;
+    cursor: pointer;
 }
 
-#prev-slide {
+#prev-button {
     left: 10px;
 }
 
-#next-slide {
+#next-button {
     right: 10px;
 }
 
-.product-details {
-    text-align: center;
+/* Информация о продукте */
+#product-name {
+    font-size: 24px;
+    font-weight: bold;
 }
 
-.product-price {
-    font-size: 18px;
+#product-price {
+    font-size: 20px;
     color: #00ff00;
 }
 
-.product-old-price {
-    font-size: 16px;
+#product-old-price {
+    font-size: 18px;
     color: #ff0000;
     text-decoration: line-through;
 }
 
-.in-stock {
-    color: #00ff00;
+#product-stock {
+    font-size: 18px;
+    margin: 10px 0;
 }
 
-.out-of-stock {
-    color: #ff0000;
+#product-description {
+    font-size: 16px;
+    color: #cccccc;
 }
 
-.order-form {
-    margin-top: 20px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #444;
-    background-color: #333;
-    color: #fff;
-}
-
-.submit-btn {
-    width: 100%;
-    padding: 10px;
+/* Стили кнопок */
+.btn {
     background-color: #007aff;
-    color: #fff;
+    color: #ffffff;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: #005bb5;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+    background-color: #17212b;
+    color: #ffffff;
+    margin: 10% auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.close-modal {
+    color: #ff3b30;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
     cursor: pointer;
 }
 
-.close-order-btn {
+.close-modal:hover {
+    color: #ffffff;
+}
+
+/* Поля ввода */
+input[type="text"],
+input[type="tel"],
+input[type="email"] {
     width: 100%;
     padding: 10px;
-    background-color: #ff3b30;
-    color: #fff;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #cccccc;
+    background-color: #2c3e50;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+input[type="text"]::placeholder,
+input[type="tel"]::placeholder,
+input[type="email"]::placeholder {
+    color: #999999;
+}
+
+/* Стили кнопки отправки формы */
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #00cc66;
+    color: #ffffff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
+    font-size: 18px;
+}
+
+button[type="submit"]:hover {
+    background-color: #009944;
+}
+
+/* Анимация для модального окна */
+.modal-content {
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Адаптивные стили */
+@media (max-width: 600px) {
+    #image-slider {
+        width: 100%;
+        height: auto;
+    }
+
+    .modal-content {
+        width: 95%;
+    }
 }
