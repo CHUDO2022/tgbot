@@ -7,14 +7,18 @@
     <link rel="stylesheet" href="order.css">
 </head>
 <body>
-    <div id="order-container">
-        <h2>Оформление заказа</h2>
-        <div id="image-slider" class="slider-container"></div>
-        <h3 id="product-name"></h3>
-        <p id="product-price"></p>
-        <p id="stock-status"></p>
-        <p id="product-description"></p>
-        <button id="pay-button">Перейти к оплате</button>
+    <div class="container">
+        <h1 id="product-name"></h1>
+        <div id="image-slider" class="slider"></div>
+        <div id="review-slider" class="slider"></div>
+
+        <div class="product-info">
+            <p id="product-price" class="price"></p>
+            <p id="stock-status" class="stock-status"></p>
+            <p id="product-description"></p>
+        </div>
+
+        <button id="pay-button" class="btn">Перейти к оплате</button>
 
         <!-- Модальное окно для ввода данных пользователя -->
         <div id="user-modal" class="modal">
@@ -22,19 +26,16 @@
                 <span class="close-modal">&times;</span>
                 <h2>Введите ваши данные</h2>
                 <form id="user-form">
-                    <div class="form-group">
-                        <label for="full-name">ФИО:</label>
-                        <input type="text" id="full-name" placeholder="Введите ваше имя" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone-number">Номер телефона:</label>
-                        <input type="text" id="phone-number" placeholder="Введите номер телефона" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Электронная почта:</label>
-                        <input type="email" id="email" placeholder="Введите ваш email" required>
-                    </div>
-                    <button type="submit">Отправить заказ</button>
+                    <label for="full-name">ФИО:</label>
+                    <input type="text" id="full-name" required>
+
+                    <label for="phone-number">Телефон:</label>
+                    <input type="tel" id="phone-number" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+
+                    <button type="submit" class="btn">Отправить заказ</button>
                 </form>
             </div>
         </div>
