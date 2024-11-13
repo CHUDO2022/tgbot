@@ -4,42 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оформление заказа</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="order.css">
 </head>
 <body>
-    <div id="order-page">
-        <h1>Оформление заказа</h1>
-
-        <!-- Слайдер изображений -->
-        <div id="image-slider">
-            <button id="prev-button">&lt;</button>
-            <img id="product-img" src="https://via.placeholder.com/600x300" alt="Product Image">
-            <button id="next-button">&gt;</button>
-        </div>
-
-        <!-- Информация о продукте -->
-        <h2 id="product-name"></h2>
+    <div id="order-container">
+        <h2>Оформление заказа</h2>
+        <div id="image-slider" class="slider-container"></div>
+        <h3 id="product-name"></h3>
         <p id="product-price"></p>
-        <p id="product-old-price"></p>
-        <p id="product-stock"></p>
+        <p id="stock-status"></p>
         <p id="product-description"></p>
-
-        <!-- Кнопка для перехода к оплате -->
-        <button id="pay-button" class="btn">Перейти к оплате</button>
+        <button id="pay-button">Перейти к оплате</button>
 
         <!-- Модальное окно для ввода данных пользователя -->
-        <div id="user-modal" class="modal hidden">
+        <div id="user-modal" class="modal">
             <div class="modal-content">
                 <span class="close-modal">&times;</span>
                 <h2>Введите ваши данные</h2>
                 <form id="user-form">
-                    <label for="full-name">ФИО:</label>
-                    <input type="text" id="full-name" placeholder="Введите ваше имя" required>
-                    <label for="phone-number">Номер телефона:</label>
-                    <input type="tel" id="phone-number" placeholder="Введите номер телефона" required>
-                    <label for="email">Электронная почта:</label>
-                    <input type="email" id="email" placeholder="Введите ваш email" required>
-                    <button type="submit" class="btn">Отправить заказ</button>
+                    <div class="form-group">
+                        <label for="full-name">ФИО:</label>
+                        <input type="text" id="full-name" placeholder="Введите ваше имя" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone-number">Номер телефона:</label>
+                        <input type="text" id="phone-number" placeholder="Введите номер телефона" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Электронная почта:</label>
+                        <input type="email" id="email" placeholder="Введите ваш email" required>
+                    </div>
+                    <button type="submit">Отправить заказ</button>
                 </form>
             </div>
         </div>
