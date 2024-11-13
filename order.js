@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const productData = JSON.parse(urlParams.get('product_data'));
-    const userId = urlParams.get('user_id');
-    const username = urlParams.get('username');
+    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
     // Проверка данных товара и пользователя
     if (!productData) {
@@ -11,9 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    if (!userId) {
-        alert("Ошибка: user_id отсутствует.");
-        console.error("user_id отсутствует в URL.");
+    if (!telegramUser || !telegramUser.id) {
+        alert("Ошибка: не загружены данные пользователя или отсутствует user_id.");
+        console.error("Не загружены данные пользователя или отсутствует user_id.");
         return;
     }
 
@@ -21,17 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const reviewsSlider = document.getElementById('reviews-slider');
     const images = productData.images || [];
     const reviews = productData.reviews || [];
-    let currentIndex = 0;
+    let currentImageIndex = 0;
+    let currentReviewIndex = 0;
     let startX = 0;
     let currentX = 0;
 
     // Функция для обновления слайдера изображений товара
     function updateImageSlider() {
-        if (images.length === 0) {
-            imageSlider.innerHTML = `<p>Изображения отсутствуют</p>`;
-        } else {
-            imageSlider.innerHTML = `<img src="${images[currentIndex]}" class="slider-img">`;
-        }
+        imageSlider.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
     }
 
     updateImageSlider();
@@ -50,9 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const swipeThreshold = 50;
 
         if (swipeDistance > swipeThreshold) {
-            currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
+            currentImageIndex = (currentImageIndex === 0) ? images.length - 1 : currentImageIndex - 1;
         } else if (swipeDistance < -swipeThreshold) {
-            currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
+            currentImageIndex = (currentImageIndex === images.length - 1) ? 0 : currentImageIndex + 1;
         }
 
         updateImageSlider();
@@ -63,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (reviews.length === 0) {
             reviewsSlider.innerHTML = `<p>Отзывы отсутствуют</p>`;
         } else {
-            reviewsSlider.innerHTML = `<img src="${reviews[currentIndex]}" class="slider-img">`;
+            reviewsSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
         }
     }
 
@@ -83,9 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const swipeThreshold = 50;
 
         if (swipeDistance > swipeThreshold) {
-            currentIndex = (currentIndex === 0) ? reviews.length - 1 : currentIndex - 1;
+            currentReviewIndex = (currentReviewIndex === 0) ? reviews.length - 1 : currentReviewIndex - 1;
         } else if (swipeDistance < -swipeThreshold) {
-            currentIndex = (currentIndex === reviews.length - 1) ? 0 : currentIndex + 1;
+            currentReviewIndex = (currentReviewIndex === reviews.length - 1) ? 0 : currentReviewIndex + 1;
         }
 
         updateReviewsSlider();
@@ -121,12 +117,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const orderData = {
             product_id: productData.id,
-            user_id: userId,
+            user_id: telegramUser.id,
             user_data: {
                 full_name: fullName,
                 phone_number: phoneNumber,
                 email: email,
-                username: username
+                username: telegramUser.username
             }
         };
 
@@ -137,6 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Отправка данных заказа на сервер
         fetch('https://gadgetmark.ru/validate-order', {
             method: 'POST',
             headers: {
