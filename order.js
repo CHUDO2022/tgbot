@@ -1,67 +1,72 @@
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const productData = JSON.parse(urlParams.get('product_data'));
+    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
-    if (!productData) {
-        alert("Ошибка: нет данных о продукте.");
+    if (!productData || !telegramUser) {
+        alert("Ошибка: нет данных о продукте или пользователе.");
         return;
     }
 
-    // Извлечение элементов
-    const productImg = document.getElementById('product-img');
-    const productName = document.getElementById('product-name');
-    const productPrice = document.getElementById('product-price');
-    const productOldPrice = document.getElementById('product-old-price');
-    const productStock = document.getElementById('product-stock');
-    const productDescription = document.getElementById('product-description');
-    const payButton = document.getElementById('pay-button');
-    const userModal = document.getElementById('user-modal');
-    const closeModal = document.querySelector('.close-modal');
-    const userForm = document.getElementById('user-form');
-
-    // Установка данных о продукте
-    let currentImageIndex = 0;
+    const imageSlider = document.getElementById('image-slider');
     const images = productData.images || [];
+    let currentIndex = 0;
+    let startX = 0;
+    let currentX = 0;
 
-    if (images.length > 0) {
-        productImg.src = images[currentImageIndex];
+    // Отображение первого изображения
+    function updateSlider() {
+        imageSlider.innerHTML = `<img src="${images[currentIndex]}" class="slider-img">`;
     }
 
-    productName.textContent = productData.name;
-    productPrice.textContent = `${productData.price} ₽`;
-    productOldPrice.textContent = productData.old_price ? `Старая цена: ${productData.old_price} ₽` : '';
-    productStock.textContent = productData.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
-    productDescription.textContent = productData.description;
+    updateSlider();
 
-    // Обработчики для переключения изображений
-    document.getElementById('prev-button').addEventListener('click', () => {
-        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-        productImg.src = images[currentImageIndex];
+    // Обработчики свайпа
+    imageSlider.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
     });
 
-    document.getElementById('next-button').addEventListener('click', () => {
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-        productImg.src = images[currentImageIndex];
+    imageSlider.addEventListener('touchmove', (e) => {
+        currentX = e.touches[0].clientX;
     });
 
-    // Открытие модального окна
-    payButton.addEventListener('click', () => {
-        userModal.style.display = 'block';
-    });
+    imageSlider.addEventListener('touchend', () => {
+        const swipeDistance = currentX - startX;
+        const swipeThreshold = 50; // Минимальное расстояние для распознавания свайпа
 
-    // Закрытие модального окна
-    closeModal.addEventListener('click', () => {
-        userModal.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-        if (event.target === userModal) {
-            userModal.style.display = 'none';
+        if (swipeDistance > swipeThreshold) {
+            // Свайп вправо
+            currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
+        } else if (swipeDistance < -swipeThreshold) {
+            // Свайп влево
+            currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
         }
+
+        updateSlider();
+    });
+
+    // Заполняем информацию о продукте
+    document.getElementById('product-name').textContent = productData.name;
+    document.getElementById('product-price').textContent = `${productData.price} ₽`;
+    document.getElementById('product-description').textContent = productData.description;
+    document.getElementById('stock-status').textContent = productData.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
+
+    // Открытие модального окна при нажатии на "Перейти к оплате"
+    const payButton = document.getElementById('pay-button');
+    const modal = document.getElementById('user-modal');
+    const closeModal = document.querySelector('.close-modal');
+
+    payButton.addEventListener('click', () => {
+        modal.style.display = 'block';
+    });
+
+    closeModal.addEventListener('click', () => {
+        modal.style.display = 'none';
     });
 
     // Обработка отправки формы
-    userForm.addEventListener('submit', (event) => {
+    const form = document.getElementById('user-form');
+    form.addEventListener('submit', (event) => {
         event.preventDefault();
 
         const fullName = document.getElementById('full-name').value;
@@ -70,10 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const orderData = {
             product_id: productData.id,
+            user_id: telegramUser.id,
             user_data: {
                 full_name: fullName,
                 phone_number: phoneNumber,
-                email: email
+                email: email,
+                username: telegramUser.username
             }
         };
 
@@ -88,14 +95,14 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             if (data.status === "success") {
                 alert("Заказ успешно отправлен!");
-                userModal.style.display = 'none';
+                window.location.href = "https://t.me/QSale_iphone_bot";
             } else {
                 alert(`Ошибка при отправке заказа: ${data.message}`);
             }
         })
         .catch(error => {
-            alert('Произошла ошибка при отправке заказа.');
-            console.error('Error:', error);
+            alert("Произошла ошибка при отправке заказа.");
+            console.error('Ошибка:', error);
         });
     });
 });
