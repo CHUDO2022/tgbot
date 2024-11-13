@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const productData = JSON.parse(urlParams.get('product_data'));
-    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+    let telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
     // Проверка данных товара и пользователя
     if (!productData) {
@@ -10,10 +10,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Если данные пользователя отсутствуют, пробуем снова загрузить их из Telegram Web App
     if (!telegramUser || !telegramUser.id) {
-        alert("Ошибка: не загружены данные пользователя или отсутствует user_id.");
-        console.error("Не загружены данные пользователя или отсутствует user_id.");
-        return;
+        const telegram = window.Telegram.WebApp;
+        const initDataUnsafe = telegram.initDataUnsafe;
+        telegramUser = initDataUnsafe?.user;
+
+        if (telegramUser && telegramUser.id) {
+            localStorage.setItem('telegramUser', JSON.stringify(telegramUser));
+            console.log("Данные пользователя загружены заново:", telegramUser);
+        } else {
+            alert("Ошибка: не удалось загрузить данные пользователя.");
+            console.error("Не удалось загрузить данные пользователя.");
+            return;
+        }
     }
 
     const imageSlider = document.getElementById('image-slider');
