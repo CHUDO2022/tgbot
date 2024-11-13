@@ -24,6 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.style.setProperty('--button-background-color', themeParams.button_color || '#232e3c');
     document.documentElement.style.setProperty('--text-color', themeParams.text_color || '#ffffff');
 
+    // Проверка и сохранение данных пользователя из Telegram
+    const initDataUnsafe = telegram.initDataUnsafe;
+    const user = initDataUnsafe.user;
+
+    if (user) {
+        console.log('Данные пользователя загружены:', user);
+        localStorage.setItem('telegramUser', JSON.stringify(user));
+    } else {
+        console.error('Ошибка: данные пользователя не загружены.');
+    }
+
     // Функция для загрузки продуктов с сервера
     function loadProducts() {
         fetch('https://gadgetmark.ru/get-products')
@@ -109,8 +120,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     in_stock: productCard.querySelector('.out-of-stock') ? 'Нет' : 'Да',
                     colors: JSON.parse(productCard.dataset.colors || '[]'),
                     memory: JSON.parse(productCard.dataset.memory || '[]'),
-                    connectivity: JSON.parse(productCard.dataset.connectivity || '[]')
+                    connectivity: JSON.parse(productCard.dataset.connectivity || '[]'),
+                    user_id: user?.id || null // Добавляем user_id
                 };
+
+                if (!product.user_id) {
+                    alert('Ошибка: user_id отсутствует.');
+                    return;
+                }
 
                 window.location.href = `order.html?product_data=${encodeURIComponent(JSON.stringify(product))}`;
             });
