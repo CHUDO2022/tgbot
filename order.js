@@ -3,99 +3,80 @@ document.addEventListener('DOMContentLoaded', () => {
     const productData = JSON.parse(urlParams.get('product_data'));
     const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
-    // Проверка наличия данных продукта и пользователя
-    if (!productData || !telegramUser || !telegramUser.id) {
+    if (!productData || !telegramUser) {
         alert("Ошибка: нет данных о продукте или пользователе.");
-        console.error('Отсутствуют данные о продукте или user_id.');
         return;
     }
 
     const imageSlider = document.getElementById('image-slider');
     const reviewSlider = document.getElementById('review-slider');
-    const productName = document.getElementById('product-name');
-    const productPrice = document.getElementById('product-price');
-    const productDescription = document.getElementById('product-description');
-    const stockStatus = document.getElementById('stock-status');
-    const payButton = document.getElementById('pay-button');
-    const modal = document.getElementById('user-modal');
-    const closeModal = document.querySelector('.close-modal');
+    const images = productData.images || [];
+    const reviews = productData.reviews || [];
+    let currentImageIndex = 0;
+    let currentReviewIndex = 0;
 
-    let currentIndex = 0;
-    let startX = 0;
-    let currentX = 0;
-
-    // Функция для отображения изображений продукта
-    function updateSlider() {
-        if (productData.images && productData.images.length > 0) {
-            imageSlider.innerHTML = `<img src="${productData.images[currentIndex]}" class="slider-img">`;
+    // Функция обновления слайдера изображений товара
+    function updateImageSlider() {
+        if (images.length > 0) {
+            imageSlider.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
         } else {
-            imageSlider.innerHTML = '<img src="https://via.placeholder.com/600x300" class="slider-img" alt="Нет изображения">';
+            imageSlider.innerHTML = '<p>Изображения отсутствуют</p>';
         }
     }
 
-    // Функция для отображения отзывов
+    // Функция обновления слайдера отзывов
     function updateReviewSlider() {
-        if (productData.reviews && productData.reviews.length > 0) {
-            reviewSlider.innerHTML = `<img src="${productData.reviews[currentIndex]}" class="slider-img">`;
+        if (reviews.length > 0) {
+            reviewSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
         } else {
             reviewSlider.innerHTML = '<p>Отзывы отсутствуют</p>';
         }
     }
 
-    updateSlider();
+    updateImageSlider();
     updateReviewSlider();
 
-    // Обработчики свайпа для изображений продукта
-    imageSlider.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-    });
-
-    imageSlider.addEventListener('touchmove', (e) => {
-        currentX = e.touches[0].clientX;
-    });
-
-    imageSlider.addEventListener('touchend', () => {
-        const swipeDistance = currentX - startX;
+    // Обработчики свайпа для изображений товара
+    imageSlider.addEventListener('touchstart', (e) => startX = e.touches[0].clientX);
+    imageSlider.addEventListener('touchend', (e) => {
+        const swipeDistance = e.changedTouches[0].clientX - startX;
         const swipeThreshold = 50;
 
         if (swipeDistance > swipeThreshold) {
-            currentIndex = (currentIndex === 0) ? productData.images.length - 1 : currentIndex - 1;
+            currentImageIndex = (currentImageIndex === 0) ? images.length - 1 : currentImageIndex - 1;
         } else if (swipeDistance < -swipeThreshold) {
-            currentIndex = (currentIndex === productData.images.length - 1) ? 0 : currentIndex + 1;
+            currentImageIndex = (currentImageIndex === images.length - 1) ? 0 : currentImageIndex + 1;
         }
 
-        updateSlider();
+        updateImageSlider();
     });
 
     // Обработчики свайпа для отзывов
-    reviewSlider.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-    });
-
-    reviewSlider.addEventListener('touchmove', (e) => {
-        currentX = e.touches[0].clientX;
-    });
-
-    reviewSlider.addEventListener('touchend', () => {
-        const swipeDistance = currentX - startX;
+    reviewSlider.addEventListener('touchstart', (e) => startX = e.touches[0].clientX);
+    reviewSlider.addEventListener('touchend', (e) => {
+        const swipeDistance = e.changedTouches[0].clientX - startX;
         const swipeThreshold = 50;
 
         if (swipeDistance > swipeThreshold) {
-            currentIndex = (currentIndex === 0) ? productData.reviews.length - 1 : currentIndex - 1;
+            currentReviewIndex = (currentReviewIndex === 0) ? reviews.length - 1 : currentReviewIndex - 1;
         } else if (swipeDistance < -swipeThreshold) {
-            currentIndex = (currentIndex === productData.reviews.length - 1) ? 0 : currentIndex + 1;
+            currentReviewIndex = (currentReviewIndex === reviews.length - 1) ? 0 : currentReviewIndex + 1;
         }
 
         updateReviewSlider();
     });
 
     // Заполняем информацию о продукте
-    productName.textContent = productData.name;
-    productPrice.textContent = `${productData.price} ₽`;
-    productDescription.textContent = productData.description;
-    stockStatus.textContent = productData.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
+    document.getElementById('product-name').textContent = productData.name;
+    document.getElementById('product-price').textContent = `${productData.price} ₽`;
+    document.getElementById('product-description').textContent = productData.description;
+    document.getElementById('stock-status').textContent = productData.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
 
     // Открытие модального окна при нажатии на "Перейти к оплате"
+    const payButton = document.getElementById('pay-button');
+    const modal = document.getElementById('user-modal');
+    const closeModal = document.querySelector('.close-modal');
+
     payButton.addEventListener('click', () => {
         modal.style.display = 'block';
     });
