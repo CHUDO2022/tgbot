@@ -6,10 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const moreCategoriesModal = document.getElementById('more-categories-modal');
     const closeModalBtn = document.getElementById('close-modal-btn');
     const telegram = window.Telegram.WebApp;
-    const userInfo = document.getElementById('user-info');
-    const homeBtn = document.getElementById('home-btn');
-    const mainContent = document.getElementById('main-content');
-    const statsBtn = document.getElementById('stats-btn');
     const searchInput = document.querySelector('.search-bar input');
     const autoCompleteList = document.createElement('ul');
     autoCompleteList.className = 'autocomplete-list';
@@ -17,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let productNames = []; // Массив для хранения названий товаров
 
-    // Адаптация темы интерфейса под профиль пользователя в Telegram
+    // Установка темы интерфейса на основе параметров Telegram
     const themeParams = telegram.themeParams;
     document.documentElement.style.setProperty('--background-color', themeParams.bg_color || '#232e3c');
     document.documentElement.style.setProperty('--card-background-color', themeParams.secondary_bg_color || '#17212b');
@@ -54,8 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     productCard.dataset.description = product.description;
                     productCard.dataset.images = JSON.stringify(product.images || []);
                     productCard.dataset.reviews = JSON.stringify(product.reviews || []);
-
-                    
 
                     const mainImage = product.image || (product.images && product.images[0]);
                     const stockStatus = product.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
@@ -107,21 +101,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Обработчики для кнопок "Добавить"
-    // Обработчики для кнопок "Добавить"
     function attachButtonEvents() {
         const buttons = document.querySelectorAll('.btn');
         buttons.forEach(button => {
             button.addEventListener('click', () => {
                 const productId = button.id.replace('btn', '');
                 const productCard = document.querySelector(`#btn${productId}`).closest('.item');
-                const telegramUser = JSON.parse(localStorage.getItem('telegramUser')) || window.Telegram.WebApp.initDataUnsafe.user;
-    
-                if (!telegramUser || !telegramUser.id) {
-                    alert('Ошибка: данные пользователя не загружены.');
-                    console.error('Данные пользователя отсутствуют.');
+                const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+                const userId = telegramUser?.id;
+
+                if (!userId) {
+                    alert('Ошибка: user_id отсутствует.');
+                    console.error('user_id не найден в данных пользователя.');
                     return;
                 }
-    
+
                 const product = {
                     id: parseInt(productId, 10),
                     images: JSON.parse(productCard.dataset.images || '[]'),
@@ -131,17 +125,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     old_price: productCard.querySelector('.old-price') ? parseFloat(productCard.querySelector('.old-price').textContent.replace('Старая цена: ', '').replace(' ₽', '')) : '',
                     description: productCard.dataset.description,
                     in_stock: productCard.querySelector('.out-of-stock') ? 'Нет' : 'Да',
-                    user_id: telegramUser.id,
-                    username: telegramUser.username
+                    colors: JSON.parse(productCard.dataset.colors || '[]'),
+                    memory: JSON.parse(productCard.dataset.memory || '[]'),
+                    connectivity: JSON.parse(productCard.dataset.connectivity || '[]'),
+                    user_id: userId
                 };
-    
-                const productData = encodeURIComponent(JSON.stringify(product));
-                const userData = `user_id=${telegramUser.id}&username=${telegramUser.username}`;
-                window.location.href = `order.html?product_data=${productData}&${userData}`;
+
+                window.location.href = `order.html?product_data=${encodeURIComponent(JSON.stringify(product))}`;
             });
         });
     }
-
 
     // Обработчик кликов по вкладкам
     tabs.forEach(tab => {
