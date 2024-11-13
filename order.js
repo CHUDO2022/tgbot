@@ -99,24 +99,29 @@ document.addEventListener('DOMContentLoaded', () => {
         updateReviewsSlider();
     });
 
-    // Модальное окно
+    // Проверка на наличие элементов для модального окна
     const modal = document.getElementById("modal");
     const payButton = document.getElementById("pay-button");
     const closeModal = document.querySelector(".close");
 
-    // Открытие модального окна
-    payButton.addEventListener('click', () => {
-        modal.style.display = "block";
-    });
+    // Проверка, что элементы модального окна существуют, прежде чем добавлять обработчики событий
+    if (payButton && modal && closeModal) {
+        // Открытие модального окна
+        payButton.addEventListener('click', () => {
+            modal.style.display = "block";
+        });
 
-    // Закрытие модального окна
-    closeModal.addEventListener('click', () => {
-        modal.style.display = "none";
-    });
+        // Закрытие модального окна
+        closeModal.addEventListener('click', () => {
+            modal.style.display = "none";
+        });
+    } else {
+        console.error("Некоторые элементы модального окна не найдены.");
+    }
 
     // Обработка отправки формы
     const form = document.getElementById("user-form");
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", function(event) {
         event.preventDefault();
 
         const fullName = document.getElementById("full-name").value;
@@ -147,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             if (data.status === "success") {
                 modal.style.display = "none";
-                window.location.href = "https://t.me/QSale_iphone_bot";
+                window.location.href = "https://t.me/QSale_iphone_bot"; // Замените ссылку на нужную
             } else {
                 alert(`Ошибка при отправке заказа: ${data.message}`);
             }
