@@ -53,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     productCard.dataset.connectivity = JSON.stringify(product.connectivity || []);
                     productCard.dataset.description = product.description;
                     productCard.dataset.images = JSON.stringify(product.images || []);
+                    productCard.dataset.reviews = JSON.stringify(product.reviews || []);
+
                     
 
                     const mainImage = product.image || (product.images && product.images[0]);
