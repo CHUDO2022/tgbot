@@ -1,93 +1,72 @@
-/* Общие стили */
+/* Основные стили */
 body {
     background-color: #232e3c;
     color: #ffffff;
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
+    padding: 0;
 }
 
 .container {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #17212b;
-    border-radius: 10px;
+    text-align: center;
 }
 
-/* Стили заголовка */
+/* Стили для заголовков */
 h2 {
-    text-align: center;
+    color: #ffffff;
     margin-bottom: 20px;
 }
 
-/* Слайдер изображений */
+h3 {
+    color: #ffffff;
+    margin-top: 20px;
+}
+
+/* Слайдер */
 .slider {
-    position: relative;
     width: 100%;
     height: 300px;
-    background-color: #1c1c1c;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-
-.slider-img,
-.review-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-/* Текстовые блоки */
-#stock-status {
-    color: #ff3b30;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-#product-price {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-#product-description {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* Слайдер отзывов */
-#reviews-slider {
-    position: relative;
-    width: 100%;
-    height: 200px;
-    background-color: #1c1c1c;
-    border-radius: 10px;
-    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: #17212b;
     margin-bottom: 20px;
 }
 
-/* Кнопка оплаты */
-#pay-button {
+.slider img {
     width: 100%;
-    padding: 15px;
-    background-color: #007aff;
-    color: #ffffff;
-    font-size: 18px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    height: 100%;
+    object-fit: cover;
 }
 
-#pay-button:hover {
+/* Информация о товаре */
+.product-info {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.product-info p {
+    margin: 5px 0;
+}
+
+/* Кнопка */
+.btn {
+    background-color: #007aff;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+}
+
+.btn:hover {
     background-color: #005bb5;
 }
 
@@ -99,53 +78,49 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
-    background: #17212b;
-    margin: 10% auto;
+    background-color: #17212b;
     padding: 20px;
-    width: 80%;
-    max-width: 400px;
     border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
 }
 
 .close-modal {
-    color: #ff3b30;
-    float: right;
+    color: #ffffff;
     font-size: 24px;
+    font-weight: bold;
     cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 20px;
 }
 
-/* Стили для формы ввода данных */
-#user-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+/* Форма */
+.form-group {
+    margin-bottom: 15px;
 }
 
-#user-form input {
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
     padding: 10px;
-    font-size: 16px;
-    border: 1px solid #007aff;
     border-radius: 5px;
-    background-color: #1c1c1c;
-    color: #ffffff;
-}
-
-#user-form button {
-    padding: 10px;
-    font-size: 16px;
-    background-color: #007aff;
-    color: #ffffff;
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    font-size: 14px;
 }
 
-#user-form button:hover {
-    background-color: #005bb5;
+/* Сообщение об отсутствии отзывов */
+#reviews-slider p {
+    color: #ffffff;
+    font-size: 16px;
 }
