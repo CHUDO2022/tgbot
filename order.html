@@ -7,46 +7,42 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+    <div id="order-page">
         <h1>Оформление заказа</h1>
 
         <!-- Слайдер изображений -->
-        <div class="slider-wrapper">
-            <button id="prev-btn" class="slider-btn">❮</button>
-            <img id="image-slider" src="https://via.placeholder.com/600x300" alt="Изображение товара" class="product-image">
-            <button id="next-btn" class="slider-btn">❯</button>
+        <div id="image-slider">
+            <button id="prev-button">&lt;</button>
+            <img id="product-img" src="https://via.placeholder.com/600x300" alt="Product Image">
+            <button id="next-button">&gt;</button>
         </div>
 
-        <!-- Информация о товаре -->
-        <div id="product-details">
-            <h2 id="product-name"></h2>
-            <p id="product-price"></p>
-            <p id="product-old-price"></p>
-            <p id="stock-status"></p>
-            <p id="product-description"></p>
+        <!-- Информация о продукте -->
+        <h2 id="product-name"></h2>
+        <p id="product-price"></p>
+        <p id="product-old-price"></p>
+        <p id="product-stock"></p>
+        <p id="product-description"></p>
+
+        <!-- Кнопка для перехода к оплате -->
+        <button id="pay-button" class="btn">Перейти к оплате</button>
+
+        <!-- Модальное окно для ввода данных пользователя -->
+        <div id="user-modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Введите ваши данные</h2>
+                <form id="user-form">
+                    <label for="full-name">ФИО:</label>
+                    <input type="text" id="full-name" placeholder="Введите ваше имя" required>
+                    <label for="phone-number">Номер телефона:</label>
+                    <input type="tel" id="phone-number" placeholder="Введите номер телефона" required>
+                    <label for="email">Электронная почта:</label>
+                    <input type="email" id="email" placeholder="Введите ваш email" required>
+                    <button type="submit" class="btn">Отправить заказ</button>
+                </form>
+            </div>
         </div>
-
-        <!-- Форма заказа -->
-        <form id="user-form" class="order-form">
-            <div class="form-group">
-                <label for="full-name">ФИО:</label>
-                <input type="text" id="full-name" placeholder="Введите ваше имя" required>
-            </div>
-
-            <div class="form-group">
-                <label for="phone-number">Номер телефона:</label>
-                <input type="tel" id="phone-number" placeholder="Введите номер телефона" required>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Электронная почта:</label>
-                <input type="email" id="email" placeholder="Введите ваш email" required>
-            </div>
-
-            <button type="submit" class="submit-btn">Перейти к оплате</button>
-        </form>
-
-        <button id="close-btn" class="close-btn">Закрыть</button>
     </div>
 
     <script src="order.js"></script>
