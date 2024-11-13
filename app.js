@@ -26,13 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Проверка и сохранение данных пользователя из Telegram
     const initDataUnsafe = telegram.initDataUnsafe;
-    const user = initDataUnsafe.user;
+    const user = initDataUnsafe?.user;
 
-    if (user) {
+    if (user && user.id) {
         console.log('Данные пользователя загружены:', user);
         localStorage.setItem('telegramUser', JSON.stringify(user));
     } else {
-        console.error('Ошибка: данные пользователя не загружены.');
+        console.error('Ошибка: данные пользователя не загружены или отсутствует user_id.');
     }
 
     // Функция для загрузки продуктов с сервера
@@ -110,6 +110,15 @@ document.addEventListener('DOMContentLoaded', () => {
             button.addEventListener('click', () => {
                 const productId = button.id.replace('btn', '');
                 const productCard = document.querySelector(`#btn${productId}`).closest('.item');
+                const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+                const userId = telegramUser?.id;
+
+                if (!userId) {
+                    alert('Ошибка: user_id отсутствует.');
+                    console.error('user_id не найден в данных пользователя.');
+                    return;
+                }
+
                 const product = {
                     id: parseInt(productId, 10),
                     images: JSON.parse(productCard.dataset.images || '[]'),
@@ -121,13 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     colors: JSON.parse(productCard.dataset.colors || '[]'),
                     memory: JSON.parse(productCard.dataset.memory || '[]'),
                     connectivity: JSON.parse(productCard.dataset.connectivity || '[]'),
-                    user_id: user?.id || null // Добавляем user_id
+                    user_id: userId
                 };
-
-                if (!product.user_id) {
-                    alert('Ошибка: user_id отсутствует.');
-                    return;
-                }
 
                 window.location.href = `order.html?product_data=${encodeURIComponent(JSON.stringify(product))}`;
             });
