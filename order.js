@@ -4,15 +4,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
     // Проверка данных товара и пользователя
+    console.log("Инициализация страницы...");
+    console.log("Данные товара:", productData);
+    console.log("Данные пользователя из localStorage:", telegramUser);
+
     if (!productData) {
         alert("Ошибка: нет данных о продукте.");
         console.error("Нет данных о продукте.");
         return;
     }
 
-    if (!telegramUser || !telegramUser.id) {
-        alert("Ошибка: не загружены данные пользователя или отсутствует user_id.");
-        console.error("Не загружены данные пользователя или отсутствует user_id.");
+    if (!telegramUser) {
+        alert("Ошибка: данные пользователя отсутствуют.");
+        console.error("Данные пользователя отсутствуют в localStorage.");
+        return;
+    }
+
+    if (!telegramUser.id) {
+        alert("Ошибка: user_id отсутствует.");
+        console.error("user_id отсутствует в данных пользователя:", telegramUser);
         return;
     }
 
@@ -99,6 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModal = document.querySelector('.close-modal');
 
     payButton.addEventListener('click', () => {
+        console.log("Кнопка 'Перейти к оплате' нажата");
+        console.log("Данные пользователя перед отправкой:", telegramUser);
         modal.style.display = 'block';
     });
 
@@ -127,9 +139,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // Проверка перед отправкой
+        console.log("Данные заказа перед отправкой:", orderData);
+
         if (!orderData.user_id) {
             alert("Ошибка: user_id отсутствует.");
-            console.error("user_id отсутствует в данных заказа.");
+            console.error("user_id отсутствует в данных заказа:", orderData);
             return;
         }
 
@@ -148,11 +162,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = "https://t.me/QSale_iphone_bot";
             } else {
                 alert(`Ошибка при отправке заказа: ${data.message}`);
+                console.error("Ответ сервера:", data);
             }
         })
         .catch(error => {
             alert("Произошла ошибка при отправке заказа.");
-            console.error('Ошибка:', error);
+            console.error('Ошибка при отправке:', error);
         });
     });
 });
