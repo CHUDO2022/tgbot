@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    console.log(`Данные товара:`, productData);
+    console.log(`Данные пользователя: user_id = ${telegramUser.id}, username = ${telegramUser.username}`);
+
     const imageSlider = document.getElementById('image-slider');
     const reviewsSlider = document.getElementById('reviews-slider');
     const images = productData.images || [];
@@ -24,14 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let currentX = 0;
 
-    // Функция для обновления слайдера изображений товара
+    // Обновление слайдера изображений
     function updateImageSlider() {
         imageSlider.innerHTML = `<img src="${images[currentIndex]}" class="slider-img">`;
     }
 
     updateImageSlider();
 
-    // Обработчики свайпа для слайдера изображений товара
+    // Обработчики свайпа для изображений
     imageSlider.addEventListener('touchstart', (e) => {
         startX = e.touches[0].clientX;
     });
@@ -53,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateImageSlider();
     });
 
-    // Функция для обновления слайдера отзывов
+    // Обновление слайдера отзывов
     function updateReviewsSlider() {
         if (reviews.length === 0) {
             reviewsSlider.innerHTML = `<p>Отзывы отсутствуют</p>`;
@@ -64,35 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateReviewsSlider();
 
-    // Обработчики свайпа для слайдера отзывов
-    reviewsSlider.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-    });
-
-    reviewsSlider.addEventListener('touchmove', (e) => {
-        currentX = e.touches[0].clientX;
-    });
-
-    reviewsSlider.addEventListener('touchend', () => {
-        const swipeDistance = currentX - startX;
-        const swipeThreshold = 50;
-
-        if (swipeDistance > swipeThreshold) {
-            currentIndex = (currentIndex === 0) ? reviews.length - 1 : currentIndex - 1;
-        } else if (swipeDistance < -swipeThreshold) {
-            currentIndex = (currentIndex === reviews.length - 1) ? 0 : currentIndex + 1;
-        }
-
-        updateReviewsSlider();
-    });
-
-    // Заполняем информацию о продукте
-    document.getElementById('product-name').textContent = productData.name;
-    document.getElementById('product-price').textContent = `${productData.price} ₽`;
-    document.getElementById('product-description').textContent = productData.description;
-    document.getElementById('stock-status').textContent = productData.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
-
-    // Открытие модального окна при нажатии на "Перейти к оплате"
+    // Открытие модального окна
     const payButton = document.getElementById('pay-button');
     const modal = document.getElementById('user-modal');
     const closeModal = document.querySelector('.close-modal');
@@ -125,10 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // Проверка перед отправкой
+        // Дополнительная проверка user_id перед отправкой
         if (!orderData.user_id) {
-            alert("Ошибка: user_id отсутствует.");
-            console.error("user_id отсутствует в данных заказа.");
+            alert("Ошибка: user_id отсутствует перед отправкой на сервер.");
+            console.error("user_id отсутствует в данных заказа:", orderData);
             return;
         }
 
@@ -143,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(data => {
+            console.log("Ответ от сервера:", data);
             if (data.status === "success") {
                 alert("Заказ успешно отправлен!");
                 window.location.href = "https://t.me/QSale_iphone_bot";
@@ -152,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             alert("Произошла ошибка при отправке заказа.");
-            console.error('Ошибка:', error);
+            console.error('Ошибка при отправке:', error);
         });
     });
 });
