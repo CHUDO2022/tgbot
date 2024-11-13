@@ -4,36 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оформление заказа</title>
-    <link rel="stylesheet" href="order.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <div id="image-slider" class="slider"></div>
         <h2 id="product-name"></h2>
-        <p id="product-price"></p>
-        <p id="stock-status"></p>
-        <p id="product-description"></p>
 
-        <div id="review-slider" class="slider reviews">
-            <h3>Отзывы:</h3>
-        </div>
+        <!-- Слайдер изображений товара -->
+        <div id="image-slider" class="slider"></div>
+        <div id="stock-status"></div>
+        <div id="product-price"></div>
+        <div id="product-description"></div>
 
+        <!-- Слайдер отзывов -->
+        <h3>Отзывы:</h3>
+        <div id="reviews-slider" class="slider"></div>
+
+        <!-- Кнопка оплаты -->
         <button id="pay-button">Перейти к оплате</button>
 
-        <!-- Модальное окно -->
+        <!-- Модальное окно ввода данных пользователя -->
         <div id="user-modal" class="modal">
             <div class="modal-content">
                 <span class="close-modal">&times;</span>
                 <h3>Введите ваши данные</h3>
                 <form id="user-form">
-                    <input id="full-name" type="text" placeholder="Введите ваше имя" required>
-                    <input id="phone-number" type="tel" placeholder="Введите номер телефона" required>
-                    <input id="email" type="email" placeholder="Введите ваш email" required>
+                    <input type="text" id="full-name" placeholder="Введите ваше имя" required>
+                    <input type="tel" id="phone-number" placeholder="Введите номер телефона" required>
+                    <input type="email" id="email" placeholder="Введите ваш email" required>
                     <button type="submit">Отправить заказ</button>
                 </form>
             </div>
         </div>
     </div>
+
     <script src="order.js"></script>
 </body>
 </html>
