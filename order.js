@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const productData = JSON.parse(urlParams.get('product_data'));
-    let telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+    const userId = urlParams.get('user_id');
+    const username = urlParams.get('username');
 
     // Проверка данных товара и пользователя
     if (!productData) {
@@ -10,20 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Если данные пользователя отсутствуют, пробуем снова загрузить их из Telegram Web App
-    if (!telegramUser || !telegramUser.id) {
-        const telegram = window.Telegram.WebApp;
-        const initDataUnsafe = telegram.initDataUnsafe;
-        telegramUser = initDataUnsafe?.user;
-
-        if (telegramUser && telegramUser.id) {
-            localStorage.setItem('telegramUser', JSON.stringify(telegramUser));
-            console.log("Данные пользователя загружены заново:", telegramUser);
-        } else {
-            alert("Ошибка: не удалось загрузить данные пользователя.");
-            console.error("Не удалось загрузить данные пользователя.");
-            return;
-        }
+    if (!userId) {
+        alert("Ошибка: user_id отсутствует.");
+        console.error("user_id отсутствует в URL.");
+        return;
     }
 
     const imageSlider = document.getElementById('image-slider');
@@ -36,7 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для обновления слайдера изображений товара
     function updateImageSlider() {
-        imageSlider.innerHTML = `<img src="${images[currentIndex]}" class="slider-img">`;
+        if (images.length === 0) {
+            imageSlider.innerHTML = `<p>Изображения отсутствуют</p>`;
+        } else {
+            imageSlider.innerHTML = `<img src="${images[currentIndex]}" class="slider-img">`;
+        }
     }
 
     updateImageSlider();
@@ -126,12 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const orderData = {
             product_id: productData.id,
-            user_id: telegramUser.id,
+            user_id: userId,
             user_data: {
                 full_name: fullName,
                 phone_number: phoneNumber,
                 email: email,
-                username: telegramUser.username
+                username: username
             }
         };
 
