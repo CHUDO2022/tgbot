@@ -1,7 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const productData = JSON.parse(urlParams.get('product_data'));
-    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+    let telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+
+    // Если данных нет в localStorage, загружаем их из Telegram WebApp API
+    if (!telegramUser) {
+        const telegram = window.Telegram.WebApp;
+        telegramUser = telegram.initDataUnsafe?.user;
+        
+        if (telegramUser) {
+            // Сохраняем данные пользователя в localStorage
+            localStorage.setItem('telegramUser', JSON.stringify(telegramUser));
+        } else {
+            alert("Ошибка: не удалось получить данные пользователя.");
+            return;
+        }
+    }
 
     if (!productData || !telegramUser) {
         alert("Ошибка: нет данных о продукте или пользователе.");
@@ -32,13 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     imageSlider.addEventListener('touchend', () => {
         const swipeDistance = currentX - startX;
-        const swipeThreshold = 50; // Минимальное расстояние для распознавания свайпа
+        const swipeThreshold = 50;
 
         if (swipeDistance > swipeThreshold) {
-            // Свайп вправо
             currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
         } else if (swipeDistance < -swipeThreshold) {
-            // Свайп влево
             currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
         }
 
