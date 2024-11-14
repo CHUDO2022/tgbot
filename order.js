@@ -1,98 +1,93 @@
-
 document.addEventListener('DOMContentLoaded', () => {
+    // Извлечение данных из URL
     const urlParams = new URLSearchParams(window.location.search);
     const productData = JSON.parse(urlParams.get('product_data'));
-    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
     if (!productData) {
         alert("Нет данных о продукте в URL");
         return;
     }
 
-    if (!telegramUser) {
-        alert("Данные пользователя не найдены.");
-        return;
+    // Извлекаем информацию о товаре
+    const productName = document.getElementById('product-name');
+    const productPrice = document.getElementById('product-price');
+    const oldPrice = document.getElementById('product-old-price');
+    const productDescription = document.getElementById('product-description');
+    const productStock = document.getElementById('product-stock');  // Новый элемент для статуса наличия товара
+
+    // Заполнение информации о продукте
+    productName.textContent = productData.name;
+    productPrice.textContent = `${productData.price} ₽`;
+
+    // Если старая цена есть, показываем ее
+    if (productData.old_price) {
+        oldPrice.textContent = `Старая цена: ${productData.old_price} ₽`;
+    } else {
+        oldPrice.textContent = '';
     }
 
+    productDescription.textContent = productData.description;
+
+    // Обработка статуса наличия товара
+    if (productData.stock && productData.stock === 'in_stock') {
+        productStock.textContent = 'В наличии';
+        productStock.style.color = 'green';
+    } else {
+        productStock.textContent = 'Нет в наличии';
+        productStock.style.color = 'red';
+    }
+
+    // Слайдер изображений товара
     const imageSlider = document.getElementById('image-slider');
     const reviewsSlider = document.getElementById('reviews-slider');
     const images = productData.images || [];
     const reviews = productData.reviews || [];
+
     let currentImageIndex = 0;
     let currentReviewIndex = 0;
 
+    // Функция обновления слайдера изображений
     function updateImageSlider() {
-        imageSlider.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
-        updateDots('image-dots', images.length, currentImageIndex);
-    }
-
-    function updateReviewsSlider() {
-        reviewsSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
-        updateDots('review-dots', reviews.length, currentReviewIndex);
-    }
-
-    function updateDots(dotContainerId, dotCount, activeIndex) {
-        const dotContainer = document.getElementById(dotContainerId);
-        dotContainer.innerHTML = '';
-        for (let i = 0; i < dotCount; i++) {
-            const dot = document.createElement('span');
-            dot.className = 'dot';
-            if (i === activeIndex) dot.classList.add('active');
-            dotContainer.appendChild(dot);
+        if (images.length > 0) {
+            imageSlider.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
+        } else {
+            imageSlider.innerHTML = `<p>Изображения отсутствуют</p>`;
         }
     }
 
-    function handleSwipe(slider, updateFunc, itemCount, getCurrentIndex, setCurrentIndex) {
-        let startX = 0;
-        let currentX = 0;
-
-        slider.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-        });
-
-        slider.addEventListener('touchmove', (e) => {
-            currentX = e.touches[0].clientX;
-        });
-
-        slider.addEventListener('touchend', () => {
-            const swipeDistance = currentX - startX;
-            const swipeThreshold = 50;
-
-            if (swipeDistance > swipeThreshold) {
-                setCurrentIndex((getCurrentIndex() - 1 + itemCount) % itemCount);
-            } else if (swipeDistance < -swipeThreshold) {
-                setCurrentIndex((getCurrentIndex() + 1) % itemCount);
-            }
-
-            updateFunc();
-        });
-
-        slider.addEventListener('click', (e) => {
-            if (e.clientX < slider.clientWidth / 2) {
-                setCurrentIndex((getCurrentIndex() - 1 + itemCount) % itemCount);
-            } else {
-                setCurrentIndex((getCurrentIndex() + 1) % itemCount);
-            }
-            updateFunc();
-        });
+    // Функция обновления слайдера отзывов
+    function updateReviewsSlider() {
+        if (reviews.length > 0) {
+            reviewsSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
+        } else {
+            reviewsSlider.innerHTML = `<p>Отзывы отсутствуют</p>`;
+        }
     }
-
-    handleSwipe(imageSlider, updateImageSlider, images.length, () => currentImageIndex, (index) => currentImageIndex = index);
-    handleSwipe(reviewsSlider, updateReviewsSlider, reviews.length, () => currentReviewIndex, (index) => currentReviewIndex = index);
 
     updateImageSlider();
     updateReviewsSlider();
 
-    document.getElementById('product-name').textContent = productData.name;
-    document.getElementById('product-price').textContent = `${productData.price} ₽`;
-    document.getElementById('product-old-price').textContent = `Старая цена: ${productData.old_price} ₽`;
-    document.getElementById('stock-status').textContent = productData.in_stock ? 'В наличии' : 'Нет в наличии';
-    document.getElementById('product-description').textContent = productData.description;
+    // Переключение изображений слайдера по клику
+    imageSlider.addEventListener('click', () => {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        updateImageSlider();
+    });
 
-    const payButton = document.getElementById('pay-button');
+    // Переключение отзывов слайдера по клику
+    reviewsSlider.addEventListener('click', () => {
+        currentReviewIndex = (currentReviewIndex + 1) % reviews.length;
+        updateReviewsSlider();
+    });
+
+    // Модальное окно
     const modal = document.getElementById("modal");
+    const payButton = document.getElementById('pay-button');
 
     payButton.addEventListener('click', () => {
+        if (!modal) {
+            alert("Модальное окно не найдено.");
+            return;
+        }
         modal.style.display = "block";
     });
 
@@ -100,7 +95,16 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = "none";
     });
 
-    document.getElementById("user-form").addEventListener("submit", (event) => {
+    // Получаем данные пользователя из localStorage
+    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+
+    if (!telegramUser) {
+        alert("Данные пользователя не найдены.");
+        return;
+    }
+
+    // Отправка формы
+    document.getElementById("user-form").addEventListener("submit", function(event) {
         event.preventDefault();
 
         const fullName = document.getElementById("full-name").value;
