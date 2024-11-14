@@ -1,21 +1,15 @@
 /* Основные стили */
 body {
-    background-color: var(--background-color, #232e3c);
-    color: var(--text-color, #ffffff);
+    background-color: #232e3c;
+    color: #ffffff;
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
 }
 
 #container {
     width: 90%;
-    max-width: 500px;
-    margin-top: 20px;
-    background-color: var(--card-background-color, #17212b);
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #17212b;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -23,9 +17,8 @@ body {
 
 /* Слайдер изображений */
 .slider {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
+    text-align: center;
     margin-bottom: 20px;
 }
 
@@ -35,110 +28,100 @@ body {
     border-radius: 10px;
 }
 
-/* Заголовки и текст */
-h2 {
+.arrow {
+    position: absolute;
+    top: 50%;
+    font-size: 2em;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    user-select: none;
+    transform: translateY(-50%);
+}
+
+.left-arrow {
+    left: 10px;
+}
+
+.right-arrow {
+    right: 10px;
+}
+
+/* Информация о продукте */
+#product-name {
     font-size: 1.5em;
     margin-bottom: 10px;
-    color: #e0e0e0;
 }
 
-h3 {
+#product-price {
     font-size: 1.2em;
-    margin-bottom: 10px;
-    color: #e0e0e0;
+    color: #ff9800;
 }
 
-p {
-    margin: 5px 0;
+#product-description {
+    margin-bottom: 20px;
 }
 
-/* Кнопка перехода к оплате */
+/* Информация о доставке */
+.info-section {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #1f2a3a;
+    border-radius: 5px;
+}
+
+.info-section h3 {
+    color: #ff9800;
+}
+
 #pay-button {
     width: 100%;
-    padding: 10px;
-    background-color: var(--button-background-color, #007bff);
+    padding: 15px;
+    background-color: #007bff;
     color: #ffffff;
     border: none;
     border-radius: 5px;
+    font-size: 1.2em;
     cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s;
 }
 
-#pay-button:hover {
-    background-color: #0056b3;
-}
-
-/* Стили модального окна */
+/* Модальное окно */
 .modal {
     display: none;
     position: fixed;
-    top: 0;
+    z-index: 1000;
     left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
-    background-color: var(--card-background-color, #17212b);
+    background-color: #17212b;
+    margin: 15% auto;
     padding: 20px;
-    border-radius: 10px;
     width: 90%;
     max-width: 400px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
 }
 
-.close, .close-option-check {
-    color: #aaa;
+.close {
     float: right;
     font-size: 1.5em;
+    color: #ffffff;
     cursor: pointer;
 }
 
-.close:hover, .close-option-check:hover {
-    color: #fff;
-}
-
-/* Стили формы */
-#user-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    font-size: 0.9em;
-    margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="tel"],
-input[type="email"] {
+/* Поля ввода */
+input {
+    width: calc(100% - 20px);
     padding: 10px;
-    font-size: 1em;
-    border: 1px solid #ccc;
+    margin: 10px 0;
+    border: none;
     border-radius: 5px;
-    background-color: #2b3a4a;
-    color: #ffffff;
 }
 
-input[type="text"]:focus,
-input[type="tel"]:focus,
-input[type="email"]:focus {
-    outline: none;
-    border-color: #007bff;
-}
-
-/* Кнопка отправки заказа */
+/* Кнопка отправки формы */
 button[type="submit"] {
     width: 100%;
     padding: 10px;
@@ -146,53 +129,5 @@ button[type="submit"] {
     color: #ffffff;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s;
-}
-
-button[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
-/* Кнопка закрытия модального окна */
-#close-option-check-button {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #444;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#close-option-check-button:hover {
-    background-color: #555;
-}
-
-/* Сообщение об ошибке */
-#error-message {
-    color: #ff4d4d;
-    font-size: 0.9em;
-    margin-top: 10px;
-    text-align: center;
-}
-
-/* Мобильная адаптивность */
-@media (max-width: 600px) {
-    .modal-content {
-        width: 100%;
-        padding: 15px;
-    }
-
-    input[type="text"],
-    input[type="tel"],
-    input[type="email"] {
-        font-size: 0.9em;
-    }
-
-    button {
-        font-size: 0.9em;
-    }
+    font-size: 1.1em;
 }
