@@ -177,6 +177,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.status === "success") {
                 modal.style.display = "none";
                 window.location.href = "https://t.me/QSale_iphone_bot";
+                console.log("Сверните окно");
+
+                
             } else {
                 alert(`Ошибка при отправке заказа: ${data.message}`);
             }
