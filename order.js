@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => { 
+document.addEventListener('DOMContentLoaded', () => {  
     const urlParams = new URLSearchParams(window.location.search);
     const productData = JSON.parse(urlParams.get('product_data'));
 
@@ -54,79 +54,19 @@ document.addEventListener('DOMContentLoaded', () => {
         updateImageSlider();
     });
 
-    // Добавление свайпа для смартфонов
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    imageSlider.addEventListener('touchstart', (event) => {
-        touchStartX = event.changedTouches[0].screenX;
-    });
-
-    imageSlider.addEventListener('touchend', (event) => {
-        touchEndX = event.changedTouches[0].screenX;
-        handleSwipe();
-    });
-
-    function handleSwipe() {
-        if (touchEndX < touchStartX) {
-            currentImageIndex = (currentImageIndex + 1) % images.length;
-        }
-        if (touchEndX > touchStartX) {
-            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-        }
-        updateImageSlider();
-    }
-
     updateImageSlider();
 
-    // Отображение отзывов
-    const reviewsSlider = document.getElementById('reviews-slider');
-    const reviewDots = document.getElementById('review-dots');
-    const reviews = productData.reviews || [];
-    let currentReviewIndex = 0;
-
-    function updateReviewsSlider() {
-        if (reviews.length > 0) {
-            reviewsSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
-            updateReviewDots();
-        } else {
-            reviewsSlider.innerHTML = `<p>Отзывы отсутствуют</p>`;
-        }
-    }
-
-    function updateReviewDots() {
-        reviewDots.innerHTML = '';
-        reviews.forEach((_, index) => {
-            const dot = document.createElement('span');
-            dot.classList.add('dot');
-            if (index === currentReviewIndex) {
-                dot.classList.add('active');
-            }
-            dot.addEventListener('click', () => {
-                currentReviewIndex = index;
-                updateReviewsSlider();
-            });
-            reviewDots.appendChild(dot);
-        });
-    }
-
-    reviewsSlider.addEventListener('click', (event) => {
-        if (event.clientX < window.innerWidth / 2) {
-            currentReviewIndex = (currentReviewIndex - 1 + reviews.length) % reviews.length;
-        } else {
-            currentReviewIndex = (currentReviewIndex + 1) % reviews.length;
-        }
-        updateReviewsSlider();
-    });
-
-    updateReviewsSlider();
-
     // Обновление информации о продукте
+    const price = parseFloat(productData.price) || 0;
+    const oldPrice = parseFloat(productData.old_price) || 0;
+
     document.getElementById('product-name').textContent = productData.name;
-    document.getElementById('product-price').textContent = `${productData.price} ₽`;
-    if (productData.old_price) {
-        document.getElementById('product-old-price').textContent = `Старая цена: ${productData.old_price} ₽`;
+    document.getElementById('product-price').textContent = `${price.toFixed(2)} ₽`;
+
+    if (oldPrice > 0) {
+        document.getElementById('product-old-price').textContent = `Старая цена: ${oldPrice.toFixed(2)} ₽`;
     }
+
     document.getElementById('stock-status').textContent = productData.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
     document.getElementById('product-description').textContent = productData.description;
 
@@ -137,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     payButton.addEventListener('click', () => {
         if (productData.in_stock !== 'Да') {
             alert("Товар не в наличии");
-            return; // Прерываем выполнение, если товар не в наличии
+            return;
         }
 
         if (!modal) {
@@ -182,9 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.status === "success") {
                 modal.style.display = "none";
                 window.location.href = "https://t.me/QSale_iphone_bot";
-                console.log("Сверните окно");
-
-                
             } else {
                 alert(`Ошибка при отправке заказа: ${data.message}`);
             }
