@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => { 
     const urlParams = new URLSearchParams(window.location.search);
     const productData = JSON.parse(urlParams.get('product_data'));
 
@@ -135,6 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById("modal");
 
     payButton.addEventListener('click', () => {
+        if (productData.in_stock !== 'Да') {
+            alert("Товар не в наличии");
+            return; // Прерываем выполнение, если товар не в наличии
+        }
+
         if (!modal) {
             alert("Модальное окно не найдено.");
             return;
