@@ -4,23 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оформление заказа</title>
-    <link rel="stylesheet" href="order.css">
+    <link rel="stylesheet" href="./order.css">
 </head>
 <body>
 
 <div id="container">
     <!-- Слайдер изображений товара -->
-    <div id="image-slider" class="slider"></div>
+    <div id="image-slider" class="slider">
+        <span class="arrow left-arrow">&larr;</span>
+        <div id="image-content"></div>
+        <span class="arrow right-arrow">&rarr;</span>
+    </div>
 
     <!-- Заголовок для отзывов -->
     <h3>Отзывы:</h3>
-    <div id="reviews-slider" class="slider"></div>
+    <div id="reviews-slider" class="slider">
+        <span class="arrow left-arrow">&larr;</span>
+        <div id="reviews-content"></div>
+        <span class="arrow right-arrow">&rarr;</span>
+    </div>
 
     <!-- Информация о продукте -->
     <h2 id="product-name"></h2>
     <p id="product-price"></p>
     <p id="product-old-price"></p>
     <p id="product-description"></p>
+
+    <!-- Информация о доставке и безопасности -->
+    <div class="info-section">
+        <h3>Доставка</h3>
+        <p>Среднее время доставки 20–25 дней. После оплаты вы сможете отслеживать статусы доставки и получать уведомления об их изменении.</p>
+    </div>
+    <div class="info-section">
+        <h3>Страховка и безопасность</h3>
+        <p>В стоимость товара входит его полное страхование. Мы несем ответственность, чтобы вы получили свой заказ в целости и сохранности.</p>
+    </div>
+    <div class="info-section">
+        <h3>Строго оригинал</h3>
+        <p>Мы гарантируем, что все купленные товары в Unicorn оригинальные и прошли проверку на подлинность. Если по каким-то причинам у вас на руках окажется подделка — мы вернем деньги в двойном размере.</p>
+    </div>
 
     <!-- Кнопка перехода к оплате -->
     <button id="pay-button">Перейти к оплате</button>
@@ -31,34 +53,21 @@
             <span class="close">&times;</span>
             <h2>Введите ваши данные</h2>
             <form id="user-form">
-                <div class="form-group">
-                    <label for="full-name">ФИО:</label>
-                    <input type="text" id="full-name" placeholder="Введите ваше имя" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone-number">Номер телефона:</label>
-                    <input type="tel" id="phone-number" placeholder="+7 (999) 123-45-67" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Электронная почта:</label>
-                    <input type="email" id="email" placeholder="example@mail.com" required>
-                </div>
+                <label for="full-name">ФИО:</label>
+                <input type="text" id="full-name" placeholder="Введите ваше имя" required>
+                
+                <label for="phone-number">Номер телефона:</label>
+                <input type="tel" id="phone-number" placeholder="+7 (999) 123-45-67" required>
+                
+                <label for="email">Электронная почта:</label>
+                <input type="email" id="email" placeholder="example@mail.com" required>
+                
                 <button type="submit">Отправить заказ</button>
             </form>
         </div>
     </div>
-
-    <!-- Модальное окно для отображения ошибок -->
-    <div id="option-check-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-option-check">&times;</span>
-            <p id="option-check-message"></p>
-            <button id="close-option-check-button">Закрыть</button>
-        </div>
-    </div>
 </div>
 
-<!-- Подключение скрипта -->
 <script src="order.js"></script>
 </body>
 </html>
