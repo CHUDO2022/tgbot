@@ -1,115 +1,95 @@
-
-body {
-    background-color: #1e2a38;
-    color: #fff;
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
-/* Контейнер для содержимого */
+body {
+    background-color: #1c1f26;
+    color: #fff;
+}
+
 #container {
+    width: 90%;
+    margin: auto;
     max-width: 600px;
-    margin: 0 auto;
     padding: 20px;
 }
 
-/* Стили для заголовков */
-h2 {
-    color: #ffa500;
-    text-align: center;
-}
-
-h3 {
-    color: #ffa500;
-}
-
-/* Стили для слайдеров */
-.slider {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    border-radius: 8px;
+h2, h3 {
+    color: #ffb800;
     margin-bottom: 10px;
 }
 
-.slider img {
+.slider {
+    position: relative;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.slider-img {
     width: 100%;
-    height: auto;
     border-radius: 8px;
 }
 
-/* Стили для точек (индикаторов) */
+.slider-arrow-left, .slider-arrow-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ffb800;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.slider-arrow-left {
+    left: 10px;
+}
+
+.slider-arrow-right {
+    right: 10px;
+}
+
 .dots-container {
-    display: flex;
-    justify-content: center;
+    text-align: center;
     margin-top: 10px;
 }
 
 .dot {
-    width: 8px;
-    height: 8px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
     margin: 0 5px;
     background-color: #888;
     border-radius: 50%;
     cursor: pointer;
-    transition: background-color 0.3s;
+    opacity: 0.5;
 }
 
 .dot.active {
-    background-color: #ffa500; /* Цвет активной точки */
+    background-color: #ffb800;
+    opacity: 1;
 }
 
-/* Информация о товаре */
-#product-name {
-    font-size: 1.5em;
-    font-weight: bold;
-    text-align: center;
-}
-
-#product-price {
-    font-size: 1.2em;
-    color: #ffa500;
-    text-align: center;
-}
-
-/* Секции информации */
 .info-section {
-    background-color: #2b3a4a;
-    border-radius: 8px;
+    background-color: #2a2f3a;
     padding: 15px;
-    margin: 10px 0;
+    border-radius: 8px;
+    margin-bottom: 15px;
 }
 
-.info-section h3 {
-    color: #ffa500;
-    margin-top: 0;
-}
-
-/* Кнопка для перехода к оплате */
-#pay-button {
-    display: block;
+.pay-button {
     width: 100%;
     padding: 15px;
-    background-color: #ffa500;
-    color: #fff;
-    font-size: 1em;
-    text-align: center;
+    font-size: 18px;
+    background-color: #ffb800;
+    color: #1c1f26;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s;
 }
 
-#pay-button:hover {
-    background-color: #ff8c00;
-}
-
-/* Стили для модального окна */
 .modal {
     display: none;
     position: fixed;
@@ -118,26 +98,55 @@ h3 {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 .modal-content {
-    background-color: #2b3a4a;
+    background-color: #333;
     margin: 10% auto;
     padding: 20px;
-    border-radius: 8px;
+    width: 80%;
     max-width: 400px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.modal-content h2 {
+    color: #ffb800;
+}
+
+.modal-content label {
+    display: block;
+    margin-top: 10px;
+    color: #ffb800;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #1c1f26;
     color: #fff;
 }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+.modal-content button {
+    margin-top: 20px;
+    padding: 10px;
+    width: 100%;
+    background-color: #ffb800;
+    color: #1c1f26;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
 }
 
-.close:hover {
-    color: #fff;
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #ffb800;
+    font-size: 24px;
+    cursor: pointer;
 }
