@@ -10,39 +10,32 @@
 
 <div id="container">
     <!-- Слайдер изображений товара -->
-    <div id="image-slider" class="slider">
-        <div id="left-arrow" class="slider-arrow">&#10094;</div>
-        <img src="placeholder.jpg" class="slider-img" alt="Product Image">
-        <div id="right-arrow" class="slider-arrow">&#10095;</div>
-        <div id="dots-container"></div>
-    </div>
+    <div id="image-slider" class="slider"></div>
+    <div id="image-dots-container" class="dots-container"></div>
 
     <!-- Информация о продукте -->
-    <h2 id="product-name"></h2>
-    <p id="product-price"></p>
-    <p id="product-description"></p>
+    <h2 id="product-name">Название продукта</h2>
+    <p id="product-price">Цена</p>
+    <p id="product-description">Описание товара</p>
 
-    <!-- Информация о доставке и безопасности -->
+    <!-- Дополнительная информация о доставке и безопасности -->
     <div class="info-section">
         <h3>Доставка</h3>
-        <p>Среднее время доставки 20–25 дней. После оплаты вы сможете отслеживать статусы доставки.</p>
+        <p>Среднее время доставки 20–25 дней. После оплаты вы сможете отслеживать статусы доставки и получать уведомления об их изменении.</p>
     </div>
     <div class="info-section">
         <h3>Страховка и безопасность</h3>
-        <p>В стоимость товара входит его полное страхование. Мы несем ответственность за ваш заказ.</p>
+        <p>В стоимость товара входит его полное страхование. Мы несем ответственность, чтобы вы получили свой заказ в целости и сохранности.</p>
     </div>
     <div class="info-section">
         <h3>Строго оригинал</h3>
-        <p>Мы гарантируем подлинность товаров. В случае подделки — возврат денег в двойном размере.</p>
+        <p>Мы гарантируем, что все купленные товары в Unicorn оригинальные и прошли проверку на подлинность. Если по каким-то причинам у вас на руках окажется подделка — мы вернем деньги в двойном размере.</p>
     </div>
 
-    <!-- Отзывы -->
-    <div class="reviews">
-        <h3>Отзывы:</h3>
-        <div id="reviews-slider" class="slider">
-            <div id="review-dots-container"></div>
-        </div>
-    </div>
+    <!-- Слайдер отзывов -->
+    <h3>Отзывы:</h3>
+    <div id="reviews-slider" class="slider"></div>
+    <div id="reviews-dots-container" class="dots-container"></div>
 
     <!-- Кнопка перехода к оплате -->
     <button id="pay-button">Перейти к оплате</button>
