@@ -201,16 +201,3 @@ button[type="submit"]:hover {
 #right-arrow {
     right: 10px;
 }
-
-/* Дополнительные стили для отзывов */
-#reviews-slider {
-    margin-top: 20px;
-}
-
-#reviews-slider .slider-img {
-    max-height: 150px;
-}
-
-#review-dots-container {
-    margin-top: 10px;
-}
