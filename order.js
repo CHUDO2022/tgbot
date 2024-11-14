@@ -1,73 +1,60 @@
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const productData = JSON.parse(urlParams.get('product_data'));
-
-    if (!productData) {
-        alert("Нет данных о продукте в URL");
-        return;
-    }
-
     const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
-    if (!telegramUser) {
-        alert("Данные пользователя не найдены.");
+    // Проверка наличия данных о продукте и пользователе
+    if (!productData || !telegramUser) {
+        alert("Ошибка: нет данных о продукте или пользователе.");
         return;
     }
 
-
+    // Элементы слайдера и данных
     const imageSlider = document.getElementById('image-slider');
+    const imageDots = document.getElementById('image-dots');
     const reviewsSlider = document.getElementById('reviews-slider');
-    const imageContent = document.getElementById('image-content');
-    const reviewsContent = document.getElementById('reviews-content');
+    const reviewsDots = document.getElementById('reviews-dots');
     const images = productData.images || [];
     const reviews = productData.reviews || [];
     let currentImageIndex = 0;
     let currentReviewIndex = 0;
 
-    // Обновление слайдера изображений
-    function updateImageSlider() {
-        if (images.length > 0) {
-            imageContent.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
-        } else {
-            imageContent.innerHTML = `<p>Изображения отсутствуют</p>`;
-        }
+    // Функция обновления слайдера
+    function updateSlider(slider, dots, items, currentIndex) {
+        slider.innerHTML = `<img src="${items[currentIndex]}" class="slider-img">`;
+        dots.innerHTML = items.map((_, index) =>
+            `<div class="dot ${index === currentIndex ? 'active' : ''}" data-index="${index}"></div>`
+        ).join('');
     }
 
-    // Обновление слайдера отзывов
-    function updateReviewsSlider() {
-        if (reviews.length > 0) {
-            reviewsContent.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
-        } else {
-            reviewsContent.innerHTML = `<p>Отзывы отсутствуют</p>`;
-        }
+    // Обработчик кликов по точкам
+    function addDotClickHandler(dots, updateFunction) {
+        dots.addEventListener('click', (event) => {
+            const index = event.target.getAttribute('data-index');
+            if (index !== null) {
+                updateFunction(parseInt(index, 10));
+            }
+        });
     }
 
-    updateImageSlider();
-    updateReviewsSlider();
+    // Функции обновления изображений и отзывов
+    function updateImage(index) {
+        currentImageIndex = index;
+        updateSlider(imageSlider, imageDots, images, currentImageIndex);
+    }
 
-    // Обработчики стрелок для слайдера изображений
-    document.querySelector('.left-arrow').addEventListener('click', () => {
-        currentImageIndex = (currentImageIndex === 0) ? images.length - 1 : currentImageIndex - 1;
-        updateImageSlider();
-    });
+    function updateReview(index) {
+        currentReviewIndex = index;
+        updateSlider(reviewsSlider, reviewsDots, reviews, currentReviewIndex);
+    }
 
-    document.querySelector('.right-arrow').addEventListener('click', () => {
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-        updateImageSlider();
-    });
+    // Инициализация слайдеров
+    updateImage(0);
+    updateReview(0);
+    addDotClickHandler(imageDots, updateImage);
+    addDotClickHandler(reviewsDots, updateReview);
 
-    // Обработчики стрелок для слайдера отзывов
-    document.querySelector('.left-arrow').addEventListener('click', () => {
-        currentReviewIndex = (currentReviewIndex === 0) ? reviews.length - 1 : currentReviewIndex - 1;
-        updateReviewsSlider();
-    });
-
-    document.querySelector('.right-arrow').addEventListener('click', () => {
-        currentReviewIndex = (currentReviewIndex + 1) % reviews.length;
-        updateReviewsSlider();
-    });
-
-    // Отображение информации о продукте
+    // Заполнение информации о продукте
     document.getElementById('product-name').textContent = productData.name;
     document.getElementById('product-price').textContent = `${productData.price} ₽`;
     document.getElementById('product-description').textContent = productData.description;
@@ -84,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = "block";
     });
 
+    // Закрытие модального окна
     document.querySelector(".close").addEventListener('click', () => {
         modal.style.display = "none";
     });
@@ -107,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
+        // Отправка данных заказа на сервер
         fetch('https://gadgetmark.ru/validate-order', {
             method: 'POST',
             headers: {
@@ -125,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             alert("Произошла ошибка при отправке заказа.");
-            console.error('Error:', error);
+            console.error('Ошибка:', error);
         });
     });
 });
