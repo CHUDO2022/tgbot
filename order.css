@@ -1,4 +1,4 @@
-/* Основные стили */
+/* Общие стили для страницы оформления заказа */
 body {
     font-family: Arial, sans-serif;
     background-color: #202225;
@@ -20,7 +20,14 @@ h2, h3 {
     color: #f39c12;
 }
 
-/* Оформление цены */
+/* Стили для блока цены */
+.price {
+    font-size: 1.5em;
+    color: #f39c12;
+    margin: 10px 0;
+}
+
+/* Стили для блока новой и старой цены */
 .product-price {
     display: flex;
     flex-direction: column;
@@ -31,7 +38,7 @@ h2, h3 {
 .current-price {
     color: #ffd700; /* Яркий оттенок золота */
     font-weight: bold;
-    font-size: 1.6em; /* Небольшое выделение */
+    font-size: 1.6em; /* Уменьшенный размер */
 }
 
 .old-price {
@@ -42,7 +49,106 @@ h2, h3 {
     margin-top: 5px;
 }
 
-/* Модальное окно */
+.stock-status {
+    color: #f39c12;
+    font-weight: bold;
+}
+
+/* Стили для описания товара */
+#product-description {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* Стили для карточки продукта */
+.product-card {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 300px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.product-name {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.availability {
+    color: #ff6600;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.product-description {
+    font-size: 16px;
+    color: #ccc;
+    margin-top: 10px;
+}
+
+/* Стили для блока информации */
+.info-section {
+    background-color: #393e46;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.info-section h3 {
+    margin-top: 0;
+}
+
+/* Стили для слайдера изображений */
+.slider {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.slider img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.dots {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.dots .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 5px;
+    background-color: #9e9e9e;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.dots .dot.active {
+    background-color: #f39c12;
+}
+
+/* Стили для кнопки оплаты */
+#pay-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #f39c12;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: background-color 0.3s;
+}
+
+#pay-button:hover {
+    background-color: #e08e0b;
+}
+
+/* Стили для модальных окон */
 .modal {
     display: none;
     position: fixed;
@@ -51,6 +157,7 @@ h2, h3 {
     top: 0;
     width: 100%;
     height: 100%;
+    overflow: auto;
     background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
@@ -59,34 +166,37 @@ h2, h3 {
 
 .modal-content {
     background-color: #2f3136;
+    margin: auto;
     padding: 20px;
     border-radius: 10px;
-    width: 90%;
+    width: 80%;
     max-width: 400px;
+    position: relative;
     color: #ffffff;
     text-align: center;
-    position: relative;
 }
 
 .close {
     color: #aaaaaa;
     position: absolute;
-    right: 15px;
+    right: 20px;
     top: 10px;
     font-size: 1.5em;
+    font-weight: bold;
     cursor: pointer;
 }
 
-.close:hover {
+.close:hover,
+.close:focus {
     color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-/* Стили для формы */
+/* Стили для формы заказа */
 #user-form label {
     display: block;
     margin: 10px 0 5px;
-    text-align: left;
-    font-weight: bold;
 }
 
 #user-form input {
@@ -120,9 +230,35 @@ h2, h3 {
     background-color: #e08e0b;
 }
 
-/* Стили для мобильных устройств */
+/* Стили для отзывов */
+#reviews-slider {
+    margin-bottom: 15px;
+}
+
+.review-slide {
+    text-align: center;
+}
+
+.review-slide img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+/* Адаптация под смартфоны */
 @media (max-width: 600px) {
     .modal-content {
-        width: 90%;
+        width: 95%;
+    }
+
+    #container {
+        padding: 10px;
+    }
+
+    #user-form input {
+        width: calc(100% - 10px);
+    }
+
+    #user-form button {
+        padding: 12px;
     }
 }
