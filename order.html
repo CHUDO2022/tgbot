@@ -1,25 +1,60 @@
-<div id="image-slider" class="slider"></div>
-<h3>Отзывы:</h3>
-<div id="reviews-slider" class="slider"></div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-<h2 id="product-name"></h2>
-<p id="product-price"></p>
-<p id="product-description"></p>
+<div id="container">
+    <!-- Слайдер изображений товара -->
+    <div id="image-slider" class="slider"></div>
 
-<button id="pay-button">Перейти к оплате</button>
+    <!-- Заголовок для отзывов -->
+    <h3>Отзывы:</h3>
+    <div id="reviews-slider" class="slider"></div>
 
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Введите ваши данные</h2>
-        <form id="user-form">
-            <label for="full-name">ФИО:</label>
-            <input type="text" id="full-name" required>
-            <label for="phone-number">Номер телефона:</label>
-            <input type="text" id="phone-number" required>
-            <label for="email">Электронная почта:</label>
-            <input type="email" id="email" required>
-            <button type="submit">Отправить заказ</button>
-        </form>
+    <!-- Информация о продукте -->
+    <h2 id="product-name"></h2>
+    <p id="product-price"></p>
+    <p id="product-old-price"></p>
+    <p id="product-description"></p>
+
+    <!-- Кнопка перехода к оплате -->
+    <button id="pay-button">Перейти к оплате</button>
+
+    <!-- Модальное окно для ввода данных пользователя -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Введите ваши данные</h2>
+            <form id="user-form">
+                <label for="full-name">ФИО:</label>
+                <input type="text" id="full-name" placeholder="Введите ваше имя" required>
+                
+                <label for="phone-number">Номер телефона:</label>
+                <input type="tel" id="phone-number" placeholder="+7 (999) 123-45-67" required>
+                
+                <label for="email">Электронная почта:</label>
+                <input type="email" id="email" placeholder="example@mail.com" required>
+                
+                <button type="submit">Отправить заказ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно для проверки опций -->
+    <div id="option-check-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-option-check">&times;</span>
+            <p id="option-check-message"></p>
+            <button id="close-option-check-button">Закрыть</button>
+        </div>
     </div>
 </div>
+
+<script src="order.js"></script>
+</body>
+</html>
