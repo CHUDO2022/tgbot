@@ -20,6 +20,7 @@ h2, h3 {
     color: #f39c12;
 }
 
+/* Стили для блока цены */
 .price {
     font-size: 1.5em;
     color: #f39c12;
@@ -42,6 +43,54 @@ h2, h3 {
     line-height: 1.6;
 }
 
+/* Стили для карточки продукта */
+.product-card {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 300px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.product-name {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.product-price {
+    font-size: 20px;
+    color: #ffcc00;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.current-price {
+    font-weight: bold;
+}
+
+.old-price {
+    font-size: 16px;
+    color: #aaa;
+    text-decoration: line-through;
+}
+
+.availability {
+    color: #ff6600;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.product-description {
+    font-size: 16px;
+    color: #ccc;
+    margin-top: 10px;
+}
+
+/* Стили для блока информации */
 .info-section {
     background-color: #393e46;
     padding: 15px;
