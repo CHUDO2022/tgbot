@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Отображение изображений товара и отзывов
+
     const imageSlider = document.getElementById('image-slider');
     const reviewsSlider = document.getElementById('reviews-slider');
     const imageContent = document.getElementById('image-content');
