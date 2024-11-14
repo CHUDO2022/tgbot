@@ -1,75 +1,81 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Инициализация страницы оформления заказа");
-
     const urlParams = new URLSearchParams(window.location.search);
     const productData = JSON.parse(urlParams.get('product_data'));
+
+    if (!productData) {
+        alert("Нет данных о продукте в URL");
+        return;
+    }
+
     const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
-    // Проверка данных продукта и пользователя
-    if (!productData) {
-        alert("Ошибка: нет данных о продукте.");
-        console.error("Нет данных о продукте в URL.");
+    if (!telegramUser) {
+        alert("Данные пользователя не найдены.");
         return;
     }
 
-    if (!telegramUser || !telegramUser.id) {
-        alert("Ошибка: данные пользователя не загружены.");
-        console.error("Данные пользователя не найдены в localStorage.");
-        return;
+    // Отображение изображений товара
+    const imageSlider = document.getElementById('image-slider');
+    const reviewsSlider = document.getElementById('reviews-slider');
+    const images = productData.images || [];
+    const reviews = productData.reviews || [];
+    let currentImageIndex = 0;
+    let currentReviewIndex = 0;
+
+    function updateImageSlider() {
+        if (images.length > 0) {
+            imageSlider.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
+        } else {
+            imageSlider.innerHTML = `<p>Изображения отсутствуют</p>`;
+        }
     }
+
+    function updateReviewsSlider() {
+        if (reviews.length > 0) {
+            reviewsSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
+        } else {
+            reviewsSlider.innerHTML = `<p>Отзывы отсутствуют</p>`;
+        }
+    }
+
+    updateImageSlider();
+    updateReviewsSlider();
+
+    // Обработчики для слайдера изображений
+    imageSlider.addEventListener('click', () => {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        updateImageSlider();
+    });
+
+    // Обработчики для слайдера отзывов
+    reviewsSlider.addEventListener('click', () => {
+        currentReviewIndex = (currentReviewIndex + 1) % reviews.length;
+        updateReviewsSlider();
+    });
 
     // Заполняем информацию о продукте
-    const productImg = document.getElementById('product-img');
-    const productName = document.getElementById('product-name');
-    const productPrice = document.getElementById('product-price');
-    const productDescription = document.getElementById('product-description');
+    document.getElementById('product-name').textContent = productData.name;
+    document.getElementById('product-price').textContent = `${productData.price} ₽`;
+    document.getElementById('product-description').textContent = productData.description;
 
-    if (productImg) productImg.src = productData.image;
-    if (productName) productName.textContent = productData.name;
-    if (productPrice) productPrice.textContent = `${productData.price} ₽`;
-    if (productDescription) productDescription.textContent = productData.description;
-
-    // Получаем элементы модального окна и кнопки
-    const payButton = document.getElementById("pay-button");
+    // Обработка кнопки "Перейти к оплате"
+    const payButton = document.getElementById('pay-button');
     const modal = document.getElementById("modal");
-    const closeModal = document.querySelector(".close");
 
-    // Проверка существования элементов
-    if (!payButton) {
-        alert("Кнопка 'Перейти к оплате' не найдена.");
-        console.error("Элемент с id 'pay-button' отсутствует в HTML.");
-        return;
-    }
-
-    if (!modal) {
-        alert("Модальное окно не найдено.");
-        console.error("Элемент с id 'modal' отсутствует в HTML.");
-        return;
-    }
-
-    if (!closeModal) {
-        alert("Кнопка закрытия модального окна не найдена.");
-        console.error("Элемент с классом 'close' отсутствует в HTML.");
-        return;
-    }
-
-    // Обработчик нажатия кнопки "Перейти к оплате"
     payButton.addEventListener('click', () => {
-        console.log("Нажата кнопка 'Перейти к оплате'. Проверяем данные перед открытием модального окна:");
-        console.log("Product ID:", productData.id);
-        console.log("User ID:", telegramUser.id);
-
+        if (!modal) {
+            alert("Модальное окно не найдено.");
+            return;
+        }
         modal.style.display = "block";
     });
 
-    // Закрытие модального окна
-    closeModal.addEventListener('click', () => {
-        console.log("Нажата кнопка закрытия модального окна.");
+    document.querySelector(".close").addEventListener('click', () => {
         modal.style.display = "none";
     });
 
     // Обработка отправки формы
-    document.getElementById("user-form").addEventListener("submit", function(event) {
+    document.getElementById("user-form").addEventListener("submit", (event) => {
         event.preventDefault();
 
         const fullName = document.getElementById("full-name").value;
@@ -87,8 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        console.log("Отправляем данные заказа:", orderData);
-
         fetch('https://gadgetmark.ru/validate-order', {
             method: 'POST',
             headers: {
@@ -98,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log("Ответ сервера:", data);
             if (data.status === "success") {
                 modal.style.display = "none";
                 window.location.href = "https://t.me/QSale_iphone_bot";
@@ -108,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             alert("Произошла ошибка при отправке заказа.");
-            console.error('Ошибка:', error);
+            console.error('Error:', error);
         });
     });
 });
