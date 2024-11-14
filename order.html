@@ -4,44 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оформление заказа</title>
-    <link rel="stylesheet" href="./order.css">
+    <link rel="stylesheet" href="order.css">
 </head>
 <body>
 
 <div id="container">
-
+    <!-- Слайдер изображений товара -->
     <div id="image-slider" class="slider">
-        <span class="arrow left-arrow">&larr;</span>
-        <div id="image-content"></div>
-        <span class="arrow right-arrow">&rarr;</span>
-    </div>
-
-    <!-- Заголовок для отзывов -->
-    <h3>Отзывы:</h3>
-    <div id="reviews-slider" class="slider">
-        <span class="arrow left-arrow">&larr;</span>
-        <div id="reviews-content"></div>
-        <span class="arrow right-arrow">&rarr;</span>
+        <div id="image-dots" class="dots"></div>
     </div>
 
     <!-- Информация о продукте -->
     <h2 id="product-name"></h2>
     <p id="product-price"></p>
-    <p id="product-old-price"></p>
     <p id="product-description"></p>
 
-    <!-- Информация о доставке и безопасности -->
+    <!-- Дополнительная информация -->
     <div class="info-section">
         <h3>Доставка</h3>
-        <p>Среднее время доставки 20–25 дней. После оплаты вы сможете отслеживать статусы доставки и получать уведомления об их изменении.</p>
+        <p>Среднее время доставки 20–25 дней. После оплаты вы сможете отслеживать статусы доставки.</p>
     </div>
     <div class="info-section">
         <h3>Страховка и безопасность</h3>
-        <p>В стоимость товара входит его полное страхование. Мы несем ответственность, чтобы вы получили свой заказ в целости и сохранности.</p>
+        <p>В стоимость товара входит полное страхование. Мы несем ответственность за ваш заказ.</p>
     </div>
     <div class="info-section">
         <h3>Строго оригинал</h3>
-        <p>Мы гарантируем, что все купленные товары в Unicorn оригинальные и прошли проверку на подлинность. Если по каким-то причинам у вас на руках окажется подделка — мы вернем деньги в двойном размере.</p>
+        <p>Мы гарантируем подлинность товаров. В случае подделки — возврат денег в двойном размере.</p>
+    </div>
+
+    <!-- Отзывы -->
+    <div id="reviews-section">
+        <h3>Отзывы:</h3>
+        <div id="reviews-slider" class="slider">
+            <div id="reviews-dots" class="dots"></div>
+        </div>
     </div>
 
     <!-- Кнопка перехода к оплате -->
