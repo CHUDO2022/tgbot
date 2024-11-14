@@ -27,10 +27,28 @@ h2, h3 {
     margin: 10px 0;
 }
 
+/* Стили для блока новой и старой цены */
+.product-price {
+    font-size: 1.8em;
+    color: #ffcc00;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.current-price {
+    color: #ffd700; /* более яркий оттенок золота */
+    font-weight: bold;
+    font-size: 1.8em;
+}
+
 .old-price {
-    text-decoration: line-through;
+    font-size: 1em;
     color: #9e9e9e;
-    margin: 5px 0;
+    text-decoration: line-through;
+    opacity: 0.7;
 }
 
 .stock-status {
@@ -38,6 +56,7 @@ h2, h3 {
     font-weight: bold;
 }
 
+/* Стили для описания товара */
 #product-description {
     margin-bottom: 20px;
     line-height: 1.6;
@@ -57,25 +76,6 @@ h2, h3 {
 .product-name {
     font-size: 24px;
     font-weight: bold;
-}
-
-.product-price {
-    font-size: 20px;
-    color: #ffcc00;
-    display: flex;
-    justify-content: center;
-    align-items: baseline;
-    gap: 10px;
-}
-
-.current-price {
-    font-weight: bold;
-}
-
-.old-price {
-    font-size: 16px;
-    color: #aaa;
-    text-decoration: line-through;
 }
 
 .availability {
