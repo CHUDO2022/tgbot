@@ -1,57 +1,25 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Оформление заказа</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+<div id="image-slider" class="slider"></div>
+<h3>Отзывы:</h3>
+<div id="reviews-slider" class="slider"></div>
 
-    <!-- Слайдер изображений товара -->
-    <div id="image-slider" class="slider"></div>
+<h2 id="product-name"></h2>
+<p id="product-price"></p>
+<p id="product-description"></p>
 
-    <!-- Название товара -->
-    <h2 id="product-name"></h2>
+<button id="pay-button">Перейти к оплате</button>
 
-    <!-- Цена и старая цена -->
-    <p id="product-price"></p>
-    <p id="product-old-price" class="old-price"></p>
-
-    <!-- Наличие товара -->
-    <p id="stock-status"></p>
-
-    <!-- Описание товара -->
-    <p id="product-description"></p>
-
-    <!-- Слайдер отзывов -->
-    <h3>Отзывы:</h3>
-    <div id="reviews-slider" class="slider"></div>
-
-    <!-- Кнопка перехода к оплате -->
-    <button id="pay-button">Перейти к оплате</button>
-
-    <!-- Модальное окно оформления заказа -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Введите ваши данные</h2>
-            <form id="user-form">
-                <label for="full-name">ФИО:</label>
-                <input type="text" id="full-name" name="full-name" required>
-
-                <label for="phone-number">Номер телефона:</label>
-                <input type="tel" id="phone-number" name="phone-number" required>
-
-                <label for="email">Электронная почта:</label>
-                <input type="email" id="email" name="email" required>
-
-                <button type="submit">Отправить заказ</button>
-            </form>
-        </div>
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Введите ваши данные</h2>
+        <form id="user-form">
+            <label for="full-name">ФИО:</label>
+            <input type="text" id="full-name" required>
+            <label for="phone-number">Номер телефона:</label>
+            <input type="text" id="phone-number" required>
+            <label for="email">Электронная почта:</label>
+            <input type="email" id="email" required>
+            <button type="submit">Отправить заказ</button>
+        </form>
     </div>
-
-
-    <script src="order.js"></script>
-</body>
-</html>
+</div>
