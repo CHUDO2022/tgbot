@@ -14,82 +14,74 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Инициализация слайдера изображений
     const imageSlider = document.getElementById('image-slider');
-    const reviewsSlider = document.getElementById('reviews-slider');
-    const dotsContainer = document.getElementById('dots-container');
-    const reviewDotsContainer = document.getElementById('review-dots-container');
+    const imageDotsContainer = document.getElementById('image-dots-container');
     const images = productData.images || [];
-    const reviews = productData.reviews || [];
     let currentImageIndex = 0;
+
+    function updateImageSlider() {
+        imageSlider.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
+        updateDots(imageDotsContainer, images.length, currentImageIndex, (index) => {
+            currentImageIndex = index;
+            updateImageSlider();
+        });
+    }
+
+    // Инициализация слайдера отзывов
+    const reviewsSlider = document.getElementById('reviews-slider');
+    const reviewsDotsContainer = document.getElementById('reviews-dots-container');
+    const reviews = productData.reviews || [];
     let currentReviewIndex = 0;
 
-    // Функция обновления слайдера изображений
-    function updateImageSlider() {
-        if (images.length > 0) {
-            imageSlider.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
-            updateDots(dotsContainer, images.length, currentImageIndex);
-        } else {
-            imageSlider.innerHTML = `<p>Изображения отсутствуют</p>`;
-        }
-    }
-
-    // Функция обновления слайдера отзывов
     function updateReviewsSlider() {
-        if (reviews.length > 0) {
-            reviewsSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
-            updateDots(reviewDotsContainer, reviews.length, currentReviewIndex);
-        } else {
-            reviewsSlider.innerHTML = `<p>Отзывы отсутствуют</p>`;
-        }
+        reviewsSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
+        updateDots(reviewsDotsContainer, reviews.length, currentReviewIndex, (index) => {
+            currentReviewIndex = index;
+            updateReviewsSlider();
+        });
     }
 
-    // Функция обновления точек
-    function updateDots(container, count, activeIndex) {
-        container.innerHTML = '';
-        for (let i = 0; i < count; i++) {
+    // Функция для создания точек и привязки к текущему слайдеру
+    function updateDots(dotsContainer, itemCount, activeIndex, onClick) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < itemCount; i++) {
             const dot = document.createElement('div');
             dot.classList.add('dot');
-            if (i === activeIndex) dot.classList.add('active');
-            dot.addEventListener('click', () => {
-                if (container === dotsContainer) {
-                    currentImageIndex = i;
-                    updateImageSlider();
-                } else {
-                    currentReviewIndex = i;
-                    updateReviewsSlider();
-                }
-            });
-            container.appendChild(dot);
+            if (i === activeIndex) {
+                dot.classList.add('active');
+            }
+            dot.addEventListener('click', () => onClick(i));
+            dotsContainer.appendChild(dot);
         }
     }
 
-    // Обработчики для навигации изображений
-    imageSlider.addEventListener('click', (e) => {
-        const clickX = e.clientX;
-        const sliderWidth = imageSlider.clientWidth;
-        if (clickX < sliderWidth / 2) {
-            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-        } else {
-            currentImageIndex = (currentImageIndex + 1) % images.length;
-        }
-        updateImageSlider();
-    });
+    // Добавление свайпа для слайдера изображений
+    function handleSwipe(sliderElement, updateFunction, items, currentIndexRef) {
+        let startX = 0;
 
-    // Обработчики для навигации отзывов
-    reviewsSlider.addEventListener('click', (e) => {
-        const clickX = e.clientX;
-        const sliderWidth = reviewsSlider.clientWidth;
-        if (clickX < sliderWidth / 2) {
-            currentReviewIndex = (currentReviewIndex - 1 + reviews.length) % reviews.length;
-        } else {
-            currentReviewIndex = (currentReviewIndex + 1) % reviews.length;
-        }
-        updateReviewsSlider();
-    });
+        sliderElement.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
 
-    // Инициализация слайдеров
+        sliderElement.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            if (startX - endX > 50) {
+                currentIndexRef.value = (currentIndexRef.value + 1) % items.length;
+            } else if (endX - startX > 50) {
+                currentIndexRef.value = (currentIndexRef.value - 1 + items.length) % items.length;
+            }
+            updateFunction();
+        });
+    }
+
+    // Устанавливаем начальные значения слайдеров и точек
     updateImageSlider();
     updateReviewsSlider();
+
+    // Настройка свайпов
+    handleSwipe(imageSlider, updateImageSlider, images, { value: currentImageIndex });
+    handleSwipe(reviewsSlider, updateReviewsSlider, reviews, { value: currentReviewIndex });
 
     // Обновление информации о продукте
     document.getElementById('product-name').textContent = productData.name;
