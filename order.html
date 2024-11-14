@@ -10,15 +10,18 @@
 
 <div id="container">
     <!-- Слайдер изображений товара -->
-    <div id="image-slider" class="slider"></div>
-    <div id="image-dots-container" class="dots-container"></div>
+    <div id="image-slider" class="slider">
+        <div class="slider-arrow-left">&larr;</div>
+        <div class="slider-arrow-right">&rarr;</div>
+    </div>
+    <div id="image-dots" class="dots-container"></div>
 
     <!-- Информация о продукте -->
-    <h2 id="product-name">Название продукта</h2>
-    <p id="product-price">Цена</p>
-    <p id="product-description">Описание товара</p>
+    <h2 id="product-name"></h2>
+    <p id="product-price"></p>
+    <p id="product-description"></p>
 
-
+    <!-- Дополнительная информация о доставке, страховке и подлинности -->
     <div class="info-section">
         <h3>Доставка</h3>
         <p>Среднее время доставки 20–25 дней. После оплаты вы сможете отслеживать статусы доставки и получать уведомления об их изменении.</p>
@@ -29,16 +32,19 @@
     </div>
     <div class="info-section">
         <h3>Строго оригинал</h3>
-        <p>Мы гарантируем, что все купленные товары в Unicorn оригинальные и прошли проверку на подлинность. Если по каким-то причинам у вас на руках окажется подделка — мы вернем деньги в двойном размере.</p>
+        <p>Мы гарантируем, что все купленные товары оригинальные и прошли проверку на подлинность. В случае подделки вернем деньги в двойном размере.</p>
     </div>
 
     <!-- Слайдер отзывов -->
     <h3>Отзывы:</h3>
-    <div id="reviews-slider" class="slider"></div>
-    <div id="reviews-dots-container" class="dots-container"></div>
+    <div id="reviews-slider" class="slider">
+        <div class="slider-arrow-left">&larr;</div>
+        <div class="slider-arrow-right">&rarr;</div>
+    </div>
+    <div id="review-dots" class="dots-container"></div>
 
     <!-- Кнопка перехода к оплате -->
-    <button id="pay-button">Перейти к оплате</button>
+    <button id="pay-button" class="pay-button">Перейти к оплате</button>
 
     <!-- Модальное окно для ввода данных пользователя -->
     <div id="modal" class="modal">
