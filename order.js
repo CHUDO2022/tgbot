@@ -60,15 +60,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const price = parseFloat(productData.price) || 0;
     const oldPrice = parseFloat(productData.old_price) || 0;
 
-    document.getElementById('product-name').textContent = productData.name;
-    document.getElementById('product-price').textContent = `${price.toFixed(2)} ₽`;
+    document.getElementById('product-name').textContent = productData.name || 'Название отсутствует';
+    document.getElementById('product-price').textContent = isNaN(price) ? 'Цена не указана' : `${price.toFixed(2)} ₽`;
 
-    if (oldPrice > 0) {
+    if (!isNaN(oldPrice) && oldPrice > 0) {
         document.getElementById('product-old-price').textContent = `Старая цена: ${oldPrice.toFixed(2)} ₽`;
+    } else {
+        document.getElementById('product-old-price').textContent = '';
     }
 
     document.getElementById('stock-status').textContent = productData.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
-    document.getElementById('product-description').textContent = productData.description;
+    document.getElementById('product-description').textContent = productData.description || 'Описание отсутствует';
 
     // Обработка кнопки "Перейти к оплате"
     const payButton = document.getElementById('pay-button');
