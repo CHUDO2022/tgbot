@@ -1,79 +1,206 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Оформление заказа</title>
-    <link rel="stylesheet" href="order.css">
-</head>
-<body>
+/* Основные стили */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
 
-<div id="container">
-    <!-- Слайдер изображений товара -->
-    <div id="image-slider" class="slider"></div>
-    <div id="image-dots" class="dots-container"></div> <!-- Точки для слайдера изображений -->
+#container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-    <!-- Информация о продукте -->
-    <h2 id="product-name"></h2>
-    <p id="product-price"></p>
-    <p id="product-old-price"></p>
-    <p id="stock-status"></p>
-    <p id="product-description"></p>
+/* Слайдер изображений и отзывов */
+.slider {
+    position: relative;
+    text-align: center;
+    margin-bottom: 15px;
+}
 
-    <!-- Информация о доставке и безопасности -->
-    <div class="info-section">
-        <h3>Доставка</h3>
-        <p>Среднее время доставки 20–25 дней. После оплаты вы сможете отслеживать статусы доставки и получать уведомления об их изменении.</p>
-    </div>
-    <div class="info-section">
-        <h3>Страховка и безопасность</h3>
-        <p>В стоимость товара входит его полное страхование. Мы несем ответственность, чтобы вы получили свой заказ в целости и сохранности.</p>
-    </div>
-    <div class="info-section">
-        <h3>Строго оригинал</h3>
-        <p>Мы гарантируем, что все купленные товары в Unicorn оригинальные и прошли проверку на подлинность. Если по каким-то причинам у вас на руках окажется подделка — мы вернем деньги в двойном размере.</p>
-    </div>
+.slider img {
+    max-width: 100%;
+    border-radius: 8px;
+}
 
-    <!-- Слайдер отзывов -->
-    <div class="reviews">
-        <h3>Отзывы</h3>
-        <div id="reviews-slider" class="slider"></div>
-        <div id="review-dots" class="dots-container"></div> <!-- Точки для слайдера отзывов -->
-    </div>
+/* Точки-индикаторы */
+.dots-container {
+    text-align: center;
+    margin-top: 10px;
+}
 
-    <!-- Кнопка перехода к оплате -->
-    <button id="pay-button">Перейти к оплате</button>
+.dots-container .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background-color: #666;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-    <!-- Модальное окно для ввода данных пользователя -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Введите ваши данные</h2>
-            <form id="user-form">
-                <label for="full-name">ФИО:</label>
-                <input type="text" id="full-name" placeholder="Введите ваше имя" required>
-                
-                <label for="phone-number">Номер телефона:</label>
-                <input type="tel" id="phone-number" placeholder="+7 (999) 123-45-67" required>
-                
-                <label for="email">Электронная почта:</label>
-                <input type="email" id="email" placeholder="example@mail.com" required>
-                
-                <button type="submit">Отправить заказ</button>
-            </form>
-        </div>
-    </div>
+.dots-container .dot.active {
+    background-color: #ffa500; /* Оранжевый цвет для активной точки */
+}
 
-    <!-- Модальное окно для оповещений -->
-    <div id="option-check-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-option-check">&times;</span>
-            <p id="option-check-message"></p>
-            <button id="close-option-check-button">Закрыть</button>
-        </div>
-    </div>
-</div>
+/* Информация о продукте */
+#product-name {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
 
-<script src="order.js"></script>
-</body>
-</html>
+#product-price {
+    font-size: 20px;
+    color: #ffa500;
+    text-align: center;
+}
+
+#product-old-price {
+    font-size: 16px;
+    color: #888;
+    text-align: center;
+    text-decoration: line-through;
+}
+
+#stock-status {
+    font-size: 16px;
+    color: #ffa500;
+    text-align: center;
+}
+
+/* Информационные секции */
+.info-section {
+    background-color: #2c2c2c;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.info-section h3 {
+    color: #ffa500;
+    margin-top: 0;
+}
+
+.reviews {
+    margin-top: 20px;
+}
+
+#pay-button {
+    display: block;
+    width: 100%;
+    background-color: #ffa500;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 15px;
+}
+
+#pay-button:hover {
+    background-color: #e69500;
+}
+
+/* Модальные окна */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #333;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    color: #fff;
+    position: relative;
+}
+
+.modal-content h2 {
+    color: #ffa500;
+    text-align: center;
+}
+
+.modal-content label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.modal-content button {
+    width: 100%;
+    background-color: #ffa500;
+    color: #fff;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+    background-color: #e69500;
+}
+
+.close, .close-option-check {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover, .close-option-check:hover {
+    color: #fff;
+}
+
+/* Адаптация для смартфонов */
+@media (max-width: 600px) {
+    .modal-content {
+        width: 90%;
+    }
+
+    #container {
+        padding: 10px;
+    }
+
+    #product-name {
+        font-size: 20px;
+    }
+
+    #product-price {
+        font-size: 18px;
+    }
+
+    #pay-button {
+        font-size: 16px;
+    }
+}
