@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Извлечение данных из URL
     const urlParams = new URLSearchParams(window.location.search);
     const productData = JSON.parse(urlParams.get('product_data'));
 
@@ -8,80 +7,109 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Извлекаем информацию о товаре
-    const productName = document.getElementById('product-name');
-    const productPrice = document.getElementById('product-price');
-    const oldPrice = document.getElementById('product-old-price');
-    const productDescription = document.getElementById('product-description');
-    const productStock = document.getElementById('product-stock');  // Новый элемент для статуса наличия товара
+    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
-    // Заполнение информации о продукте
-    productName.textContent = productData.name;
-    productPrice.textContent = `${productData.price} ₽`;
-
-    // Если старая цена есть, показываем ее
-    if (productData.old_price) {
-        oldPrice.textContent = `Старая цена: ${productData.old_price} ₽`;
-    } else {
-        oldPrice.textContent = '';
+    if (!telegramUser) {
+        alert("Данные пользователя не найдены.");
+        return;
     }
 
-    productDescription.textContent = productData.description;
-
-    // Обработка статуса наличия товара
-    if (productData.stock && productData.stock === 'in_stock') {
-        productStock.textContent = 'В наличии';
-        productStock.style.color = 'green';
-    } else {
-        productStock.textContent = 'Нет в наличии';
-        productStock.style.color = 'red';
-    }
-
-    // Слайдер изображений товара
+    // Отображение изображений товара
     const imageSlider = document.getElementById('image-slider');
-    const reviewsSlider = document.getElementById('reviews-slider');
+    const imageDots = document.getElementById('image-dots');
     const images = productData.images || [];
-    const reviews = productData.reviews || [];
-
     let currentImageIndex = 0;
-    let currentReviewIndex = 0;
 
-    // Функция обновления слайдера изображений
     function updateImageSlider() {
         if (images.length > 0) {
             imageSlider.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
+            updateImageDots();
         } else {
             imageSlider.innerHTML = `<p>Изображения отсутствуют</p>`;
         }
     }
 
-    // Функция обновления слайдера отзывов
+    function updateImageDots() {
+        imageDots.innerHTML = '';
+        images.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            if (index === currentImageIndex) {
+                dot.classList.add('active');
+            }
+            dot.addEventListener('click', () => {
+                currentImageIndex = index;
+                updateImageSlider();
+            });
+            imageDots.appendChild(dot);
+        });
+    }
+
+    imageSlider.addEventListener('click', (event) => {
+        if (event.clientX < window.innerWidth / 2) {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+        } else {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+        }
+        updateImageSlider();
+    });
+
+    updateImageSlider();
+
+    // Отображение отзывов
+    const reviewsSlider = document.getElementById('reviews-slider');
+    const reviewDots = document.getElementById('review-dots');
+    const reviews = productData.reviews || [];
+    let currentReviewIndex = 0;
+
     function updateReviewsSlider() {
         if (reviews.length > 0) {
             reviewsSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
+            updateReviewDots();
         } else {
             reviewsSlider.innerHTML = `<p>Отзывы отсутствуют</p>`;
         }
     }
 
-    updateImageSlider();
-    updateReviewsSlider();
+    function updateReviewDots() {
+        reviewDots.innerHTML = '';
+        reviews.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            if (index === currentReviewIndex) {
+                dot.classList.add('active');
+            }
+            dot.addEventListener('click', () => {
+                currentReviewIndex = index;
+                updateReviewsSlider();
+            });
+            reviewDots.appendChild(dot);
+        });
+    }
 
-    // Переключение изображений слайдера по клику
-    imageSlider.addEventListener('click', () => {
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-        updateImageSlider();
-    });
-
-    // Переключение отзывов слайдера по клику
-    reviewsSlider.addEventListener('click', () => {
-        currentReviewIndex = (currentReviewIndex + 1) % reviews.length;
+    reviewsSlider.addEventListener('click', (event) => {
+        if (event.clientX < window.innerWidth / 2) {
+            currentReviewIndex = (currentReviewIndex - 1 + reviews.length) % reviews.length;
+        } else {
+            currentReviewIndex = (currentReviewIndex + 1) % reviews.length;
+        }
         updateReviewsSlider();
     });
 
-    // Модальное окно
-    const modal = document.getElementById("modal");
+    updateReviewsSlider();
+
+    // Обновление информации о продукте
+    document.getElementById('product-name').textContent = productData.name;
+    document.getElementById('product-price').textContent = `${productData.price} ₽`;
+    if (productData.old_price) {
+        document.getElementById('product-old-price').textContent = `Старая цена: ${productData.old_price} ₽`;
+    }
+    document.getElementById('stock-status').textContent = productData.in_stock ? 'В наличии' : 'Нет в наличии';
+    document.getElementById('product-description').textContent = productData.description;
+
+    // Обработка кнопки "Перейти к оплате"
     const payButton = document.getElementById('pay-button');
+    const modal = document.getElementById("modal");
 
     payButton.addEventListener('click', () => {
         if (!modal) {
@@ -95,16 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = "none";
     });
 
-    // Получаем данные пользователя из localStorage
-    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
-
-    if (!telegramUser) {
-        alert("Данные пользователя не найдены.");
-        return;
-    }
-
-    // Отправка формы
-    document.getElementById("user-form").addEventListener("submit", function(event) {
+    // Обработка отправки формы
+    document.getElementById("user-form").addEventListener("submit", (event) => {
         event.preventDefault();
 
         const fullName = document.getElementById("full-name").value;
