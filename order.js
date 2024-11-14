@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Извлечение данных пользователя из localStorage
     const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
     if (!telegramUser) {
@@ -18,43 +17,57 @@ document.addEventListener('DOMContentLoaded', () => {
     // Отображение изображений товара и отзывов
     const imageSlider = document.getElementById('image-slider');
     const reviewsSlider = document.getElementById('reviews-slider');
+    const imageContent = document.getElementById('image-content');
+    const reviewsContent = document.getElementById('reviews-content');
     const images = productData.images || [];
     const reviews = productData.reviews || [];
     let currentImageIndex = 0;
     let currentReviewIndex = 0;
 
+    // Обновление слайдера изображений
     function updateImageSlider() {
         if (images.length > 0) {
-            imageSlider.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
+            imageContent.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
         } else {
-            imageSlider.innerHTML = `<p>Изображения отсутствуют</p>`;
+            imageContent.innerHTML = `<p>Изображения отсутствуют</p>`;
         }
     }
 
+    // Обновление слайдера отзывов
     function updateReviewsSlider() {
         if (reviews.length > 0) {
-            reviewsSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
+            reviewsContent.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
         } else {
-            reviewsSlider.innerHTML = `<p>Отзывы отсутствуют</p>`;
+            reviewsContent.innerHTML = `<p>Отзывы отсутствуют</p>`;
         }
     }
 
     updateImageSlider();
     updateReviewsSlider();
 
-    // Обработчики для слайдера изображений
-    imageSlider.addEventListener('click', () => {
+    // Обработчики стрелок для слайдера изображений
+    document.querySelector('.left-arrow').addEventListener('click', () => {
+        currentImageIndex = (currentImageIndex === 0) ? images.length - 1 : currentImageIndex - 1;
+        updateImageSlider();
+    });
+
+    document.querySelector('.right-arrow').addEventListener('click', () => {
         currentImageIndex = (currentImageIndex + 1) % images.length;
         updateImageSlider();
     });
 
-    // Обработчики для слайдера отзывов
-    reviewsSlider.addEventListener('click', () => {
+    // Обработчики стрелок для слайдера отзывов
+    document.querySelector('.left-arrow').addEventListener('click', () => {
+        currentReviewIndex = (currentReviewIndex === 0) ? reviews.length - 1 : currentReviewIndex - 1;
+        updateReviewsSlider();
+    });
+
+    document.querySelector('.right-arrow').addEventListener('click', () => {
         currentReviewIndex = (currentReviewIndex + 1) % reviews.length;
         updateReviewsSlider();
     });
 
-    // Заполнение информации о продукте
+    // Отображение информации о продукте
     document.getElementById('product-name').textContent = productData.name;
     document.getElementById('product-price').textContent = `${productData.price} ₽`;
     document.getElementById('product-description').textContent = productData.description;
@@ -71,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = "block";
     });
 
-    // Закрытие модального окна
     document.querySelector(".close").addEventListener('click', () => {
         modal.style.display = "none";
     });
@@ -84,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const phoneNumber = document.getElementById("phone-number").value;
         const email = document.getElementById("email").value;
 
-        // Создаем объект данных заказа
         const orderData = {
             product_id: productData.id,
             user_data: {
@@ -96,10 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // Логируем данные заказа перед отправкой
-        console.log("Данные заказа:", orderData);
-
-        // Отправка данных заказа на сервер
         fetch('https://gadgetmark.ru/validate-order', {
             method: 'POST',
             headers: {
@@ -118,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             alert("Произошла ошибка при отправке заказа.");
-            console.error('Ошибка:', error);
+            console.error('Error:', error);
         });
     });
 });
