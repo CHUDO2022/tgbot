@@ -29,19 +29,19 @@ h2, h3 {
 
 /* Стили для блока новой и старой цены */
 .product-price {
-    font-size: 1.8em;
+    font-size: 1.5em;
     color: #ffcc00;
     font-weight: bold;
     display: flex;
-    justify-content: center;
-    align-items: baseline;
-    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
 }
 
 .current-price {
-    color: #ffd700; /* более яркий оттенок золота */
+    color: #ffd700; /* яркий оттенок золота */
     font-weight: bold;
-    font-size: 1.8em;
+    font-size: 1.6em; /* Уменьшение шрифта для сбалансированного вида */
 }
 
 .old-price {
@@ -49,6 +49,7 @@ h2, h3 {
     color: #9e9e9e;
     text-decoration: line-through;
     opacity: 0.7;
+    margin-top: 5px;
 }
 
 .stock-status {
