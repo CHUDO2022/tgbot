@@ -54,6 +54,29 @@ document.addEventListener('DOMContentLoaded', () => {
         updateImageSlider();
     });
 
+    // Добавление свайпа для смартфонов
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    imageSlider.addEventListener('touchstart', (event) => {
+        touchStartX = event.changedTouches[0].screenX;
+    });
+
+    imageSlider.addEventListener('touchend', (event) => {
+        touchEndX = event.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        if (touchEndX < touchStartX) {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+        }
+        if (touchEndX > touchStartX) {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+        }
+        updateImageSlider();
+    }
+
     updateImageSlider();
 
     // Отображение отзывов
@@ -104,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (productData.old_price) {
         document.getElementById('product-old-price').textContent = `Старая цена: ${productData.old_price} ₽`;
     }
-    document.getElementById('stock-status').textContent = productData.in_stock ? 'В наличии' : 'Нет в наличии';
+    document.getElementById('stock-status').textContent = productData.in_stock === 'Да' ? 'В наличии' : 'Нет в наличии';
     document.getElementById('product-description').textContent = productData.description;
 
     // Обработка кнопки "Перейти к оплате"
