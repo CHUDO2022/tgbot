@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateReviewsSlider();
     imageSlider.appendChild(dotsContainer);
 
-    // Свайп обработчики для мобильных устройств
+
     let xStart = null;
 
     imageSlider.addEventListener('touchstart', (e) => {
