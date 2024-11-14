@@ -1,203 +1,143 @@
 /* Основные стили страницы */
 body {
-    background-color: #232e3c;
-    color: #ffffff;
+    background-color: #1e2a38;
+    color: #fff;
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 10px;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Контейнер */
+/* Контейнер для содержимого */
 #container {
     max-width: 600px;
     margin: 0 auto;
+    padding: 20px;
 }
 
-/* Слайдер изображений */
-#image-slider,
-#reviews-slider {
-    position: relative;
+/* Стили для заголовков */
+h2 {
+    color: #ffa500;
     text-align: center;
-    margin-bottom: 15px;
 }
 
-.slider-img {
-    width: 100%;
-    max-height: 300px;
-    object-fit: cover;
-    border-radius: 10px;
+h3 {
+    color: #ffa500;
 }
 
-/* Точки навигации */
-#dots-container,
-#review-dots-container {
+/* Стили для слайдеров */
+.slider {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.slider img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Стили для точек (индикаторов) */
+.dots-container {
+    display: flex;
+    justify-content: center;
     margin-top: 10px;
 }
 
 .dot {
-    height: 10px;
-    width: 10px;
+    width: 8px;
+    height: 8px;
     margin: 0 5px;
-    background-color: #bbb;
+    background-color: #888;
     border-radius: 50%;
-    display: inline-block;
+    cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .dot.active {
-    background-color: #f39c12;
+    background-color: #ffa500; /* Цвет активной точки */
 }
 
-/* Информация о продукте */
-h2 {
+/* Информация о товаре */
+#product-name {
+    font-size: 1.5em;
+    font-weight: bold;
     text-align: center;
-    font-size: 24px;
-    margin-bottom: 10px;
 }
 
 #product-price {
+    font-size: 1.2em;
+    color: #ffa500;
     text-align: center;
-    font-size: 18px;
-    color: #f39c12;
 }
 
-#product-description {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* Информационные секции */
+/* Секции информации */
 .info-section {
-    background-color: #17212b;
+    background-color: #2b3a4a;
+    border-radius: 8px;
     padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 15px;
+    margin: 10px 0;
 }
 
 .info-section h3 {
-    color: #f39c12;
-    margin-bottom: 10px;
+    color: #ffa500;
+    margin-top: 0;
 }
 
-/* Кнопка оплаты */
+/* Кнопка для перехода к оплате */
 #pay-button {
     display: block;
     width: 100%;
     padding: 15px;
-    font-size: 16px;
-    color: #ffffff;
-    background-color: #f39c12;
+    background-color: #ffa500;
+    color: #fff;
+    font-size: 1em;
+    text-align: center;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
+    margin-top: 20px;
     transition: background-color 0.3s;
 }
 
 #pay-button:hover {
-    background-color: #e67e22;
+    background-color: #ff8c00;
 }
 
-/* Модальное окно */
+/* Стили для модального окна */
 .modal {
     display: none;
     position: fixed;
-    top: 0;
+    z-index: 1000;
     left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    justify-content: center;
-    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 .modal-content {
-    background-color: #17212b;
+    background-color: #2b3a4a;
+    margin: 10% auto;
     padding: 20px;
-    border-radius: 10px;
-    width: 90%;
+    border-radius: 8px;
     max-width: 400px;
+    color: #fff;
 }
 
 .close {
-    color: #f39c12;
+    color: #aaa;
     float: right;
     font-size: 28px;
+    font-weight: bold;
     cursor: pointer;
 }
 
-/* Поля формы */
-input[type="text"],
-input[type="tel"],
-input[type="email"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #444;
-    border-radius: 5px;
-    background-color: #2c3e50;
-    color: #ffffff;
-}
-
-button[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    background-color: #f39c12;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-button[type="submit"]:hover {
-    background-color: #e67e22;
-}
-
-/* Адаптивные стили для смартфонов */
-@media only screen and (max-width: 600px) {
-    .modal-content {
-        width: 95%;
-        padding: 15px;
-    }
-
-    .slider-img {
-        max-height: 200px;
-    }
-
-    .dot {
-        height: 8px;
-        width: 8px;
-    }
-
-    #pay-button {
-        padding: 12px;
-        font-size: 14px;
-    }
-}
-
-/* Стрелки для навигации */
-.slider-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 24px;
-    color: #f39c12;
-    cursor: pointer;
-    user-select: none;
-    opacity: 0.7;
-}
-
-.slider-arrow:hover {
-    opacity: 1;
-}
-
-#left-arrow {
-    left: 10px;
-}
-
-#right-arrow {
-    right: 10px;
+.close:hover {
+    color: #fff;
 }
