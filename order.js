@@ -57,14 +57,22 @@ document.addEventListener('DOMContentLoaded', () => {
     updateImageSlider();
 
     // Обновление информации о продукте
-    const price = parseFloat(productData.price) || 0;
-    const oldPrice = parseFloat(productData.old_price) || 0;
+    const price = productData.price;
+    const oldPrice = productData.old_price;
+
+    // Отладочные сообщения
+    console.log("Product Data:", productData);
+    console.log("Parsed Price:", price);
+    console.log("Parsed Old Price:", oldPrice);
 
     document.getElementById('product-name').textContent = productData.name || 'Название отсутствует';
-    document.getElementById('product-price').textContent = isNaN(price) ? 'Цена не указана' : `${price.toFixed(2)} ₽`;
+    
+    // Отображение цены без форматирования с фиксированной точностью
+    document.getElementById('product-price').textContent = price > 0 ? `${price} ₽` : 'Цена не указана';
 
-    if (!isNaN(oldPrice) && oldPrice > 0) {
-        document.getElementById('product-old-price').textContent = `Старая цена: ${oldPrice.toFixed(2)} ₽`;
+    // Отображение старой цены только если она больше 0
+    if (oldPrice > 0) {
+        document.getElementById('product-old-price').textContent = `Старая цена: ${oldPrice} ₽`;
     } else {
         document.getElementById('product-old-price').textContent = '';
     }
