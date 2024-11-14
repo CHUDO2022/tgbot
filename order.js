@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Извлечение данных пользователя из localStorage
     const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
     if (!telegramUser) {
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Отображение изображений товара
+    // Отображение изображений товара и отзывов
     const imageSlider = document.getElementById('image-slider');
     const reviewsSlider = document.getElementById('reviews-slider');
     const images = productData.images || [];
@@ -53,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateReviewsSlider();
     });
 
-
+    // Заполнение информации о продукте
     document.getElementById('product-name').textContent = productData.name;
     document.getElementById('product-price').textContent = `${productData.price} ₽`;
     document.getElementById('product-description').textContent = productData.description;
@@ -70,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = "block";
     });
 
+    // Закрытие модального окна
     document.querySelector(".close").addEventListener('click', () => {
         modal.style.display = "none";
     });
@@ -82,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const phoneNumber = document.getElementById("phone-number").value;
         const email = document.getElementById("email").value;
 
+        // Создаем объект данных заказа
         const orderData = {
             product_id: productData.id,
             user_data: {
@@ -93,6 +96,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
+        // Логируем данные заказа перед отправкой
+        console.log("Данные заказа:", orderData);
+
+        // Отправка данных заказа на сервер
         fetch('https://gadgetmark.ru/validate-order', {
             method: 'POST',
             headers: {
@@ -111,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             alert("Произошла ошибка при отправке заказа.");
-            console.error('Error:', error);
+            console.error('Ошибка:', error);
         });
     });
 });
