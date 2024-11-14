@@ -1,14 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const productData = JSON.parse(urlParams.get('product_data'));
-    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
-    if (!productData || !telegramUser) {
-        alert("Ошибка: отсутствуют данные о продукте или пользователе.");
+    if (!productData) {
+        alert("Нет данных о продукте в URL");
         return;
     }
 
-    // Элементы слайдера
+    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+
+    if (!telegramUser) {
+        alert("Данные пользователя не найдены.");
+        return;
+    }
+
     const imageSlider = document.getElementById('image-slider');
     const reviewsSlider = document.getElementById('reviews-slider');
     const dotsContainer = document.getElementById('dots-container');
@@ -18,47 +23,64 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentImageIndex = 0;
     let currentReviewIndex = 0;
 
-    // Функция для обновления слайдера изображений
+    // Функция обновления слайдера изображений
     function updateImageSlider() {
-        imageSlider.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
-        updateDots(dotsContainer, images, currentImageIndex);
+        if (images.length > 0) {
+            imageSlider.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
+            updateDots(dotsContainer, images.length, currentImageIndex);
+        } else {
+            imageSlider.innerHTML = `<p>Изображения отсутствуют</p>`;
+        }
     }
 
-    // Функция для обновления слайдера отзывов
+    // Функция обновления слайдера отзывов
     function updateReviewsSlider() {
-        reviewsSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
-        updateDots(reviewDotsContainer, reviews, currentReviewIndex);
+        if (reviews.length > 0) {
+            reviewsSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
+            updateDots(reviewDotsContainer, reviews.length, currentReviewIndex);
+        } else {
+            reviewsSlider.innerHTML = `<p>Отзывы отсутствуют</p>`;
+        }
     }
 
-    // Функция для обновления точек
-    function updateDots(container, items, activeIndex) {
+    // Функция обновления точек
+    function updateDots(container, count, activeIndex) {
         container.innerHTML = '';
-        items.forEach((_, index) => {
-            const dot = document.createElement('span');
-            dot.className = 'dot';
-            if (index === activeIndex) dot.classList.add('active');
+        for (let i = 0; i < count; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === activeIndex) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                if (container === dotsContainer) {
+                    currentImageIndex = i;
+                    updateImageSlider();
+                } else {
+                    currentReviewIndex = i;
+                    updateReviewsSlider();
+                }
+            });
             container.appendChild(dot);
-        });
+        }
     }
 
-    // Обработчики для кликов по изображению
-    imageSlider.addEventListener('click', (event) => {
-        const clickX = event.clientX - imageSlider.getBoundingClientRect().left;
-        const halfWidth = imageSlider.clientWidth / 2;
-        if (clickX < halfWidth) {
-            currentImageIndex = (currentImageIndex === 0) ? images.length - 1 : currentImageIndex - 1;
+    // Обработчики для навигации изображений
+    imageSlider.addEventListener('click', (e) => {
+        const clickX = e.clientX;
+        const sliderWidth = imageSlider.clientWidth;
+        if (clickX < sliderWidth / 2) {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
         } else {
             currentImageIndex = (currentImageIndex + 1) % images.length;
         }
         updateImageSlider();
     });
 
-    // Обработчики для кликов по отзывам
-    reviewsSlider.addEventListener('click', (event) => {
-        const clickX = event.clientX - reviewsSlider.getBoundingClientRect().left;
-        const halfWidth = reviewsSlider.clientWidth / 2;
-        if (clickX < halfWidth) {
-            currentReviewIndex = (currentReviewIndex === 0) ? reviews.length - 1 : currentReviewIndex - 1;
+    // Обработчики для навигации отзывов
+    reviewsSlider.addEventListener('click', (e) => {
+        const clickX = e.clientX;
+        const sliderWidth = reviewsSlider.clientWidth;
+        if (clickX < sliderWidth / 2) {
+            currentReviewIndex = (currentReviewIndex - 1 + reviews.length) % reviews.length;
         } else {
             currentReviewIndex = (currentReviewIndex + 1) % reviews.length;
         }
@@ -76,9 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Обработка кнопки "Перейти к оплате"
     const payButton = document.getElementById('pay-button');
-    const modal = document.getElementById('modal');
+    const modal = document.getElementById("modal");
 
     payButton.addEventListener('click', () => {
+        if (!modal) {
+            alert("Модальное окно не найдено.");
+            return;
+        }
         modal.style.display = "block";
     });
 
