@@ -1,82 +1,103 @@
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const productData = JSON.parse(urlParams.get('product_data'));
-    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
 
-    // Проверка наличия данных о продукте и пользователе
-    if (!productData || !telegramUser) {
-        alert("Ошибка: нет данных о продукте или пользователе.");
+    if (!productData) {
+        alert("Нет данных о продукте в URL");
         return;
     }
 
-    // Элементы слайдера и данных
+    const telegramUser = JSON.parse(localStorage.getItem('telegramUser'));
+
+    if (!telegramUser) {
+        alert("Данные пользователя не найдены.");
+        return;
+    }
+
     const imageSlider = document.getElementById('image-slider');
-    const imageDots = document.getElementById('image-dots');
     const reviewsSlider = document.getElementById('reviews-slider');
-    const reviewsDots = document.getElementById('reviews-dots');
     const images = productData.images || [];
     const reviews = productData.reviews || [];
     let currentImageIndex = 0;
     let currentReviewIndex = 0;
 
-    // Функция обновления слайдера
-    function updateSlider(slider, dots, items, currentIndex) {
-        slider.innerHTML = `<img src="${items[currentIndex]}" class="slider-img">`;
-        dots.innerHTML = items.map((_, index) =>
-            `<div class="dot ${index === currentIndex ? 'active' : ''}" data-index="${index}"></div>`
-        ).join('');
+    const dotsContainer = document.createElement('div');
+    dotsContainer.classList.add('dots-container');
+
+    function updateImageSlider() {
+        imageSlider.innerHTML = `<img src="${images[currentImageIndex]}" class="slider-img">`;
+        updateDots();
     }
 
-    // Обработчик кликов по точкам
-    function addDotClickHandler(dots, updateFunction) {
-        dots.addEventListener('click', (event) => {
-            const index = event.target.getAttribute('data-index');
-            if (index !== null) {
-                updateFunction(parseInt(index, 10));
+    function updateDots() {
+        dotsContainer.innerHTML = '';
+        images.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            if (index === currentImageIndex) {
+                dot.classList.add('active');
             }
+            dot.addEventListener('click', () => {
+                currentImageIndex = index;
+                updateImageSlider();
+            });
+            dotsContainer.appendChild(dot);
         });
     }
 
-    // Функции обновления изображений и отзывов
-    function updateImage(index) {
-        currentImageIndex = index;
-        updateSlider(imageSlider, imageDots, images, currentImageIndex);
+    function updateReviewsSlider() {
+        if (reviews.length > 0) {
+            reviewsSlider.innerHTML = `<img src="${reviews[currentReviewIndex]}" class="slider-img">`;
+        } else {
+            reviewsSlider.innerHTML = `<p>Отзывы отсутствуют</p>`;
+        }
     }
 
-    function updateReview(index) {
-        currentReviewIndex = index;
-        updateSlider(reviewsSlider, reviewsDots, reviews, currentReviewIndex);
-    }
+    updateImageSlider();
+    updateReviewsSlider();
+    imageSlider.appendChild(dotsContainer);
 
-    // Инициализация слайдеров
-    updateImage(0);
-    updateReview(0);
-    addDotClickHandler(imageDots, updateImage);
-    addDotClickHandler(reviewsDots, updateReview);
+    // Свайп обработчики для мобильных устройств
+    let xStart = null;
 
-    // Заполнение информации о продукте
+    imageSlider.addEventListener('touchstart', (e) => {
+        xStart = e.touches[0].clientX;
+    });
+
+    imageSlider.addEventListener('touchmove', (e) => {
+        if (!xStart) return;
+
+        const xEnd = e.touches[0].clientX;
+        const xDiff = xStart - xEnd;
+
+        if (xDiff > 50) {
+            // Свайп влево
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+        } else if (xDiff < -50) {
+            // Свайп вправо
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+        }
+        updateImageSlider();
+        xStart = null;
+    });
+
+    // Информация о продукте
     document.getElementById('product-name').textContent = productData.name;
     document.getElementById('product-price').textContent = `${productData.price} ₽`;
     document.getElementById('product-description').textContent = productData.description;
 
-    // Обработка кнопки "Перейти к оплате"
     const payButton = document.getElementById('pay-button');
     const modal = document.getElementById("modal");
 
     payButton.addEventListener('click', () => {
-        if (!modal) {
-            alert("Модальное окно не найдено.");
-            return;
-        }
         modal.style.display = "block";
     });
 
-    // Закрытие модального окна
     document.querySelector(".close").addEventListener('click', () => {
         modal.style.display = "none";
     });
 
-    // Обработка отправки формы
+    // Отправка формы
     document.getElementById("user-form").addEventListener("submit", (event) => {
         event.preventDefault();
 
@@ -95,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // Отправка данных заказа на сервер
         fetch('https://gadgetmark.ru/validate-order', {
             method: 'POST',
             headers: {
@@ -114,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             alert("Произошла ошибка при отправке заказа.");
-            console.error('Ошибка:', error);
+            console.error('Error:', error);
         });
     });
 });
