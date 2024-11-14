@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateReviewsSlider();
     });
 
-    // Заполняем информацию о продукте
+
     document.getElementById('product-name').textContent = productData.name;
     document.getElementById('product-price').textContent = `${productData.price} ₽`;
     document.getElementById('product-description').textContent = productData.description;
